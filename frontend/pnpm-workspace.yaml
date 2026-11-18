@@ -1,0 +1,12 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+allowBuilds:
+  '@parcel/watcher': set this to true or false
+  esbuild: set this to true or false
+
+# Cho phép build script của các dep bắt buộc (esbuild cần postinstall).
+onlyBuiltDependencies:
+  - "esbuild"
+  - "@parcel/watcher"

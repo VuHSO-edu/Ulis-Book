@@ -1,0 +1,22 @@
+// Global styles dùng chung cho tất cả app — theo vuhso-frontend-rules §3.7.
+:root {
+  --ulis-primary: #1f3a93;
+  --ulis-bg: #f5f6fa;
+  --ulis-text: #2f3542;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ulis-bg);
+  color: var(--ulis-text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+}

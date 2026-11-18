@@ -1,0 +1,32 @@
+# Profile PROD — chạy trên server riêng bằng Docker (ticket 13).
+# Mọi giá trị bí mật đều qua biến môi trường, không commit giá trị thật.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ulis}
+    username: ${DB_USERNAME:ulis}
+    password: ${DB_PASSWORD:ulis}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost}
+  jwt:
+    # Bí mật ký JWT ở prod luôn lấy từ biến môi trường, không commit giá trị thật.
+    secret: ${JWT_SECRET:}
+    issuer: ${JWT_ISSUER:ulis-books}
+    access-token-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:15}
+    refresh-token-ttl-days: ${JWT_REFRESH_TTL_DAYS:14}

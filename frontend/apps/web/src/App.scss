@@ -1,0 +1,44 @@
+// Styles của riêng app web (layout, trang login).
+.page-loading {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-screen {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1f3a93 0%, #2f5bd0 100%);
+}
+
+.login-card {
+  width: 360px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.login-title {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-header-user {
+  line-height: 1;
+}
+
+.app-logo {
+  font-weight: 600;
+  color: #fff;
+}
+
+.home-card {
+  margin: 16px;
+}

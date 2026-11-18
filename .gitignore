@@ -1,0 +1,27 @@
+# === Node / frontend ===
+node_modules/
+dist/
+build/
+.turbo/
+*.local
+.env.local
+.env.*.local
+
+# === Java / Gradle ===
+backend/.gradle/
+backend/**/.gradle/
+backend/**/build/
+backend/.idea/
+backend/*.iml
+*.class
+hs_err_pid*
+
+# === IDE / OS ===
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# === Secrets ===
+.env
