@@ -1,0 +1,39 @@
+# Docker Compose — hạ tầng ULIS Books.
+# Tài liệu: database PostgreSQL dùng cho profile `prod` của backend.
+# Dev/test mặc định dùng H2 (MODE=PostgreSQL) nên không cần Docker.
+#
+# Cách dùng:
+#   docker compose up -d
+#   cd backend && .\gradlew.bat bootRun --args='--spring.profiles.active=prod'
+#   # DB_URL mặc định khớp: jdbc:postgresql://localhost:5432/ulis  (user/pass: ulis/ulis)
+#
+# Có thể override qua .env (xem .env.example) — KHÔNG commit .env thật.
+
+name: ulis
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ulis-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ulis}
+      POSTGRES_USER: ${POSTGRES_USER:-ulis}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ulis}
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      # Giữ cổng host 5432 trùng mặc định backend (DB_URL không cần chỉnh).
+      - "5432:5432"
+    volumes:
+      - ulis-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      # $$ -> để container shell tự expand POSTGRES_USER/DB khi chạy (khớp mọi giá trị override).
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  ulis-postgres-data:
+    driver: local

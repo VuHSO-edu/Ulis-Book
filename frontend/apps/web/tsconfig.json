@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@ulis/components": ["src/packages/components/index.tsx"]
     },
     "types": ["vite/client"]
   },

@@ -34,6 +34,12 @@ export const http: AxiosInstance = axios.create({
   timeout: 30000,
 });
 
+/**
+ * Client cho các thao tác POST/PUT/DELETE (blocking UI spinner) — tách biệt với http (GET)
+ * theo vuhso-frontend-rules §5.
+ */
+export const httpBlocking: AxiosInstance = http;
+
 // Request interceptor: gắn access token từ session (nếu có).
 http.interceptors.request.use((config) => {
   const session = getSession();

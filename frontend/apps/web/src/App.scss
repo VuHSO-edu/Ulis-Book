@@ -1,4 +1,4 @@
-// Styles của riêng app web (layout, trang login).
+// Styles của riêng app web — thiết kế theo 8 màn hình Stitch (ULIS Books UI Prompts)
 .page-loading {
   display: flex;
   height: 100vh;
@@ -6,39 +6,808 @@
   justify-content: center;
 }
 
-.login-screen {
+// =============================================================================
+// 1. TOP STICKY HEADER & STUDENT APP LAYOUT
+// =============================================================================
+.ulis-student-shell {
+  min-height: 100vh;
   display: flex;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1f3a93 0%, #2f5bd0 100%);
+  flex-direction: column;
+  background: #f0f2f5;
 }
 
-.login-card {
-  width: 360px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-}
-
-.login-title {
-  margin-bottom: 4px;
-  font-weight: 600;
-}
-
-.app-header {
+.ulis-top-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid #e2e7ff;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
-.app-header-user {
-  line-height: 1;
+.ulis-header-inner {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.app-logo {
+.ulis-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #004ac6 0%, #2563eb 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 74, 198, 0.25);
+  }
+
+  .brand-title {
+    font-family: 'Plus Jakarta Sans', Tahoma, sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #131b2e;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-badge {
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: #dbe1ff;
+    color: #004ac6;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+}
+
+.ulis-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  a,
+  .nav-link-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: #596377;
+    text-decoration: none;
+    padding: 18px 2px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    &:hover {
+      color: #004ac6;
+    }
+
+    &.active {
+      color: #004ac6;
+      font-weight: 700;
+      border-bottom-color: #004ac6;
+    }
+
+    &.free-highlight {
+      color: #006c49;
+      font-weight: 700;
+    }
+  }
+}
+
+.ulis-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ulis-sell-cta-btn {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #004ac6 0%, #2563eb 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 74, 198, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 74, 198, 0.3);
+  }
+}
+
+.ulis-icon-pill-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #e2e7ff;
+  background: #f2f3ff;
+  color: #131b2e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: #dbe1ff;
+    color: #004ac6;
+  }
+
+  .unread-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #ba1a1a;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+  }
+}
+
+.ulis-footer {
+  margin-top: auto;
+  background: #ffffff;
+  border-top: 1px solid #e2e7ff;
+  padding: 24px;
+}
+
+.ulis-footer-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 12px;
+  color: #596377;
+}
+
+// =============================================================================
+// 2. SCREEN 3: LOGIN & REGISTER 12-COL SPLIT HUB (571a230665d14229bd9ad442e4c4de80)
+// =============================================================================
+.ulis-auth-page {
+  min-height: calc(100vh - 64px);
+  padding: 32px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.1) 0%, transparent 38%),
+    radial-gradient(circle at 88% 82%, rgba(0, 108, 73, 0.08) 0%, transparent 40%),
+    #f0f2f5;
+}
+
+.ulis-auth-shell {
+  width: 100%;
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 24px 60px -15px rgba(19, 27, 46, 0.16);
+  border: 1px solid #e2e7ff;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ulis-auth-editorial {
+  background: linear-gradient(155deg, #131b2e 0%, #0f2557 52%, #004ac6 100%);
+  color: #ffffff;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+
+  .editorial-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+
+  .editorial-title {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0 0 12px;
+    color: #ffffff;
+  }
+
+  .editorial-desc {
+    font-size: 13px;
+    color: rgba(219, 225, 255, 0.86);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 10px;
+
+    .trust-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(108, 248, 187, 0.18);
+      color: #6cf8bb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .trust-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .trust-desc {
+      font-size: 12px;
+      color: rgba(219, 225, 255, 0.78);
+      line-height: 1.45;
+    }
+  }
+
+  .quote-card {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(19, 27, 46, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    .quote-text {
+      font-size: 12.5px;
+      font-style: italic;
+      color: #eef2ff;
+      line-height: 1.55;
+      margin: 8px 0 12px;
+    }
+  }
+}
+
+.ulis-auth-form-col {
+  padding: 36px 44px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media (max-width: 640px) {
+    padding: 24px 20px;
+  }
+}
+
+.ulis-auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 5px;
+  background: #f2f3ff;
+  border-radius: 10px;
+  border: 1px solid #e2e7ff;
+  margin-bottom: 20px;
+
+  .auth-tab-btn {
+    height: 38px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    font-family: Tahoma, 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #596377;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s ease;
+
+    &.active {
+      background: #ffffff;
+      color: #004ac6;
+      box-shadow: 0 2px 8px rgba(19, 27, 46, 0.08);
+    }
+  }
+}
+
+.ulis-sso-fastlane-btn {
+  width: 100%;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid #c3c6d7;
+  background: #faf8ff;
+  color: #131b2e;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: #004ac6;
+    background: #eef2ff;
+  }
+}
+
+// =============================================================================
+// 3. SCREEN 1: OTP VERIFY & PASSWORD RESET (e8fbfd61556442c38530505407e13fc2)
+// =============================================================================
+.ulis-otp-card {
+  width: 100%;
+  max-width: 490px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e7ff;
+  box-shadow: 0 20px 50px rgba(19, 27, 46, 0.12);
+  overflow: hidden;
+}
+
+.ulis-otp-digits {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin: 12px 0 16px;
+
+  .otp-digit-input {
+    width: 100%;
+    height: 54px;
+    text-align: center;
+    font-family: 'Plus Jakarta Sans', Tahoma, monospace;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1677ff;
+    background: #f2f3ff;
+    border: 2px solid #c3c6d7;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.15s ease;
+
+    &:focus {
+      background: #ffffff;
+      border-color: #1677ff;
+      box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15);
+    }
+  }
+}
+
+// =============================================================================
+// 4. SCREEN 2: HOME & BOOK DISCOVERY (645618ae43d74c7db2114d085fcd783d)
+// =============================================================================
+.ulis-home-hero {
+  position: relative;
+  padding: 36px 24px 28px;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 20%, rgba(0, 108, 73, 0.07) 0%, transparent 45%),
+    linear-gradient(180deg, #faf8ff 0%, #f0f2f5 100%);
+  border-bottom: 1px solid #e2e7ff;
+}
+
+.ulis-capsule-search {
+  max-width: 980px;
+  margin: 24px auto 16px;
+  background: #ffffff;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid #d5dcff;
+  box-shadow: 0 14px 36px -8px rgba(0, 74, 198, 0.12);
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.9fr auto;
+  align-items: center;
+  gap: 8px;
+
+  @media (max-width: 860px) {
+    border-radius: 16px;
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .capsule-segment {
+    padding: 4px 14px;
+    border-right: 1px solid #e2e7ff;
+    text-align: left;
+
+    &:last-of-type {
+      border-right: none;
+    }
+
+    @media (max-width: 860px) {
+      border-right: none;
+      border-bottom: 1px solid #e2e7ff;
+      padding: 8px 6px;
+    }
+
+    .segment-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #000000;
+      margin-bottom: 2px;
+    }
+  }
+}
+
+.ulis-faculty-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 80;
+  background: rgba(250, 248, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e2e7ff;
+  padding: 12px 24px;
+}
+
+.ulis-faculty-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .faculty-pill {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid #d5dcff;
+    background: #ffffff;
+    color: #434655;
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      border-color: #004ac6;
+      color: #004ac6;
+    }
+
+    &.active {
+      background: #004ac6;
+      border-color: #004ac6;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 74, 198, 0.25);
+    }
+
+    &.giveaway-pill {
+      background: #fff4e5;
+      border-color: #f59e0b;
+      color: #784b00;
+
+      &.active {
+        background: #d97706;
+        border-color: #d97706;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+.ulis-book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 860px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 540px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ulis-book-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e7ff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 38px -12px rgba(19, 27, 46, 0.15);
+    border-color: #b4c5ff;
+  }
+
+  &.giveaway-card {
+    border: 2px solid #fbbf24;
+  }
+
+  .card-cover {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: #eef2ff;
+    overflow: hidden;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.04);
+    }
+  }
+
+  .card-body {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
+
+// =============================================================================
+// 5. SCREEN 8: 1-1 REALTIME CHAT WORKSPACE (98741f6091c249a3a5c7de9f13eb815b)
+// =============================================================================
+.ulis-chat-workspace {
+  max-width: 1400px;
+  width: 100%;
+  margin: 16px auto;
+  padding: 0 20px;
+  height: calc(100vh - 125px);
+  min-height: 600px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+.ulis-chat-sidebar {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e7ff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ulis-chat-thread-item {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f0f2f8;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    background: #f5f7ff;
+  }
+
+  &.active {
+    background: #eef2ff;
+    border-left-color: #004ac6;
+  }
+}
+
+.ulis-chat-main {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e7ff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ulis-chat-messages {
+  flex: 1;
+  padding: 18px 20px;
+  overflow-y: auto;
+  background: #f8f9fd;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ulis-chat-bubble-in {
+  max-width: 72%;
+  padding: 10px 14px;
+  background: #ffffff;
+  color: #131b2e;
+  border-radius: 14px 14px 14px 2px;
+  border: 1px solid #e2e7ff;
+  box-shadow: 0 2px 6px rgba(19, 27, 46, 0.04);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ulis-chat-bubble-out {
+  max-width: 72%;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #004ac6 0%, #2563eb 100%);
+  color: #ffffff;
+  border-radius: 14px 14px 2px 14px;
+  box-shadow: 0 4px 12px rgba(0, 74, 198, 0.18);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+// =============================================================================
+// 6. SCREENS 5, 6, 7: ADMIN SAAS CONSOLE LAYOUT
+// =============================================================================
+.ulis-admin-shell {
+  min-height: 100vh;
+  display: flex;
+  background: #f0f2f5;
+}
+
+.ulis-admin-sidebar {
+  width: 245px;
+  background: #ffffff;
+  border-right: 1px solid #dce2f2;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.ulis-admin-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: #434655;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: #f2f3ff;
+    color: #004ac6;
+  }
+
+  &.active {
+    background: #004ac6;
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 74, 198, 0.22);
+  }
 }
 
-.home-card {
-  margin: 16px;
+.ulis-admin-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ulis-admin-topbar {
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid #dce2f2;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.ulis-admin-content {
+  padding: 20px 24px 36px;
+  max-width: 1560px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ulis-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 580px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ulis-kpi-card {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #dce2f2;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(19, 27, 46, 0.04);
 }

@@ -44,6 +44,8 @@ export const translate = (key: I18nKey, options?: Record<string, unknown>): stri
  */
 export const COMMON_VALIDATION_PATTERN = {
   EDU_EMAIL: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(edu|edu\.vn)$/,
+  CODE: /^[A-Za-z0-9_]+$/,
+  INTEGER: /^\d+$/,
 } as const;
 
 export { i18n };

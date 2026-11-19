@@ -1,14 +1,31 @@
-// Global styles dùng chung cho tất cả app — theo vuhso-frontend-rules §3.7.
+// Global styles dùng chung cho tất cả app — theo vuhso-frontend-rules + Stitch Design System
 :root {
-  --ulis-primary: #1f3a93;
-  --ulis-bg: #f5f6fa;
-  --ulis-text: #2f3542;
+  --ulis-primary: #004ac6;
+  --ulis-primary-container: #2563eb;
+  --ulis-blue: #1677ff;
+  --ulis-navy: #131b2e;
+  --ulis-bg: #f0f2f5;
+  --ulis-surface: #ffffff;
+  --ulis-surface-low: #f2f3ff;
+  --ulis-text: #131b2e;
+  --ulis-text-muted: #596377;
+  --ulis-border: #c3c6d7;
+  --ulis-emerald: #006c49;
+  --ulis-emerald-bg: #6cf8bb;
+  --ulis-amber: #784b00;
+  --ulis-amber-bg: #ffddb8;
+  --ulis-error: #ba1a1a;
+  --ulis-error-bg: #ffdad6;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html,
 body,
 #root {
-  height: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -16,7 +33,215 @@ body,
 body {
   background: var(--ulis-bg);
   color: var(--ulis-text);
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif;
+  font-family: Tahoma, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-headline {
+  font-family: 'Plus Jakarta Sans', Tahoma, sans-serif;
+}
+
+// Material Symbols support
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 20;
+  vertical-align: middle;
+  user-select: none;
+}
+
+// Global Rules (§2 & §3): Form labels #000000, Input text #1677ff, Tahoma 13px, 8-12px spacing
+.ant-form-item {
+  margin-bottom: 10px !important;
+}
+
+.ant-form-item-label > label {
+  font-family: Tahoma, 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+}
+
+.ant-input,
+.ant-input-affix-wrapper input,
+.ant-input-number-input,
+.ant-select-selection-item,
+textarea.ant-input {
+  font-family: Tahoma, 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  color: #1677ff !important;
+  font-weight: 500;
+}
+
+.ant-input::placeholder,
+.ant-input-affix-wrapper input::placeholder,
+textarea.ant-input::placeholder {
+  color: #8c95a6 !important;
+  font-weight: 400;
+}
+
+// Read-only / disabled state (#f5f5f5)
+.ant-input[disabled],
+.ant-input-disabled,
+.ant-input-affix-wrapper-disabled,
+.ant-select-disabled .ant-select-selector,
+.ant-input-number-disabled {
+  background-color: #f5f5f5 !important;
+  color: #737686 !important;
+  cursor: not-allowed !important;
+}
+
+// Modal Rules (§2): 8px border-radius, fixed 56px header height
+.ulis-custom-modal .ant-modal-content,
+.ant-modal .ant-modal-content {
+  border-radius: 8px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(19, 27, 46, 0.22);
+}
+
+.ulis-custom-modal .ant-modal-header,
+.ant-modal .ant-modal-header {
+  height: 56px !important;
+  min-height: 56px !important;
+  max-height: 56px !important;
+  padding: 0 20px !important;
+  margin-bottom: 0 !important;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e2e7ff;
+  background: #faf8ff;
+}
+
+.ulis-custom-modal .ant-modal-title,
+.ant-modal .ant-modal-title {
+  font-family: Tahoma, 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #131b2e !important;
+}
+
+.ulis-custom-modal .ant-modal-body,
+.ant-modal .ant-modal-body {
+  padding: 16px 20px !important;
+}
+
+.ulis-custom-modal .ant-modal-footer,
+.ant-modal .ant-modal-footer {
+  margin-top: 0 !important;
+  padding: 12px 20px !important;
+  background: #f2f3ff;
+  border-top: 1px solid #e2e7ff;
+}
+
+// Confirm modal body padding
+.ant-modal-confirm .ant-modal-body {
+  padding: 20px 24px !important;
+}
+
+// Form Buttons: #1677ff background, #ffffff text, Tahoma 13px
+.ulis-modal-btn-submit,
+.ulis-modal-btn-exit,
+.ulis-primary-btn {
+  background: #1677ff !important;
+  border-color: #1677ff !important;
+  color: #ffffff !important;
+  font-family: Tahoma, 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  height: 36px !important;
+  padding: 0 18px !important;
+}
+
+.ulis-modal-btn-exit {
+  opacity: 0.92;
+}
+
+.ulis-modal-btn-submit:hover,
+.ulis-modal-btn-exit:hover,
+.ulis-primary-btn:hover {
+  background: #004ac6 !important;
+  border-color: #004ac6 !important;
+  color: #ffffff !important;
+}
+
+// Table Grid Rules (§4): Hover light gray + blue text; Selected deep blue + white text
+.ulis-data-table .ant-table {
+  font-family: Tahoma, 'Inter', sans-serif;
+  font-size: 13px;
+}
+
+.ulis-data-table .ant-table-thead > tr > th {
+  background: #eef1f8 !important;
+  color: #131b2e !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  padding: 10px 12px !important;
+  border-bottom: 1px solid #d8deee !important;
+}
+
+.ulis-data-table .ant-table-tbody > tr > td {
+  padding: 10px 12px !important;
+  font-size: 13px !important;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.ulis-data-table .ant-table-tbody > tr:hover > td {
+  background-color: #f5f5f5 !important;
+  color: #1677ff !important;
+}
+
+.ulis-data-table .ant-table-tbody > tr.ulis-row-focused > td,
+.ulis-data-table .ant-table-tbody > tr.ulis-row-focused:hover > td {
+  background-color: #1677ff !important;
+  color: #ffffff !important;
+}
+
+.ulis-data-table .ant-table-tbody > tr.ulis-row-focused td *,
+.ulis-data-table .ant-table-tbody > tr.ulis-row-focused:hover td * {
+  color: #ffffff !important;
+}
+
+.ulis-table-action-icons {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ulis-action-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #434655;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: rgba(22, 119, 255, 0.12);
+    color: #1677ff;
+  }
+
+  &.danger:hover {
+    background: rgba(186, 26, 26, 0.14);
+    color: #ba1a1a;
+  }
+
+  &.success:hover {
+    background: rgba(0, 108, 73, 0.14);
+    color: #006c49;
+  }
 }

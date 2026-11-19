@@ -16,9 +16,18 @@ ulis-books/
 ## Chạy backend
 ```bash
 cd backend
-./gradlew bootRun          # mặc định port 8080
+./gradlew bootRun          # mặc định port 8080 (dùng H2 — không cần Docker)
 # verify: GET http://localhost:8080/health -> ApiResponse envelope
 ./gradlew build            # compile + test
+```
+
+## Chạy database bằng Docker (PostgreSQL, cho profile `prod`)
+```bash
+docker compose up -d       # khởi động Postgres 16 trên cổng 5432 (tên DB/user/pass: ulis)
+cd backend
+./gradlew bootRun --args='--spring.profiles.active=prod'   # backend nối Postgres
+# dừng: docker compose down | xoá luôn dữ liệu: docker compose down -v
+# override biến qua .env (xem .env.example)
 ```
 
 ## Chạy frontend
