@@ -38,6 +38,10 @@ public class ReportServiceImpl implements ReportService {
 
         verifyTargetExists(request.getSourceType(), request.getTargetId());
 
+        if (request.getSourceType() == ReportSourceType.USER && request.getTargetId().equals(reporterId)) {
+            throw new BadRequestException(messageHelper.getMessage("report.self.forbidden"));
+        }
+
         boolean duplicate = reportRepository.existsByReporterIdAndSourceTypeAndTargetIdAndStatus(
                 reporterId,
                 request.getSourceType(),

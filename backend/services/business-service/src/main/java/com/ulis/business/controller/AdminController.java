@@ -16,12 +16,15 @@ import com.ulis.business.repository.ReportRepository;
 import com.ulis.business.repository.UserRepository;
 import com.ulis.business.security.SecurityUtils;
 import com.ulis.business.service.ReportService;
+import com.ulis.core.exception.BadRequestException;
 import com.ulis.core.exception.ForbiddenException;
 import com.ulis.core.exception.NotFoundException;
 import com.ulis.core.helper.MessageHelper;
 import com.ulis.core.http.ResponseBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -75,7 +78,9 @@ public class AdminController {
 
     @Data
     public static class UpsertCategoryRequest {
+        @NotBlank(message = "{validation.required}")
         private String code;
+        @NotBlank(message = "{validation.required}")
         private String name;
         private String subtitle;
         private String parentAxis;
@@ -189,11 +194,15 @@ public class AdminController {
     @PostMapping("/book-categories/create")
     @Transactional
     @Operation(summary = "Tạo danh mục sách")
-    public ResponseEntity<Object> createCategory(@RequestBody UpsertCategoryRequest req) {
+    public ResponseEntity<Object> createCategory(@Valid @RequestBody UpsertCategoryRequest req) {
         requireAdmin();
+        String cleanCode = req.getCode().trim().toUpperCase();
+        if (bookCategoryRepository.findByCodeIgnoreCase(cleanCode).isPresent()) {
+            throw new BadRequestException(messageHelper.getMessage("book.category.duplicate"));
+        }
         BookCategory category = new BookCategory();
-        category.setCode(req.getCode() != null ? req.getCode().trim().toUpperCase() : "");
-        category.setName(req.getName() != null ? req.getName().trim() : "");
+        category.setCode(cleanCode);
+        category.setName(req.getName().trim());
         return ResponseBuilder.ok(bookCategoryRepository.save(category));
     }
 
