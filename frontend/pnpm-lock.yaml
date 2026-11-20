@@ -97,6 +97,15 @@ importers:
         specifier: ^1.7.2
         version: 1.21.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
 
+  packages/components:
+    dependencies:
+      antd:
+        specifier: ^5.20.0
+        version: 5.29.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+
   packages/locale:
     dependencies:
       '@ulis/utils':
