@@ -22,7 +22,6 @@ import { useReportModalStore } from '../../store/useReportModalStore';
 import { useAuth } from '../../store/useAuth';
 import type { BookPostItem } from '../../services/mock-data';
 
-const POPULAR_KEYWORDS = ['ENG2014', 'Minna no Nihongo', 'HSK 4', 'Tiếng Hàn Tổng hợp', 'Peter Roach'];
 const CAMPUS_LOCATIONS = [
   'Toà A1 ULIS',
   'Sân C1',
@@ -148,59 +147,30 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* 1. HERO SECTION & CAPSULE SEARCH COMMAND BAR (Stitch Screen 2: 645618ae43d74c7db2114d085fcd783d) */}
+      {/* 1. HERO SECTION & SEARCH COMMAND BAR — Minimalist & Flat */}
       <section className="ulis-home-hero">
-        <div style={{ maxWidth: 1120, margin: '0 auto', textAlign: 'center' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '6px 14px',
-              borderRadius: 999,
-              background: '#dbe1ff',
-              border: '1px solid #b4c5ff',
-              marginBottom: 14,
-              fontSize: 12,
-              fontWeight: 700,
-              color: '#004ac6',
-            }}
-          >
-            <MaterialIcon name="verified" size={16} />
-            <span>{translate('home:versionBadge')}</span>
-            <span style={{ color: '#006c49' }}>· {translate('common:vnuVerified')}</span>
-          </div>
-
+        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
           <h1
             style={{
               margin: '0 auto 12px',
-              maxWidth: 820,
-              fontSize: 'clamp(28px, 4vw, 44px)',
-              fontWeight: 800,
-              lineHeight: 1.15,
+              maxWidth: 760,
+              fontSize: 'clamp(26px, 3.4vw, 38px)',
+              fontWeight: 700,
+              lineHeight: 1.25,
               color: '#131b2e',
-              letterSpacing: '-0.02em',
             }}
           >
             {translate('home:heroTitlePrefix')}{' '}
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #004ac6 0%, #2563eb 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              {translate('home:heroTitleHighlight')}
-            </span>
+            <span style={{ color: '#004ac6' }}>{translate('home:heroTitleHighlight')}</span>
           </h1>
 
           <p
             style={{
               margin: '0 auto',
-              maxWidth: 650,
+              maxWidth: 600,
               fontSize: 14,
               color: '#596377',
-              lineHeight: 1.6,
+              lineHeight: 1.65,
             }}
           >
             {translate('home:heroSubtitle')}
@@ -225,6 +195,7 @@ export default function HomePage() {
               <span className="segment-label">{translate('home:facultyLabel')}</span>
               <Select
                 variant="borderless"
+                popupMatchSelectWidth={false}
                 value={facultyCode}
                 onChange={(val) => {
                   clearFocusedRow();
@@ -232,10 +203,10 @@ export default function HomePage() {
                 }}
                 style={{ width: '100%' }}
                 options={[
-                  { value: 'ALL', label: `ALL - ${translate('home:allFaculties')}` },
+                  { value: 'ALL', label: translate('home:allFaculties') },
                   ...faculties.map((f) => ({
                     value: f.code,
-                    label: `${f.code} - ${f.name}`,
+                    label: f.name,
                   })),
                 ]}
               />
@@ -245,6 +216,7 @@ export default function HomePage() {
               <span className="segment-label">{translate('home:categoryLabel')}</span>
               <Select
                 variant="borderless"
+                popupMatchSelectWidth={false}
                 value={bookTypeCode}
                 onChange={(val) => {
                   clearFocusedRow();
@@ -252,10 +224,10 @@ export default function HomePage() {
                 }}
                 style={{ width: '100%' }}
                 options={[
-                  { value: 'ALL', label: `ALL - ${translate('home:allCategories')}` },
+                  { value: 'ALL', label: translate('home:allCategories') },
                   ...bookTypes.map((t) => ({
                     value: t.code,
-                    label: `${t.code} - ${t.name}`,
+                    label: t.name,
                   })),
                 ]}
               />
@@ -268,104 +240,11 @@ export default function HomePage() {
                 clearFocusedRow();
                 setFilter({ keyword: inputKeyword.trim(), pageNumber: 1 });
               }}
-              style={{ height: 46, padding: '0 22px' }}
+              style={{ height: 44, padding: '0 22px' }}
             >
               <MaterialIcon name="travel_explore" size={18} />
               <span>{translate('button:search')}</span>
             </button>
-          </div>
-
-          {/* Popular Keywords Chips */}
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-              fontSize: 12,
-            }}
-          >
-            <span style={{ fontWeight: 700, color: '#596377' }}>
-              {translate('home:popularKeywords')}
-            </span>
-            {POPULAR_KEYWORDS.map((kw) => (
-              <button
-                key={kw}
-                type="button"
-                onClick={() => handleKeywordInput(kw)}
-                style={{
-                  padding: '4px 11px',
-                  borderRadius: 999,
-                  border: '1px solid #d5dcff',
-                  background: '#ffffff',
-                  color: '#131b2e',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                {kw}
-              </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => setFilter({ onlyGiveaway: !onlyGiveaway, pageNumber: 1 })}
-              style={{
-                padding: '4px 12px',
-                borderRadius: 999,
-                border: '1px solid #f59e0b',
-                background: onlyGiveaway ? '#d97706' : '#fff4e5',
-                color: onlyGiveaway ? '#ffffff' : '#784b00',
-                fontSize: 12,
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 4,
-              }}
-            >
-              <MaterialIcon name="redeem" size={14} />
-              <span>{translate('home:giveawayChip')}</span>
-            </button>
-          </div>
-
-          {/* 4-Metric Trust Bar */}
-          <div
-            style={{
-              maxWidth: 880,
-              margin: '24px auto 0',
-              paddingTop: 18,
-              borderTop: '1px solid #e2e7ff',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: 12,
-            }}
-          >
-            <div>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#004ac6' }}>
-                {translate('home:stat1Value')}
-              </div>
-              <div style={{ fontSize: 12, color: '#596377' }}>{translate('home:stat1Label')}</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#131b2e' }}>
-                {translate('home:stat2Value')}
-              </div>
-              <div style={{ fontSize: 12, color: '#596377' }}>{translate('home:stat2Label')}</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#006c49' }}>
-                {translate('home:stat3Value')}
-              </div>
-              <div style={{ fontSize: 12, color: '#596377' }}>{translate('home:stat3Label')}</div>
-            </div>
-            <div>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#784b00' }}>
-                {translate('home:stat4Value')}
-              </div>
-              <div style={{ fontSize: 12, color: '#596377' }}>{translate('home:stat4Label')}</div>
-            </div>
           </div>
         </div>
       </section>
@@ -602,15 +481,14 @@ export default function HomePage() {
                           <span
                             style={{
                               padding: '4px 10px',
-                              borderRadius: 999,
-                              background: 'linear-gradient(135deg, #f59e0b 0%, #ea580c 100%)',
+                              borderRadius: 6,
+                              background: '#004ac6',
                               color: '#ffffff',
                               fontSize: 11,
-                              fontWeight: 800,
+                              fontWeight: 700,
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: 4,
-                              boxShadow: '0 4px 10px rgba(234, 88, 12, 0.35)',
                             }}
                           >
                             <MaterialIcon name="volunteer_activism" size={14} />
@@ -620,11 +498,11 @@ export default function HomePage() {
                           <span
                             style={{
                               padding: '4px 10px',
-                              borderRadius: 999,
-                              background: 'rgba(255,255,255,0.94)',
-                              color: '#006c49',
+                              borderRadius: 6,
+                              background: 'rgba(255,255,255,0.95)',
+                              color: '#004ac6',
                               fontSize: 11,
-                              fontWeight: 800,
+                              fontWeight: 700,
                             }}
                           >
                             ● {book.conditionBadge}
@@ -755,9 +633,9 @@ export default function HomePage() {
                           <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
                             <span
                               style={{
-                                fontSize: 18,
-                                fontWeight: 800,
-                                color: book.isGiveaway ? '#d97706' : '#004ac6',
+                                fontSize: 17,
+                                fontWeight: 700,
+                                color: '#004ac6',
                               }}
                             >
                               {book.isGiveaway
@@ -782,10 +660,10 @@ export default function HomePage() {
                               style={{
                                 padding: '2px 6px',
                                 borderRadius: 4,
-                                background: '#6cf8bb',
-                                color: '#005236',
+                                background: '#eef2ff',
+                                color: '#004ac6',
                                 fontSize: 10.5,
-                                fontWeight: 800,
+                                fontWeight: 700,
                               }}
                             >
                               -{discountPercent}%
@@ -898,14 +776,14 @@ export default function HomePage() {
           </>
         )}
 
-        {/* 4. COMMUNITY GIVING 0Đ CALLOUT BANNER */}
+        {/* 4. COMMUNITY GIVING 0Đ CALLOUT BANNER — Flat & Uniform Palette */}
         <div
           style={{
             marginTop: 36,
             padding: '28px 32px',
-            borderRadius: 20,
-            background: 'linear-gradient(135deg, #fff8eb 0%, #ffedd5 100%)',
-            border: '1px solid #fdba74',
+            borderRadius: 12,
+            background: '#ffffff',
+            border: '1px solid #dbe1ff',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
@@ -920,18 +798,18 @@ export default function HomePage() {
                 alignItems: 'center',
                 gap: 6,
                 padding: '4px 10px',
-                borderRadius: 999,
-                background: '#ffffff',
-                color: '#9a3412',
+                borderRadius: 6,
+                background: '#eef2ff',
+                color: '#004ac6',
                 fontSize: 11,
-                fontWeight: 800,
+                fontWeight: 700,
                 marginBottom: 10,
               }}
             >
               <MaterialIcon name="favorite" size={14} />
               <span>{translate('home:communityBadge')}</span>
             </span>
-            <h3 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 800, color: '#131b2e' }}>
+            <h3 style={{ margin: '0 0 8px', fontSize: 20, fontWeight: 700, color: '#131b2e' }}>
               {translate('home:communityTitle')}
             </h3>
             <p style={{ margin: 0, fontSize: 13.5, color: '#596377', lineHeight: 1.6 }}>
@@ -946,12 +824,12 @@ export default function HomePage() {
               style={{
                 height: 40,
                 padding: '0 18px',
-                borderRadius: 10,
-                border: 'none',
-                background: '#d97706',
+                borderRadius: 8,
+                border: '1px solid #004ac6',
+                background: '#004ac6',
                 color: '#ffffff',
                 fontSize: 13,
-                fontWeight: 700,
+                fontWeight: 600,
                 cursor: 'pointer',
               }}
             >
@@ -963,12 +841,12 @@ export default function HomePage() {
               style={{
                 height: 40,
                 padding: '0 18px',
-                borderRadius: 10,
-                border: '1px solid #d97706',
-                background: '#ffffff',
-                color: '#9a3412',
+                borderRadius: 8,
+                border: '1px solid #dbe1ff',
+                background: '#eef2ff',
+                color: '#004ac6',
                 fontSize: 13,
-                fontWeight: 700,
+                fontWeight: 600,
                 cursor: 'pointer',
               }}
             >
@@ -1040,7 +918,7 @@ export default function HomePage() {
               value={campusLocation}
               onChange={(val) => setFilter({ campusLocation: val })}
               options={[
-                { value: 'ALL', label: `ALL - ${translate('home:allFaculties')}` },
+                { value: 'ALL', label: translate('home:allFaculties') },
                 ...CAMPUS_LOCATIONS.map((loc) => ({
                   value: loc,
                   label: loc,

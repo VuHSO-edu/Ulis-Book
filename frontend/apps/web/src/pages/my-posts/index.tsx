@@ -531,7 +531,7 @@ export default function MyPostsPage() {
               <Select
                 options={faculties.map((f) => ({
                   value: f.code,
-                  label: `${f.code} - ${f.name}`,
+                  label: f.name,
                 }))}
               />
             </Form.Item>
@@ -551,7 +551,7 @@ export default function MyPostsPage() {
               <Select
                 options={bookTypes.map((t) => ({
                   value: t.code,
-                  label: `${t.code} - ${t.name}`,
+                  label: t.name,
                 }))}
               />
             </Form.Item>

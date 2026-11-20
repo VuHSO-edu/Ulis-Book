@@ -249,52 +249,43 @@ export default function AdminReportsPage() {
 
   return (
     <div>
-      {/* Title Row */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          marginBottom: 16,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: '#131b2e' }}>
-            {translate('admin:reports.title')}
-          </h1>
-          <span
-            style={{
-              padding: '3px 10px',
-              borderRadius: 999,
-              background: '#ffdad6',
-              color: '#93000a',
-              fontSize: 11.5,
-              fontWeight: 800,
-            }}
-          >
-            {translate('admin:reports.pendingBadge', { count: pendingCount })}
-          </span>
+      {/* Page Header */}
+      <div className="ulis-admin-page-header">
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <h1>{translate('admin:reports.title')}</h1>
+            <span
+              style={{
+                padding: '3px 10px',
+                borderRadius: 6,
+                background: '#fef3c7',
+                color: '#b45309',
+                fontSize: 11.5,
+                fontWeight: 700,
+              }}
+            >
+              {translate('admin:reports.pendingBadge', { count: pendingCount })}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* 4 KPI Cards (Stitch Screen 5: 56269799012e40d8a3ef31ce41b269fa) */}
+      {/* 4 KPI Cards — Flat & Uniform Palette */}
       <div className="ulis-kpi-grid">
         <div className="ulis-kpi-card">
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#596377' }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
               {translate('admin:reports.statPending')}
             </div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#d97706' }}>{pendingCount}</div>
+            <div style={{ fontSize: 26, fontWeight: 700, color: '#f59e0b' }}>{pendingCount}</div>
           </div>
           <span
             style={{
-              width: 38,
-              height: 38,
+              width: 40,
+              height: 40,
               borderRadius: 8,
-              background: '#ffddb8',
-              color: '#784b00',
+              background: '#fef3c7',
+              color: '#f59e0b',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -306,18 +297,18 @@ export default function AdminReportsPage() {
 
         <div className="ulis-kpi-card">
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#596377' }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
               {translate('admin:reports.statHigh')}
             </div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#ba1a1a' }}>{highCount}</div>
+            <div style={{ fontSize: 26, fontWeight: 700, color: '#ef4444' }}>{highCount}</div>
           </div>
           <span
             style={{
-              width: 38,
-              height: 38,
+              width: 40,
+              height: 40,
               borderRadius: 8,
-              background: '#ffdad6',
-              color: '#ba1a1a',
+              background: '#fee2e2',
+              color: '#ef4444',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -329,18 +320,18 @@ export default function AdminReportsPage() {
 
         <div className="ulis-kpi-card">
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#596377' }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
               {translate('admin:reports.statResolved')}
             </div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#006c49' }}>{resolvedCount}</div>
+            <div style={{ fontSize: 26, fontWeight: 700, color: '#10b981' }}>{resolvedCount}</div>
           </div>
           <span
             style={{
-              width: 38,
-              height: 38,
+              width: 40,
+              height: 40,
               borderRadius: 8,
-              background: '#6cf8bb',
-              color: '#005236',
+              background: '#d1fae5',
+              color: '#10b981',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -352,18 +343,18 @@ export default function AdminReportsPage() {
 
         <div className="ulis-kpi-card">
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#596377' }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
               {translate('admin:reports.statDismissed')}
             </div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#434655' }}>{dismissedCount}</div>
+            <div style={{ fontSize: 26, fontWeight: 700, color: '#0f172a' }}>{dismissedCount}</div>
           </div>
           <span
             style={{
-              width: 38,
-              height: 38,
+              width: 40,
+              height: 40,
               borderRadius: 8,
-              background: '#e5e9f5',
-              color: '#434655',
+              background: '#f1f5f9',
+              color: '#475569',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -376,27 +367,19 @@ export default function AdminReportsPage() {
 
       {/* Debounced Filter Bar */}
       <div
-        style={{
-          padding: 12,
-          borderRadius: 10,
-          background: '#ffffff',
-          border: '1px solid #dce2f2',
-          marginBottom: 14,
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr 1fr auto',
-          gap: 10,
-          alignItems: 'center',
-        }}
+        className="ulis-admin-filter-bar"
+        style={{ gridTemplateColumns: '2fr 1fr 1fr auto' }}
       >
         <Input
           value={inputKeyword}
           onChange={(e) => handleKeywordChange(e.target.value)}
           placeholder={translate('admin:reports.filterSearchPlaceholder')}
-          prefix={<MaterialIcon name="search" size={17} style={{ color: '#737686' }} />}
+          prefix={<MaterialIcon name="search" size={17} style={{ color: '#64748b' }} />}
           allowClear
         />
 
         <Select
+          popupMatchSelectWidth={false}
           value={reportSourceFilter}
           onChange={(val) => {
             clearFocusedRow('reports');
@@ -414,6 +397,7 @@ export default function AdminReportsPage() {
         />
 
         <Select
+          popupMatchSelectWidth={false}
           value={reportStatusFilter}
           onChange={(val) => {
             clearFocusedRow('reports');
@@ -447,15 +431,7 @@ export default function AdminReportsPage() {
       </div>
 
       {/* Moderation Table Grid */}
-      <div
-        className="ulis-data-table"
-        style={{
-          background: '#ffffff',
-          borderRadius: 10,
-          border: '1px solid #dce2f2',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="ulis-data-table ulis-admin-table-card">
         <Table<ReportItem>
           rowKey="id"
           loading={isLoading}

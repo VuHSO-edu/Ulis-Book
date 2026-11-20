@@ -1,19 +1,19 @@
 // Global styles dùng chung cho tất cả app — theo vuhso-frontend-rules + Stitch Design System
 :root {
-  --ulis-primary: #004ac6;
+  --ulis-primary: #2563eb;
   --ulis-primary-container: #2563eb;
   --ulis-blue: #1677ff;
-  --ulis-navy: #131b2e;
+  --ulis-navy: #0f172a;
   --ulis-bg: #f0f2f5;
   --ulis-surface: #ffffff;
   --ulis-surface-low: #f2f3ff;
-  --ulis-text: #131b2e;
+  --ulis-text: #0f172a;
   --ulis-text-muted: #596377;
   --ulis-border: #c3c6d7;
-  --ulis-emerald: #006c49;
-  --ulis-emerald-bg: #6cf8bb;
-  --ulis-amber: #784b00;
-  --ulis-amber-bg: #ffddb8;
+  --ulis-emerald: #10b981;
+  --ulis-emerald-bg: #d1fae5;
+  --ulis-amber: #f59e0b;
+  --ulis-amber-bg: #fef3c7;
   --ulis-error: #ba1a1a;
   --ulis-error-bg: #ffdad6;
 }
@@ -33,7 +33,7 @@ body,
 body {
   background: var(--ulis-bg);
   color: var(--ulis-text);
-  font-family: Tahoma, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Lexend', Tahoma, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 13px;
   -webkit-font-smoothing: antialiased;
 }
@@ -43,7 +43,7 @@ h2,
 h3,
 h4,
 .font-headline {
-  font-family: 'Plus Jakarta Sans', Tahoma, sans-serif;
+  font-family: 'Merriweather', Georgia, serif;
 }
 
 // Material Symbols support
@@ -63,7 +63,7 @@ h4,
 }
 
 .ant-form-item-label > label {
-  font-family: Tahoma, 'Inter', sans-serif !important;
+  font-family: 'Lexend', Tahoma, sans-serif !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   color: #000000 !important;
@@ -74,7 +74,7 @@ h4,
 .ant-input-number-input,
 .ant-select-selection-item,
 textarea.ant-input {
-  font-family: Tahoma, 'Inter', sans-serif !important;
+  font-family: 'Lexend', Tahoma, sans-serif !important;
   font-size: 13px !important;
   color: #1677ff !important;
   font-weight: 500;
@@ -104,7 +104,8 @@ textarea.ant-input::placeholder {
   border-radius: 8px !important;
   padding: 0 !important;
   overflow: hidden;
-  box-shadow: 0 20px 45px rgba(19, 27, 46, 0.22);
+  border: 1px solid #dbe1ff;
+  box-shadow: none !important;
 }
 
 .ulis-custom-modal .ant-modal-header,
@@ -122,10 +123,10 @@ textarea.ant-input::placeholder {
 
 .ulis-custom-modal .ant-modal-title,
 .ant-modal .ant-modal-title {
-  font-family: Tahoma, 'Plus Jakarta Sans', sans-serif !important;
+  font-family: 'Merriweather', Georgia, serif !important;
   font-size: 14px !important;
   font-weight: 700 !important;
-  color: #131b2e !important;
+  color: #0f172a !important;
 }
 
 .ulis-custom-modal .ant-modal-body,
@@ -150,15 +151,16 @@ textarea.ant-input::placeholder {
 .ulis-modal-btn-submit,
 .ulis-modal-btn-exit,
 .ulis-primary-btn {
-  background: #1677ff !important;
-  border-color: #1677ff !important;
+  background: #2563eb !important;
+  border-color: #2563eb !important;
   color: #ffffff !important;
-  font-family: Tahoma, 'Inter', sans-serif !important;
+  font-family: 'Lexend', Tahoma, sans-serif !important;
   font-size: 13px !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   border-radius: 6px !important;
   height: 36px !important;
   padding: 0 18px !important;
+  box-shadow: none !important;
 }
 
 .ulis-modal-btn-exit {
@@ -175,7 +177,7 @@ textarea.ant-input::placeholder {
 
 // Table Grid Rules (§4): Hover light gray + blue text; Selected deep blue + white text
 .ulis-data-table .ant-table {
-  font-family: Tahoma, 'Inter', sans-serif;
+  font-family: 'Lexend', Tahoma, sans-serif;
   font-size: 13px;
 }
 
@@ -205,8 +207,8 @@ textarea.ant-input::placeholder {
   color: #ffffff !important;
 }
 
-.ulis-data-table .ant-table-tbody > tr.ulis-row-focused td *,
-.ulis-data-table .ant-table-tbody > tr.ulis-row-focused:hover td * {
+.ulis-data-table .ant-table-tbody > tr.ulis-row-focused td *:not(.ant-tag):not(.ant-tag *),
+.ulis-data-table .ant-table-tbody > tr.ulis-row-focused:hover td *:not(.ant-tag):not(.ant-tag *) {
   color: #ffffff !important;
 }
 

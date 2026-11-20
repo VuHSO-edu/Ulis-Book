@@ -4,6 +4,8 @@ import com.ulis.business.entity.BookCategory;
 import com.ulis.business.entity.BookPost;
 import com.ulis.business.entity.Report;
 import com.ulis.business.entity.User;
+import com.ulis.business.enums.BookCategoryAxis;
+import com.ulis.business.enums.BookCategoryStatus;
 import com.ulis.business.enums.BookPostStatus;
 import com.ulis.business.enums.ReportSourceType;
 import com.ulis.business.enums.ReportStatus;
@@ -149,7 +151,7 @@ public class AdminController {
         BookPost post = bookPostRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(messageHelper.getMessage("book.post.not.found")));
         BookPostStatus next = post.getStatus() == BookPostStatus.BANNED
-                ? BookPostStatus.AVAILABLE
+                ? BookPostStatus.SELLING
                 : BookPostStatus.BANNED;
         post.setStatus(next);
         bookPostRepository.save(post);
@@ -203,6 +205,17 @@ public class AdminController {
         BookCategory category = new BookCategory();
         category.setCode(cleanCode);
         category.setName(req.getName().trim());
+        category.setSubtitle(req.getSubtitle() != null ? req.getSubtitle().trim() : "");
+        category.setParentAxis(
+                "BOOK_TYPE".equalsIgnoreCase(req.getParentAxis())
+                        ? BookCategoryAxis.BOOK_TYPE
+                        : BookCategoryAxis.FACULTY);
+        category.setSortOrder(req.getSortOrder() != null ? req.getSortOrder() : 1);
+        category.setStatus(
+                "INACTIVE".equalsIgnoreCase(req.getStatus())
+                        ? BookCategoryStatus.INACTIVE
+                        : BookCategoryStatus.ACTIVE);
+        category.setUpdatedAt(java.time.LocalDateTime.now());
         return ResponseBuilder.ok(bookCategoryRepository.save(category));
     }
 
@@ -218,6 +231,25 @@ public class AdminController {
         if (req.getName() != null) {
             category.setName(req.getName().trim());
         }
+        if (req.getSubtitle() != null) {
+            category.setSubtitle(req.getSubtitle().trim());
+        }
+        if (req.getParentAxis() != null) {
+            category.setParentAxis(
+                    "BOOK_TYPE".equalsIgnoreCase(req.getParentAxis())
+                            ? BookCategoryAxis.BOOK_TYPE
+                            : BookCategoryAxis.FACULTY);
+        }
+        if (req.getSortOrder() != null) {
+            category.setSortOrder(req.getSortOrder());
+        }
+        if (req.getStatus() != null) {
+            category.setStatus(
+                    "INACTIVE".equalsIgnoreCase(req.getStatus())
+                            ? BookCategoryStatus.INACTIVE
+                            : BookCategoryStatus.ACTIVE);
+        }
+        category.setUpdatedAt(java.time.LocalDateTime.now());
         return ResponseBuilder.ok(bookCategoryRepository.save(category));
     }
 

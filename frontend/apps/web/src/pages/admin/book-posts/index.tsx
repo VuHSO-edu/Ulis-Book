@@ -262,62 +262,18 @@ export default function AdminBookPostsPage() {
 
   return (
     <div>
-      {/* Segmented Switcher Bar (Stitch Screen 6: 40daf8eecf514885b56dfe66195ed8f1) */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          marginBottom: 16,
-        }}
-      >
+      {/* Page Header + Segmented Switcher */}
+      <div className="ulis-admin-page-header">
         <div>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: '#131b2e' }}>
-            {translate('admin:posts.title')}
-          </h1>
-          <div style={{ fontSize: 12.5, color: '#596377' }}>{translate('admin:posts.subtitle')}</div>
+          <h1>{translate('admin:posts.title')}</h1>
+          <div className="page-subtitle">{translate('admin:posts.subtitle')}</div>
         </div>
 
-        <div
-          style={{
-            display: 'inline-flex',
-            padding: 4,
-            borderRadius: 8,
-            background: '#dce2f2',
-            gap: 4,
-          }}
-        >
-          <button
-            type="button"
-            style={{
-              padding: '6px 14px',
-              borderRadius: 6,
-              border: 'none',
-              background: '#004ac6',
-              color: '#ffffff',
-              fontSize: 12.5,
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
-          >
+        <div className="ulis-admin-segmented">
+          <button type="button" className="seg-btn active">
             {translate('admin:navPosts')} ({posts.length})
           </button>
-          <button
-            type="button"
-            onClick={() => navigate('/admin/users')}
-            style={{
-              padding: '6px 14px',
-              borderRadius: 6,
-              border: 'none',
-              background: 'transparent',
-              color: '#434655',
-              fontSize: 12.5,
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
-          >
+          <button type="button" className="seg-btn" onClick={() => navigate('/admin/users')}>
             {translate('admin:navUsers')}
           </button>
         </div>
@@ -325,42 +281,35 @@ export default function AdminBookPostsPage() {
 
       {/* Filter Bar */}
       <div
-        style={{
-          padding: 12,
-          borderRadius: 10,
-          background: '#ffffff',
-          border: '1px solid #dce2f2',
-          marginBottom: 14,
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr 1fr auto',
-          gap: 10,
-          alignItems: 'center',
-        }}
+        className="ulis-admin-filter-bar"
+        style={{ gridTemplateColumns: '2fr 1fr 1fr auto' }}
       >
         <Input
           value={inputKeyword}
           onChange={(e) => handleKeywordChange(e.target.value)}
           placeholder={translate('admin:posts.filterKeywordPlaceholder')}
-          prefix={<MaterialIcon name="search" size={17} style={{ color: '#737686' }} />}
+          prefix={<MaterialIcon name="search" size={17} style={{ color: '#64748b' }} />}
           allowClear
         />
 
         <Select
+          popupMatchSelectWidth={false}
           value={postFacultyFilter}
           onChange={(val) => {
             clearFocusedRow('posts');
             setPostFilter({ postFacultyFilter: val, postPage: 1 });
           }}
           options={[
-            { value: 'ALL', label: `ALL - ${translate('home:allFaculties')}` },
+            { value: 'ALL', label: translate('home:allFaculties') },
             ...faculties.map((f) => ({
               value: f.code,
-              label: `${f.code} - ${f.name}`,
+              label: f.name,
             })),
           ]}
         />
 
         <Select
+          popupMatchSelectWidth={false}
           value={postStatusFilter}
           onChange={(val) => {
             clearFocusedRow('posts');
@@ -392,15 +341,7 @@ export default function AdminBookPostsPage() {
       </div>
 
       {/* Data Table */}
-      <div
-        className="ulis-data-table"
-        style={{
-          background: '#ffffff',
-          borderRadius: 10,
-          border: '1px solid #dce2f2',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="ulis-data-table ulis-admin-table-card">
         <Table<BookPostItem>
           rowKey="id"
           loading={isLoading}

@@ -65,7 +65,15 @@ export const routes = [
     />
   </Route>,
 
-  <Route key="admin-console" path="/admin" element={<AdminLayout />}>
+  <Route
+    key="admin-console"
+    path="/admin"
+    element={
+      <AuthGuard requireAdmin>
+        <AdminLayout />
+      </AuthGuard>
+    }
+  >
     <Route index element={<Navigate to="/admin/reports" replace />} />
     <Route path="reports" element={withSuspense(<AdminReportsPage />)} />
     <Route path="book-posts" element={withSuspense(<AdminBookPostsPage />)} />

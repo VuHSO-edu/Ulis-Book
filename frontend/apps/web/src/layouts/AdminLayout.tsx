@@ -9,6 +9,7 @@ export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const user = useAuth((s) => s.user);
+  const logout = useAuth((s) => s.logout);
   const { data: reports = [] } = useAdminReports();
 
   const pendingReportsCount = reports.filter((r) => r.status === 'PENDING').length;
@@ -26,38 +27,47 @@ export default function AdminLayout() {
       <aside className="ulis-admin-sidebar">
         <div
           style={{
-            height: 56,
+            height: 60,
             padding: '0 18px',
-            borderBottom: '1px solid #dce2f2',
+            borderBottom: '1px solid #e2e8f0',
             display: 'flex',
             alignItems: 'center',
-            gap: 10,
+            gap: 12,
           }}
         >
           <span
             style={{
-              width: 32,
-              height: 32,
+              width: 34,
+              height: 34,
               borderRadius: 8,
-              background: '#004ac6',
+              background: '#2563eb',
               color: '#ffffff',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <MaterialIcon name="menu_book" size={18} />
+            <MaterialIcon name="admin_panel_settings" size={19} />
           </span>
           <div>
-            <div style={{ fontSize: 13.5, fontWeight: 800, color: '#131b2e', lineHeight: 1.15 }}>
+            <div
+              style={{
+                fontFamily: "'Merriweather', Georgia, serif",
+                fontSize: 15,
+                fontWeight: 700,
+                color: '#0f172a',
+                lineHeight: 1.2,
+              }}
+            >
               {translate('common:appName')}
             </div>
             <div
               style={{
-                fontSize: 10,
-                fontWeight: 700,
-                color: '#596377',
+                fontSize: 10.5,
+                fontWeight: 600,
+                color: '#64748b',
                 textTransform: 'uppercase',
+                letterSpacing: '0.04em',
               }}
             >
               {translate('admin:consoleSubtitle')}
@@ -65,15 +75,15 @@ export default function AdminLayout() {
           </div>
         </div>
 
-        <div style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
+        <div style={{ flex: 1, padding: '18px 14px', overflowY: 'auto' }}>
           <div
             style={{
-              fontSize: 10.5,
-              fontWeight: 800,
-              color: '#737686',
+              fontSize: 11,
+              fontWeight: 600,
+              color: '#64748b',
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
-              padding: '0 10px 8px',
+              padding: '0 10px 10px',
             }}
           >
             {translate('admin:systemGroup')}
@@ -90,14 +100,14 @@ export default function AdminLayout() {
             {pendingReportsCount > 0 && (
               <span
                 style={{
-                  padding: '2px 7px',
+                  padding: '2px 8px',
                   borderRadius: 999,
                   background: location.pathname.includes('/admin/reports')
                     ? '#ffffff'
-                    : '#ffdad6',
-                  color: '#ba1a1a',
+                    : '#fef3c7',
+                  color: location.pathname.includes('/admin/reports') ? '#2563eb' : '#b45309',
                   fontSize: 11,
-                  fontWeight: 800,
+                  fontWeight: 700,
                 }}
               >
                 {pendingReportsCount}
@@ -138,8 +148,8 @@ export default function AdminLayout() {
           <div
             style={{
               height: 1,
-              background: '#dce2f2',
-              margin: '14px 4px',
+              background: '#e2e8f0',
+              margin: '16px 4px',
             }}
           />
 
@@ -153,33 +163,55 @@ export default function AdminLayout() {
 
         <div
           style={{
-            padding: 12,
-            borderTop: '1px solid #dce2f2',
-            background: '#faf8ff',
+            padding: 14,
+            borderTop: '1px solid #e2e8f0',
+            background: '#f8fafc',
           }}
         >
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
-              padding: '6px 10px',
-              borderRadius: 6,
-              background: '#eef2ff',
-              fontSize: 11,
-              fontWeight: 700,
-              color: '#006c49',
+              justifyContent: 'space-between',
+              padding: '8px 10px',
+              borderRadius: 8,
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
             }}
           >
-            <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                background: '#10b981',
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Avatar size={28} style={{ background: '#2563eb', fontSize: 11, fontWeight: 700 }}>
+                AD
+              </Avatar>
+              <div style={{ lineHeight: 1.25 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#0f172a' }}>
+                  {user?.fullName ?? 'Admin ULIS'}
+                </div>
+                <div style={{ fontSize: 10.5, color: '#10b981', fontWeight: 600 }}>● ADMIN</div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                navigate('/login', { replace: true });
               }}
-            />
-            <span>{translate('admin:serverOnline')}</span>
+              title={translate('button:logout')}
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: 6,
+                border: 'none',
+                background: 'transparent',
+                color: '#64748b',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <MaterialIcon name="logout" size={16} />
+            </button>
           </div>
         </div>
       </aside>
@@ -192,31 +224,31 @@ export default function AdminLayout() {
                 title: (
                   <span
                     onClick={() => navigate('/admin/reports')}
-                    style={{ cursor: 'pointer', fontWeight: 600 }}
+                    style={{ cursor: 'pointer', fontWeight: 500, color: '#64748b' }}
                   >
                     {translate('admin:breadcrumbRoot')}
                   </span>
                 ),
               },
               {
-                title: <strong style={{ color: '#004ac6' }}>{currentCrumb()}</strong>,
+                title: <strong style={{ color: '#2563eb' }}>{currentCrumb()}</strong>,
               },
             ]}
           />
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <button
               type="button"
               onClick={() => navigate('/')}
               style={{
-                height: 32,
-                padding: '0 12px',
-                borderRadius: 6,
-                border: '1px solid #c3c6d7',
+                height: 34,
+                padding: '0 14px',
+                borderRadius: 8,
+                border: '1px solid #cbd5e1',
                 background: '#ffffff',
-                fontSize: 12,
-                fontWeight: 700,
-                color: '#131b2e',
+                fontSize: 12.5,
+                fontWeight: 600,
+                color: '#0f172a',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -226,31 +258,12 @@ export default function AdminLayout() {
               <MaterialIcon name="open_in_new" size={15} />
               <span>{translate('admin:backToStudentView')}</span>
             </button>
-
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '4px 10px 4px 4px',
-                borderRadius: 999,
-                background: '#f2f3ff',
-                border: '1px solid #d5dcff',
-              }}
-            >
-              <Avatar size={26} style={{ background: '#004ac6', fontSize: 11, fontWeight: 700 }}>
-                AD
-              </Avatar>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#131b2e' }}>
-                {user?.fullName ?? 'Admin ULIS'}
-              </span>
-            </div>
           </div>
         </header>
 
-        <div className="ulis-admin-content">
+        <main className="ulis-admin-content">
           <Outlet />
-        </div>
+        </main>
       </div>
 
       <ReportModal />

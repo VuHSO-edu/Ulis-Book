@@ -194,12 +194,10 @@ export default function AdminBookCategoriesPage() {
       align: 'left',
       ellipsis: true,
       render: (_v, record) => (
-        <Tooltip title={`${record.code} - ${record.name}`}>
+        <Tooltip title={record.name}>
           <div>
-            <div style={{ fontWeight: 700 }}>
-              {record.code} - {record.name}
-            </div>
-            <div style={{ fontSize: 11.5, color: '#596377' }}>{record.subtitle}</div>
+            <div style={{ fontWeight: 700 }}>{record.name}</div>
+            <div style={{ fontSize: 11.5, color: '#64748b' }}>{record.subtitle}</div>
           </div>
         </Tooltip>
       ),
@@ -285,23 +283,10 @@ export default function AdminBookCategoriesPage() {
   return (
     <div>
       {/* Header Row */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          marginBottom: 16,
-        }}
-      >
+      <div className="ulis-admin-page-header">
         <div>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: '#131b2e' }}>
-            {translate('admin:categories.title')}
-          </h1>
-          <div style={{ fontSize: 12.5, color: '#596377' }}>
-            {translate('admin:categories.subtitle')}
-          </div>
+          <h1>{translate('admin:categories.title')}</h1>
+          <div className="page-subtitle">{translate('admin:categories.subtitle')}</div>
         </div>
 
         <Button type="primary" className="ulis-primary-btn" onClick={openCreateModal}>
@@ -309,14 +294,14 @@ export default function AdminBookCategoriesPage() {
         </Button>
       </div>
 
-      {/* 12-Col Split Workspace: Left 4-col Tree View + Right 8-col Data Table (Stitch Screen 7: 5b9048fd6b0d475bb2cb424508a5339c) */}
-      <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 16 }}>
+      {/* 12-Col Split Workspace: Left 4-col Tree View + Right 8-col Data Table */}
+      <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 18 }}>
         {/* Left: Interactive 2-Axis Academic Tree */}
         <div
           style={{
             background: '#ffffff',
             borderRadius: 10,
-            border: '1px solid #dce2f2',
+            border: '1px solid #e2e8f0',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
@@ -325,14 +310,14 @@ export default function AdminBookCategoriesPage() {
           <div
             style={{
               padding: '12px 14px',
-              borderBottom: '1px solid #dce2f2',
-              background: '#f8f9fd',
+              borderBottom: '1px solid #e2e8f0',
+              background: '#f8fafc',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
             }}
           >
-            <strong style={{ fontSize: 13, color: '#131b2e' }}>
+            <strong style={{ fontSize: 13, color: '#0f172a' }}>
               {translate('admin:categories.treeTitle')}
             </strong>
             {selectedTreeNodeCode !== 'ALL' && (
@@ -342,7 +327,7 @@ export default function AdminBookCategoriesPage() {
                 style={{
                   border: 'none',
                   background: 'none',
-                  color: '#1677ff',
+                  color: '#2563eb',
                   fontSize: 11.5,
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -353,27 +338,27 @@ export default function AdminBookCategoriesPage() {
             )}
           </div>
 
-          <div style={{ padding: 10, borderBottom: '1px solid #eef1f8' }}>
+          <div style={{ padding: 10, borderBottom: '1px solid #f1f5f9' }}>
             <Input
               value={treeKeyword}
               onChange={(e) => setCategoryFilter({ treeKeyword: e.target.value })}
               placeholder={translate('admin:categories.treeSearchPlaceholder')}
-              prefix={<MaterialIcon name="filter_alt" size={16} style={{ color: '#737686' }} />}
+              prefix={<MaterialIcon name="filter_alt" size={16} style={{ color: '#64748b' }} />}
               allowClear
             />
           </div>
 
           <div style={{ padding: 10, overflowY: 'auto', maxHeight: 540 }}>
             {/* Axis 1: BOOK_TYPE */}
-            <div style={{ marginBottom: 12 }}>
+            <div style={{ marginBottom: 14 }}>
               <div
                 style={{
-                  padding: '6px 8px',
+                  padding: '6px 10px',
                   borderRadius: 6,
                   background: '#eef2ff',
-                  color: '#004ac6',
+                  color: '#2563eb',
                   fontSize: 12,
-                  fontWeight: 800,
+                  fontWeight: 700,
                   marginBottom: 6,
                 }}
               >
@@ -391,22 +376,20 @@ export default function AdminBookCategoriesPage() {
                       })
                     }
                     style={{
-                      padding: '7px 10px',
-                      marginLeft: 10,
+                      padding: '8px 10px',
+                      marginLeft: 8,
                       borderRadius: 6,
-                      background: active ? '#1677ff' : 'transparent',
-                      color: active ? '#ffffff' : '#131b2e',
+                      background: active ? '#2563eb' : 'transparent',
+                      color: active ? '#ffffff' : '#0f172a',
                       fontSize: 12.5,
-                      fontWeight: active ? 700 : 500,
+                      fontWeight: active ? 600 : 500,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
                     }}
                   >
-                    <span>
-                      {node.code} - {node.name}
-                    </span>
+                    <span>{node.name}</span>
                     <span style={{ fontSize: 11, opacity: 0.8 }}>{node.bookCount}</span>
                   </div>
                 );
@@ -417,12 +400,12 @@ export default function AdminBookCategoriesPage() {
             <div>
               <div
                 style={{
-                  padding: '6px 8px',
+                  padding: '6px 10px',
                   borderRadius: 6,
-                  background: '#e6f9f1',
-                  color: '#006c49',
+                  background: '#ecfdf5',
+                  color: '#059669',
                   fontSize: 12,
-                  fontWeight: 800,
+                  fontWeight: 700,
                   marginBottom: 6,
                 }}
               >
@@ -440,22 +423,20 @@ export default function AdminBookCategoriesPage() {
                       })
                     }
                     style={{
-                      padding: '7px 10px',
-                      marginLeft: 10,
+                      padding: '8px 10px',
+                      marginLeft: 8,
                       borderRadius: 6,
-                      background: active ? '#1677ff' : 'transparent',
-                      color: active ? '#ffffff' : '#131b2e',
+                      background: active ? '#2563eb' : 'transparent',
+                      color: active ? '#ffffff' : '#0f172a',
                       fontSize: 12.5,
-                      fontWeight: active ? 700 : 500,
+                      fontWeight: active ? 600 : 500,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
                     }}
                   >
-                    <span>
-                      {node.code} - {node.name}
-                    </span>
+                    <span>{node.name}</span>
                     <span style={{ fontSize: 11, opacity: 0.8 }}>{node.bookCount}</span>
                   </div>
                 );
@@ -467,27 +448,19 @@ export default function AdminBookCategoriesPage() {
         {/* Right: Server Filter Bar + Category Data Table */}
         <div>
           <div
-            style={{
-              padding: 12,
-              borderRadius: 10,
-              background: '#ffffff',
-              border: '1px solid #dce2f2',
-              marginBottom: 12,
-              display: 'grid',
-              gridTemplateColumns: '2fr 1fr auto',
-              gap: 10,
-              alignItems: 'center',
-            }}
+            className="ulis-admin-filter-bar"
+            style={{ gridTemplateColumns: '2fr 1fr auto' }}
           >
             <Input
               value={inputKeyword}
               onChange={(e) => handleKeywordChange(e.target.value)}
               placeholder={translate('admin:categories.filterSearchPlaceholder')}
-              prefix={<MaterialIcon name="search" size={17} style={{ color: '#737686' }} />}
+              prefix={<MaterialIcon name="search" size={17} style={{ color: '#64748b' }} />}
               allowClear
             />
 
             <Select
+              popupMatchSelectWidth={false}
               value={categoryAxisFilter}
               onChange={(val) => {
                 clearFocusedRow('categories');
@@ -498,8 +471,8 @@ export default function AdminBookCategoriesPage() {
               }}
               options={[
                 { value: 'ALL', label: translate('admin:categories.filterParentAll') },
-                { value: 'FACULTY', label: 'FACULTY - Khoa Đào Tạo' },
-                { value: 'BOOK_TYPE', label: 'BOOK_TYPE - Loại Tài Liệu' },
+                { value: 'FACULTY', label: 'Khoa Đào Tạo' },
+                { value: 'BOOK_TYPE', label: 'Loại Tài Liệu' },
               ]}
             />
 
@@ -519,15 +492,7 @@ export default function AdminBookCategoriesPage() {
             </Button>
           </div>
 
-          <div
-            className="ulis-data-table"
-            style={{
-              background: '#ffffff',
-              borderRadius: 10,
-              border: '1px solid #dce2f2',
-              overflow: 'hidden',
-            }}
-          >
+          <div className="ulis-data-table ulis-admin-table-card">
             <Table<BookCategoryItem>
               rowKey="id"
               loading={isLoading}

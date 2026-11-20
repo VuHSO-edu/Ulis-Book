@@ -77,10 +77,10 @@ export default function ForgotPasswordPage() {
           <div style={{ textAlign: 'center', marginBottom: 22 }}>
             <h1
               style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontFamily: "'Merriweather', Georgia, serif",
                 fontSize: 22,
-                fontWeight: 800,
-                color: '#191c1e',
+                fontWeight: 700,
+                color: '#0f172a',
                 margin: '0 0 8px',
               }}
             >

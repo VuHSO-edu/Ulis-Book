@@ -33,6 +33,8 @@ export default function AppLayout() {
     navigate('/');
   };
 
+  const isAdmin = isAuthenticated && user?.role === 'ADMIN';
+
   const userMenuItems = [
     {
       key: 'profile',
@@ -44,11 +46,15 @@ export default function AppLayout() {
       label: translate('nav:myPosts'),
       onClick: () => navigate('/my-posts'),
     },
-    {
-      key: 'admin',
-      label: translate('nav:adminConsole'),
-      onClick: () => navigate('/admin/reports'),
-    },
+    ...(isAdmin
+      ? [
+          {
+            key: 'admin',
+            label: translate('nav:adminConsole'),
+            onClick: () => navigate('/admin/reports'),
+          },
+        ]
+      : []),
     {
       key: 'logout',
       danger: true,
@@ -88,23 +94,32 @@ export default function AppLayout() {
                 {translate('nav:freeBooks')}
               </button>
 
-              <Link
-                to="/my-posts"
-                className={location.pathname.startsWith('/my-posts') ? 'active' : ''}
-              >
-                {translate('nav:myPosts')}
-              </Link>
+              {isAuthenticated && (
+                <>
+                  <Link
+                    to="/my-posts"
+                    className={location.pathname.startsWith('/my-posts') ? 'active' : ''}
+                  >
+                    {translate('nav:myPosts')}
+                  </Link>
 
-              <Link to="/chat" className={location.pathname.startsWith('/chat') ? 'active' : ''}>
-                {translate('nav:chat')}
-              </Link>
+                  <Link
+                    to="/chat"
+                    className={location.pathname.startsWith('/chat') ? 'active' : ''}
+                  >
+                    {translate('nav:chat')}
+                  </Link>
+                </>
+              )}
 
-              <Link
-                to="/admin/reports"
-                className={location.pathname.startsWith('/admin') ? 'active' : ''}
-              >
-                {translate('nav:adminConsole')}
-              </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin/reports"
+                  className={location.pathname.startsWith('/admin') ? 'active' : ''}
+                >
+                  {translate('nav:adminConsole')}
+                </Link>
+              )}
             </nav>
           </div>
 
@@ -118,16 +133,18 @@ export default function AppLayout() {
               <span>{translate('button:createPost')}</span>
             </button>
 
-            <Tooltip title={translate('nav:chat')}>
-              <button
-                type="button"
-                className="ulis-icon-pill-btn"
-                onClick={() => navigate(isAuthenticated ? '/chat' : '/login')}
-              >
-                <MaterialIcon name="chat_bubble" size={18} />
-                {totalUnread > 0 && <span className="unread-dot">{totalUnread}</span>}
-              </button>
-            </Tooltip>
+            {isAuthenticated && (
+              <Tooltip title={translate('nav:chat')}>
+                <button
+                  type="button"
+                  className="ulis-icon-pill-btn"
+                  onClick={() => navigate('/chat')}
+                >
+                  <MaterialIcon name="chat_bubble" size={18} />
+                  {totalUnread > 0 && <span className="unread-dot">{totalUnread}</span>}
+                </button>
+              </Tooltip>
+            )}
 
             {isAuthenticated ? (
               <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
