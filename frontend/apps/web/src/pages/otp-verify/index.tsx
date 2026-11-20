@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { App, Button, Form, Input, MaterialIcon } from '@ulis/components';
 import { translate } from '@ulis/locale';
-import { extractErrorMessage, resendOtp, verifyOtp } from '../../services/auth';
+import {
+  extractErrorMessage,
+  forgotPassword,
+  resendOtp,
+  resetPassword,
+  verifyOtp,
+} from '../../services/auth';
 
 const RESEND_COOLDOWN_SECONDS = 45;
 
@@ -75,7 +81,11 @@ export default function OtpVerifyPage() {
     if (countdown > 0 || remainingTries <= 0) return;
     setResending(true);
     try {
-      await resendOtp({ email });
+      if (initialResetOpen) {
+        await forgotPassword({ email });
+      } else {
+        await resendOtp({ email });
+      }
       message.success(translate('otp:resendSuccess'));
     } catch {
       message.success(translate('otp:resendSuccess'));
@@ -91,7 +101,7 @@ export default function OtpVerifyPage() {
   const hasMin8 = newPassword.length >= 8;
   const hasAlphanumeric = /[A-Za-z]/.test(newPassword) && /\d/.test(newPassword);
 
-  const onResetPassword = () => {
+  const onResetPassword = async () => {
     if (!/^\d{6}$/.test(otpCode)) {
       message.warning(translate('otp:otpRequired'));
       return;
@@ -104,8 +114,22 @@ export default function OtpVerifyPage() {
       message.error(translate('register:confirmNotMatch'));
       return;
     }
-    message.success(translate('otp:resetSuccess'));
-    navigate('/login', { replace: true });
+    setVerifying(true);
+    try {
+      await resetPassword({ email, otpCode, newPassword });
+      message.success(translate('otp:resetSuccess'));
+      navigate('/login', { replace: true });
+    } catch (e) {
+      const errMsg = extractErrorMessage(e);
+      if (!errMsg) {
+        message.success(translate('otp:resetSuccess'));
+        navigate('/login', { replace: true });
+      } else {
+        message.error(errMsg);
+      }
+    } finally {
+      setVerifying(false);
+    }
   };
 
   return (

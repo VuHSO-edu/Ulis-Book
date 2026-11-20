@@ -8,6 +8,7 @@ import AdminLayout from '../layouts/AdminLayout';
 const LoginPage = lazy(() => import('../pages/login'));
 const RegisterPage = lazy(() => import('../pages/register'));
 const OtpVerifyPage = lazy(() => import('../pages/otp-verify'));
+const ForgotPasswordPage = lazy(() => import('../pages/forgot-password'));
 const HomePage = lazy(() => import('../pages/home'));
 const BookDetailPage = lazy(() => import('../pages/book-detail'));
 const MyPostsPage = lazy(() => import('../pages/my-posts'));
@@ -33,6 +34,7 @@ export const routes = [
   <Route key="login" path="/login" element={withSuspense(<LoginPage />)} />,
   <Route key="register" path="/register" element={withSuspense(<RegisterPage />)} />,
   <Route key="otp-verify" path="/otp-verify" element={withSuspense(<OtpVerifyPage />)} />,
+  <Route key="forgot-password" path="/forgot-password" element={withSuspense(<ForgotPasswordPage />)} />,
 
   <Route key="student-app" path="/" element={<AppLayout />}>
     <Route index element={withSuspense(<HomePage />)} />

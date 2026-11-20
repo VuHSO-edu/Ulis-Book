@@ -24,6 +24,16 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  email: string;
+  otpCode: string;
+  newPassword: string;
+}
+
 export interface UserSummary {
   id: number;
   email: string;
@@ -58,3 +68,9 @@ export const resendOtp = (data: ResendOtpPayload) =>
 
 export const login = (data: LoginPayload) =>
   http.post<BaseResponse<LoginResponseData>>('/auth/login', data);
+
+export const forgotPassword = (data: ForgotPasswordPayload) =>
+  http.post<BaseResponse>('/auth/password/forgot', data);
+
+export const resetPassword = (data: ResetPasswordPayload) =>
+  http.post<BaseResponse>('/auth/password/reset', data);

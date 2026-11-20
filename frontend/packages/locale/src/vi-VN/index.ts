@@ -165,6 +165,16 @@ export default {
     cloudBadge: 'Máy chủ ULIS VNU Cloud',
     tlsBadge: 'Mã hóa TLS 1.3',
   },
+  forgotPassword: {
+    securityBadge: 'KHÔI PHỤC MẬT KHẨU',
+    title: 'Quên mật khẩu',
+    subtitle: 'Nhập email sinh viên (.edu.vn) để nhận mã OTP 6 chữ số đặt lại mật khẩu.',
+    emailLabel: 'Email sinh viên (.edu.vn)',
+    emailPlaceholder: 'Ví dụ: an.nv@ulis.edu.vn',
+    submit: 'Gửi mã OTP đặt lại mật khẩu',
+    success: 'Mã OTP đã được gửi tới email của bạn!',
+    backToLogin: 'Quay lại Đăng nhập',
+  },
   profile: {
     title: 'Hồ sơ của tôi',
     breadcrumb: 'Hồ sơ sinh viên VNU',

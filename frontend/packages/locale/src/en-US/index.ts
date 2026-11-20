@@ -164,6 +164,16 @@ export default {
     cloudBadge: 'ULIS VNU Cloud Server',
     tlsBadge: 'TLS 1.3 Encrypted',
   },
+  forgotPassword: {
+    securityBadge: 'PASSWORD RECOVERY',
+    title: 'Forgot Password',
+    subtitle: 'Enter your .edu.vn student email to receive a 6-digit OTP code to reset your password.',
+    emailLabel: 'Student Email (.edu.vn)',
+    emailPlaceholder: 'e.g. an.nv@ulis.edu.vn',
+    submit: 'Send Reset OTP',
+    success: 'OTP has been sent to your email!',
+    backToLogin: 'Back to Sign In',
+  },
   profile: {
     title: 'My Profile',
     breadcrumb: 'VNU Student Profile',

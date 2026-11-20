@@ -428,7 +428,7 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
                   <Checkbox>{translate('login:keepLogin')}</Checkbox>
                 </Form.Item>
                 <Link
-                  to="/otp-verify?email=an.nv%40ulis.edu.vn&reset=1"
+                  to="/forgot-password"
                   style={{ fontSize: 12, fontWeight: 700, color: '#004ac6' }}
                 >
                   {translate('login:forgotPassword')}

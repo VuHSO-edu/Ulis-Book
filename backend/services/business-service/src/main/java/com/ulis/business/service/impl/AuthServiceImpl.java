@@ -1,11 +1,13 @@
 package com.ulis.business.service.impl;
 
 import com.ulis.business.config.properties.AuthProperties;
+import com.ulis.business.dto.request.ForgotPasswordRequest;
 import com.ulis.business.dto.request.LoginRequest;
 import com.ulis.business.dto.request.OtpVerifyRequest;
 import com.ulis.business.dto.request.RefreshTokenRequest;
 import com.ulis.business.dto.request.RegisterRequest;
 import com.ulis.business.dto.request.ResendOtpRequest;
+import com.ulis.business.dto.request.ResetPasswordRequest;
 import com.ulis.business.dto.response.LoginResponse;
 import com.ulis.business.dto.response.TokenPairResponse;
 import com.ulis.business.entity.User;
@@ -26,7 +28,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -49,6 +54,7 @@ public class AuthServiceImpl implements AuthService {
     private final OtpSender otpSender;
     private final MessageHelper messageHelper;
     private final JwtTokenService jwtTokenService;
+    private final PlatformTransactionManager transactionManager;
 
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -100,24 +106,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException(messageHelper.getMessage("auth.otp.already"));
         }
         ensureNotBanned(user);
-
-        if (user.getOtpHash() == null || user.getOtpExpiryAt() == null) {
-            throw new BadRequestException(messageHelper.getMessage("auth.otp.notRequested"));
-        }
-        if (LocalDateTime.now().isAfter(user.getOtpExpiryAt())) {
-            throw new BadRequestException(messageHelper.getMessage("auth.otp.expired"));
-        }
-        if (user.getOtpFailedAttempts() != null
-                && user.getOtpFailedAttempts() >= authProperties.getOtpMaxAttempts()) {
-            throw new BadRequestException(messageHelper.getMessage("auth.otp.attemptLimit"));
-        }
-        if (!passwordEncoder.matches(request.getOtpCode(), user.getOtpHash())) {
-            user.setOtpFailedAttempts(
-                    (user.getOtpFailedAttempts() == null ? 0 : user.getOtpFailedAttempts()) + 1);
-            userRepository.save(user);
-            log.warn("Wrong OTP attempt {} for {}", user.getOtpFailedAttempts(), email);
-            throw new BadRequestException(messageHelper.getMessage("auth.otp.invalid"));
-        }
+        validateOtpCode(user, request.getOtpCode());
 
         user.setStatus(UserStatus.ACTIVE);
         clearOtp(user);
@@ -197,7 +186,100 @@ public class AuthServiceImpl implements AuthService {
         return LoginResponse.of(pair, user);
     }
 
+    @Override
+    public String forgotPassword(ForgotPasswordRequest request) {
+        String email = request.getEmail().trim().toLowerCase();
+        User user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new NotFoundException(messageHelper.getMessage("auth.user.notFound")));
+
+        ensureNotBanned(user);
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new BadRequestException(messageHelper.getMessage("auth.login.inactive"));
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if (user.getOtpLastSentAt() != null
+                && ChronoUnit.SECONDS.between(user.getOtpLastSentAt(), now)
+                        < authProperties.getOtpCooldownSeconds()) {
+            throw new BadRequestException(messageHelper.getMessage("auth.otp.cooldown"));
+        }
+        if (user.getOtpResendCount() != null
+                && user.getOtpResendCount() >= authProperties.getOtpMaxResend()) {
+            throw new BadRequestException(messageHelper.getMessage("auth.otp.resendLimit"));
+        }
+
+        String otp = applyOtp(user, true);
+        user.setUpdatedAt(now);
+        user.setUpdatedBy(email);
+        userRepository.save(user);
+        otpSender.send(email, otp);
+        log.info("Password reset OTP sent for {}", email);
+        return messageHelper.getMessage("auth.password.forgotSent");
+    }
+
+    @Override
+    public String resetPassword(ResetPasswordRequest request) {
+        String email = request.getEmail().trim().toLowerCase();
+        User user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new NotFoundException(messageHelper.getMessage("auth.user.notFound")));
+
+        ensureNotBanned(user);
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new BadRequestException(messageHelper.getMessage("auth.login.inactive"));
+        }
+        validateOtpCode(user, request.getOtpCode());
+
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        clearOtp(user);
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setUpdatedBy(email);
+        userRepository.save(user);
+        log.info("Password reset completed for {}", email);
+        return messageHelper.getMessage("auth.password.resetSuccess");
+    }
+
     // region Private Helper Methods
+
+    /**
+     * Dùng chung cho kích hoạt tài khoản (ticket 02) và đặt lại mật khẩu
+     * (ticket 10): OTP phải tồn tại, còn hạn, chưa vượt số lần sai, và khớp mã.
+     * Sai mã => tăng bộ đếm và lưu lại (để chặn brute-force), rồi ném lỗi.
+     */
+    private void validateOtpCode(User user, String otpCode) {
+        if (user.getOtpHash() == null || user.getOtpExpiryAt() == null) {
+            throw new BadRequestException(messageHelper.getMessage("auth.otp.notRequested"));
+        }
+        if (LocalDateTime.now().isAfter(user.getOtpExpiryAt())) {
+            throw new BadRequestException(messageHelper.getMessage("auth.otp.expired"));
+        }
+        if (user.getOtpFailedAttempts() != null
+                && user.getOtpFailedAttempts() >= authProperties.getOtpMaxAttempts()) {
+            throw new BadRequestException(messageHelper.getMessage("auth.otp.attemptLimit"));
+        }
+        if (!passwordEncoder.matches(otpCode, user.getOtpHash())) {
+            // Ghi nhận sai trong transaction riêng (REQUIRES_NEW): lỗi 400 ném ra
+            // sẽ rollback transaction ngoài, nên nếu lưu chung thì bộ đếm mất →
+            // brute-force không bao giờ bị chặn.
+            int attempts = recordFailedAttempt(user.getId());
+            log.warn("Wrong OTP attempt {} for {}", attempts, user.getEmail());
+            throw new BadRequestException(messageHelper.getMessage("auth.otp.invalid"));
+        }
+    }
+
+    /** Tăng bộ đếm sai OTP trong transaction độc lập để không bị rollback theo lỗi 400. */
+    private int recordFailedAttempt(Long userId) {
+        TransactionTemplate template = new TransactionTemplate(transactionManager);
+        template.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        Integer attempts = template.execute(status -> {
+            User fresh = userRepository.findById(userId).orElseThrow();
+            int next = (fresh.getOtpFailedAttempts() == null ? 0 : fresh.getOtpFailedAttempts()) + 1;
+            fresh.setOtpFailedAttempts(next);
+            userRepository.save(fresh);
+            return next;
+        });
+        return attempts == null ? 0 : attempts;
+    }
+
     private String applyOtp(User user) {
         return applyOtp(user, false);
     }

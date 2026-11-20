@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/login", "/auth/register",
                                 "/auth/otp/verify", "/auth/otp/resend",
+                                "/auth/password/forgot", "/auth/password/reset",
                                 "/auth/refresh", "/health").permitAll()
                         .requestMatchers(
                                 "/book-categories",

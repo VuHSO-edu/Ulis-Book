@@ -1,10 +1,12 @@
 package com.ulis.business.controller;
 
+import com.ulis.business.dto.request.ForgotPasswordRequest;
 import com.ulis.business.dto.request.LoginRequest;
 import com.ulis.business.dto.request.OtpVerifyRequest;
 import com.ulis.business.dto.request.RefreshTokenRequest;
 import com.ulis.business.dto.request.RegisterRequest;
 import com.ulis.business.dto.request.ResendOtpRequest;
+import com.ulis.business.dto.request.ResetPasswordRequest;
 import com.ulis.business.service.AuthService;
 import com.ulis.core.http.ResponseBuilder;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,5 +58,17 @@ public class AuthController {
     @Operation(summary = "Đổi mới cặp JWT bằng refresh token (xoay vòng)")
     public ResponseEntity<Object> refresh(@Valid @RequestBody RefreshTokenRequest request) {
         return ResponseBuilder.ok(authService.refresh(request));
+    }
+
+    @PostMapping("/password/forgot")
+    @Operation(summary = "Gửi OTP đặt lại mật khẩu tới email giáo dục")
+    public ResponseEntity<Object> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        return ResponseBuilder.ok(null, authService.forgotPassword(request));
+    }
+
+    @PostMapping("/password/reset")
+    @Operation(summary = "Đặt lại mật khẩu bằng OTP")
+    public ResponseEntity<Object> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return ResponseBuilder.ok(null, authService.resetPassword(request));
     }
 }
