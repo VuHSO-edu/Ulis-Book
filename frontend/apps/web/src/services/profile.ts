@@ -10,6 +10,7 @@ export interface Profile {
   id: number;
   email: string;
   fullName: string;
+  msv?: string | null;
   faculty?: string | null;
   major?: string | null;
   className?: string | null;
@@ -22,6 +23,7 @@ export interface Profile {
 
 export interface UpdateProfilePayload {
   fullName: string;
+  msv?: string;
   faculty?: string;
   major?: string;
   className?: string;

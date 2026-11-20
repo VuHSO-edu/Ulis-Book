@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/login", "/auth/register",
-                                "/auth/otp/verify", "/auth/otp/resend",
+                                "/auth/otp/verify", "/auth/otp/resend", "/auth/otp/dev-peek",
                                 "/auth/password/forgot", "/auth/password/reset",
                                 "/auth/refresh", "/health").permitAll()
                         .requestMatchers(
@@ -72,7 +72,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList(allowedOrigins));
+        config.setAllowedOriginPatterns(Arrays.asList(allowedOrigins));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

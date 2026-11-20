@@ -25,6 +25,8 @@ public class ProfileResponse {
 
     private String fullName;
 
+    private String msv;
+
     private String faculty;
 
     private String major;
@@ -46,6 +48,7 @@ public class ProfileResponse {
                 .id(user.getId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
+                .msv(user.getMsv())
                 .faculty(user.getFaculty())
                 .major(user.getMajor())
                 .className(user.getClassName())

@@ -1,0 +1,62 @@
+{
+  "groups": [
+    {
+      "name": "app.auth",
+      "type": "com.ulis.business.config.properties.AuthProperties",
+      "sourceType": "com.ulis.business.config.properties.AuthProperties"
+    },
+    {
+      "name": "app.jwt",
+      "type": "com.ulis.business.config.properties.JwtProperties",
+      "sourceType": "com.ulis.business.config.properties.JwtProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "app.auth.otp-cooldown-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ulis.business.config.properties.AuthProperties"
+    },
+    {
+      "name": "app.auth.otp-expiry-minutes",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ulis.business.config.properties.AuthProperties"
+    },
+    {
+      "name": "app.auth.otp-length",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ulis.business.config.properties.AuthProperties"
+    },
+    {
+      "name": "app.auth.otp-max-attempts",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ulis.business.config.properties.AuthProperties"
+    },
+    {
+      "name": "app.auth.otp-max-resend",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ulis.business.config.properties.AuthProperties"
+    },
+    {
+      "name": "app.jwt.access-token-ttl-minutes",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ulis.business.config.properties.JwtProperties"
+    },
+    {
+      "name": "app.jwt.issuer",
+      "type": "java.lang.String",
+      "sourceType": "com.ulis.business.config.properties.JwtProperties"
+    },
+    {
+      "name": "app.jwt.refresh-token-ttl-days",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ulis.business.config.properties.JwtProperties"
+    },
+    {
+      "name": "app.jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.ulis.business.config.properties.JwtProperties"
+    }
+  ],
+  "hints": []
+}

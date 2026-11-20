@@ -1,0 +1,72 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  shutdown: graceful
+
+spring:
+  application:
+    name: business-service
+  jackson:
+    time-zone: GMT+7
+  # --- DB (mặc định dev/test: H2 chạy chế độ PostgreSQL — không cần Docker) ---
+  datasource:
+    url: jdbc:h2:mem:ulis;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: GMT+7
+  messages:
+    basename: messages
+    default-locale: vi
+    encoding: UTF-8
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:nv.vuhso@gmail.com}
+    password: ${MAIL_PASSWORD:bgjf vdzm qbsv hrow}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:*,http://127.0.0.1:*}
+  auth:
+    otp-length: 6
+    otp-expiry-minutes: 5
+    otp-max-resend: 5
+    otp-cooldown-seconds: 60
+    otp-max-attempts: 5
+  jwt:
+    # Secret dành cho dev — KHÔNG dùng ở prod (prod đọc từ env JWT_SECRET).
+    secret: dev-only-ulis-books-jwt-secret-change-me-0123456789abcdef
+    issuer: ulis-books
+    access-token-ttl-minutes: 15
+    refresh-token-ttl-days: 14
+  post:
+    # Job hết hạn bài đăng (ticket 05): quét mỗi 60s, khởi động sau 120s.
+    expiry:
+      schedule-ms: 60000
+      initial-delay-ms: 120000
+  comment:
+    # Giãn cách tối thiểu giữa 2 bình luận của cùng 1 user (ticket 07),
+    # in-memory; mặc định 3s — khớp guard "posting too fast" 3s bên FE.
+    cooldown-seconds: 3
+
+logging:
+  level:
+    com.ulis: debug

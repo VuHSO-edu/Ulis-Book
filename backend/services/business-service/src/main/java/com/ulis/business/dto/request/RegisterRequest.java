@@ -32,4 +32,19 @@ public class RegisterRequest {
     @NotBlank(message = "{auth.fullName.required}")
     @Size(max = 100, message = "{auth.fullName.length}")
     private String fullName;
+
+    @Size(max = 50)
+    private String msv;
+
+    @Size(max = 100)
+    private String faculty;
+
+    @Size(max = 100)
+    private String major;
+
+    @Size(max = 50)
+    private String className;
+
+    @Size(max = 20)
+    private String phone;
 }

@@ -37,6 +37,7 @@ public class ProfileServiceImpl implements ProfileService {
     public ProfileResponse updateProfile(Long userId, UpdateProfileRequest request) {
         User user = findUser(userId);
         user.setFullName(request.getFullName().trim());
+        user.setMsv(trimToNull(request.getMsv()));
         user.setFaculty(trimToNull(request.getFaculty()));
         user.setMajor(trimToNull(request.getMajor()));
         user.setClassName(trimToNull(request.getClassName()));

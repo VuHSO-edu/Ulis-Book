@@ -8,6 +8,11 @@ export interface RegisterPayload {
   email: string;
   password: string;
   fullName: string;
+  msv?: string;
+  faculty?: string;
+  major?: string;
+  className?: string;
+  phone?: string;
 }
 
 export interface VerifyOtpPayload {
@@ -74,3 +79,8 @@ export const forgotPassword = (data: ForgotPasswordPayload) =>
 
 export const resetPassword = (data: ResetPasswordPayload) =>
   http.post<BaseResponse>('/auth/password/reset', data);
+
+export const peekDevOtp = (email: string) =>
+  http.get<BaseResponse<{ email: string; otpCode: string }>>('/auth/otp/dev-peek', {
+    params: { email },
+  });

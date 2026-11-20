@@ -12,6 +12,10 @@ interface LoginFormValues {
 
 interface RegisterFormValues {
   fullName: string;
+  msv: string;
+  faculty?: string;
+  className?: string;
+  phone?: string;
   email: string;
   password: string;
   confirm: string;
@@ -75,6 +79,10 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
         email: cleanEmail,
         password: values.password,
         fullName: cleanName,
+        msv: values.msv?.trim(),
+        faculty: values.faculty?.trim(),
+        className: values.className?.trim(),
+        phone: values.phone?.trim(),
       });
       message.success(translate('register:success'));
       navigate(`/otp-verify?email=${encodeURIComponent(cleanEmail)}`);
@@ -239,95 +247,123 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
           </Form>
         ) : (
           <Form<RegisterFormValues> layout="vertical" onFinish={onRegisterFinish}>
-            <Form.Item
-              name="fullName"
-              label={translate('register:fullName')}
-              rules={[
-                {
-                  required: true,
-                  message: translate('common:validation.required', {
-                    field: translate('register:fullName'),
-                  }),
-                },
-              ]}
-            >
-              <Input
-                autoFocus
-                size="large"
-                placeholder={translate('register:fullNamePlaceholder')}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="email"
-              label={translate('register:email')}
-              rules={[
-                {
-                  required: true,
-                  message: translate('common:validation.required', {
-                    field: translate('register:email'),
-                  }),
-                },
-                {
-                  type: 'email',
-                  message: translate('common:validation.email', {
-                    field: translate('register:email'),
-                  }),
-                },
-                {
-                  pattern: COMMON_VALIDATION_PATTERN.EDU_EMAIL,
-                  message: translate('register:emailHint'),
-                },
-              ]}
-            >
-              <Input size="large" placeholder={translate('register:emailPlaceholder')} />
-            </Form.Item>
-
-            <Form.Item
-              name="password"
-              label={translate('register:password')}
-              rules={[
-                {
-                  required: true,
-                  message: translate('common:validation.required', {
-                    field: translate('register:password'),
-                  }),
-                },
-                { min: 8, message: translate('register:passwordMin') },
-              ]}
-            >
-              <Input.Password
-                size="large"
-                placeholder={translate('register:passwordPlaceholder')}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="confirm"
-              label={translate('register:confirm')}
-              dependencies={['password']}
-              rules={[
-                {
-                  required: true,
-                  message: translate('common:validation.required', {
-                    field: translate('register:confirm'),
-                  }),
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error(translate('register:confirmNotMatch')));
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Form.Item
+                name="fullName"
+                label={translate('register:fullName')}
+                rules={[
+                  {
+                    required: true,
+                    message: translate('common:validation.required', {
+                      field: translate('register:fullName'),
+                    }),
                   },
-                }),
-              ]}
-            >
-              <Input.Password
-                size="large"
-                placeholder={translate('register:confirmPlaceholder')}
-              />
-            </Form.Item>
+                ]}
+              >
+                <Input
+                  autoFocus
+                  placeholder={translate('register:fullNamePlaceholder')}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="msv"
+                label={translate('register:msv')}
+                rules={[
+                  {
+                    required: true,
+                    message: translate('common:validation.required', {
+                      field: translate('register:msv'),
+                    }),
+                  },
+                ]}
+              >
+                <Input placeholder={translate('register:msvPlaceholder')} />
+              </Form.Item>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Form.Item name="faculty" label={translate('profile:faculty')}>
+                <Input placeholder={translate('profile:facultyPlaceholder')} />
+              </Form.Item>
+
+              <Form.Item name="className" label={translate('profile:className')}>
+                <Input placeholder={translate('profile:classNamePlaceholder')} />
+              </Form.Item>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Form.Item
+                name="email"
+                label={translate('register:email')}
+                rules={[
+                  {
+                    required: true,
+                    message: translate('common:validation.required', {
+                      field: translate('register:email'),
+                    }),
+                  },
+                  {
+                    type: 'email',
+                    message: translate('common:validation.email', {
+                      field: translate('register:email'),
+                    }),
+                  },
+                  {
+                    pattern: COMMON_VALIDATION_PATTERN.EDU_EMAIL,
+                    message: translate('register:emailHint'),
+                  },
+                ]}
+              >
+                <Input placeholder={translate('register:emailPlaceholder')} />
+              </Form.Item>
+
+              <Form.Item name="phone" label={translate('profile:phone')}>
+                <Input placeholder={translate('profile:phonePlaceholder')} />
+              </Form.Item>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Form.Item
+                name="password"
+                label={translate('register:password')}
+                rules={[
+                  {
+                    required: true,
+                    message: translate('common:validation.required', {
+                      field: translate('register:password'),
+                    }),
+                  },
+                  { min: 8, message: translate('register:passwordMin') },
+                ]}
+              >
+                <Input.Password placeholder={translate('register:passwordPlaceholder')} />
+              </Form.Item>
+
+              <Form.Item
+                name="confirm"
+                label={translate('register:confirm')}
+                dependencies={['password']}
+                rules={[
+                  {
+                    required: true,
+                    message: translate('common:validation.required', {
+                      field: translate('register:confirm'),
+                    }),
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error(translate('register:confirmNotMatch')));
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password placeholder={translate('register:confirmPlaceholder')} />
+              </Form.Item>
+            </div>
 
             <Button
               type="primary"

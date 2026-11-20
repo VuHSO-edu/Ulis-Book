@@ -22,6 +22,9 @@ public class UpdateProfileRequest {
     @Size(max = 100, message = "{profile.fullName.length}")
     private String fullName;
 
+    @Size(max = 50)
+    private String msv;
+
     @Size(max = 100, message = "{profile.faculty.length}")
     private String faculty;
 

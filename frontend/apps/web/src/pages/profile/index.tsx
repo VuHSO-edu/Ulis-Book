@@ -41,12 +41,12 @@ export default function ProfilePage() {
   useEffect(() => {
     const profile = data?.data?.data;
     form.setFieldsValue({
-      msv: '22040118',
-      fullName: profile?.fullName ?? user?.fullName ?? 'Nguyễn Văn An',
-      faculty: profile?.faculty ?? 'Khoa Sư phạm Tiếng Anh (FELTE)',
-      major: profile?.major ?? 'Sư phạm Tiếng Anh',
-      className: profile?.className ?? 'QH-2022.F1',
-      phone: profile?.phone ?? '0987654321',
+      msv: profile?.msv ?? '',
+      fullName: profile?.fullName ?? user?.fullName ?? '',
+      faculty: profile?.faculty ?? '',
+      major: profile?.major ?? '',
+      className: profile?.className ?? '',
+      phone: profile?.phone ?? '',
       avatarUrl: profile?.avatarUrl ?? '',
     });
   }, [data, form, user]);
@@ -63,6 +63,7 @@ export default function ProfilePage() {
     try {
       await updateMutation.mutateAsync({
         fullName: cleanName,
+        msv: values.msv?.trim(),
         faculty: values.faculty?.trim(),
         major: values.major?.trim(),
         className: values.className?.trim(),
@@ -164,7 +165,7 @@ export default function ProfilePage() {
         >
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
             <Form.Item name="msv" label={translate('profile:msv')}>
-              <Input disabled />
+              <Input placeholder={translate('register:msvPlaceholder')} />
             </Form.Item>
 
             <Form.Item

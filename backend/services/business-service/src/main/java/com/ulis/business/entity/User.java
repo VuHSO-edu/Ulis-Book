@@ -57,6 +57,9 @@ public class User implements Serializable {
     private UserStatus status;
 
     // --- Hồ sơ (ticket 03) — toàn bộ nullable, cập nhật qua PUT /profile/me ---
+    @Column(name = "MSV", length = 50)
+    private String msv;
+
     @Column(name = "FACULTY", length = 100)
     private String faculty;
 

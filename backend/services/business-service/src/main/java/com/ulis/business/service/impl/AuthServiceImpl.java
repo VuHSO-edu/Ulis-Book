@@ -87,6 +87,21 @@ public class AuthServiceImpl implements AuthService {
                     .createdAt(now)
                     .build();
         }
+        if (request.getMsv() != null && !request.getMsv().isBlank()) {
+            user.setMsv(request.getMsv().trim());
+        }
+        if (request.getFaculty() != null && !request.getFaculty().isBlank()) {
+            user.setFaculty(request.getFaculty().trim());
+        }
+        if (request.getMajor() != null && !request.getMajor().isBlank()) {
+            user.setMajor(request.getMajor().trim());
+        }
+        if (request.getClassName() != null && !request.getClassName().isBlank()) {
+            user.setClassName(request.getClassName().trim());
+        }
+        if (request.getPhone() != null && !request.getPhone().isBlank()) {
+            user.setPhone(request.getPhone().trim());
+        }
 
         String otp = applyOtp(user);
         userRepository.save(user);

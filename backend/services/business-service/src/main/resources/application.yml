@@ -30,10 +30,21 @@ spring:
     basename: messages
     default-locale: vi
     encoding: UTF-8
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:nv.vuhso@gmail.com}
+    password: ${MAIL_PASSWORD:bgjf vdzm qbsv hrow}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 app:
   cors:
-    allowed-origins: http://localhost:5173
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:*,http://127.0.0.1:*}
   auth:
     otp-length: 6
     otp-expiry-minutes: 5

@@ -8,16 +8,22 @@ import com.ulis.business.dto.request.RegisterRequest;
 import com.ulis.business.dto.request.ResendOtpRequest;
 import com.ulis.business.dto.request.ResetPasswordRequest;
 import com.ulis.business.service.AuthService;
+import com.ulis.business.service.impl.DevOtpSender;
 import com.ulis.core.http.ResponseBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Auth API — đăng ký + OTP email giáo dục (ticket 02); đăng nhập + refresh JWT (ticket 03).
@@ -29,6 +35,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final Optional<DevOtpSender> devOtpSender;
+
+    @GetMapping("/otp/dev-peek")
+    @Operation(summary = "Lấy mã OTP vừa sinh trong môi trường dev/local")
+    public ResponseEntity<Object> devPeekOtp(@RequestParam String email) {
+        String code = devOtpSender.map(s -> s.lastSent(email)).orElse(null);
+        return ResponseBuilder.ok(Map.of("email", email, "otpCode", code != null ? code : ""));
+    }
 
     @PostMapping("/register")
     @Operation(summary = "Đăng ký tài khoản (email .edu/.edu.vn) và gửi OTP")
