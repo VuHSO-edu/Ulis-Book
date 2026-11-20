@@ -309,14 +309,15 @@ class BookSearchMarketplaceIntegrationTest {
                     false, String.valueOf(30000 + i * 1000), "Toà A1 ULIS", "0" + i));
         }
 
-        postJson("/book-posts/search", Map.of("pageSize", 2, "pageNumber", 0))
+        // Trang 1 (FE 1-based) -> 2 tin đầu; response.pageNumber là index 0-based nội bộ
+        postJson("/book-posts/search", Map.of("pageSize", 2, "pageNumber", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.totalElements").value(5))
                 .andExpect(jsonPath("$.data.totalPages").value(3))
-                .andExpect(jsonPath("$.data.pageNumber").value(0))
                 .andExpect(jsonPath("$.data.content.length()").value(2));
 
-        postJson("/book-posts/search", Map.of("pageSize", 2, "pageNumber", 2))
+        // Trang 3 (FE 1-based) -> còn 1 tin cuối
+        postJson("/book-posts/search", Map.of("pageSize", 2, "pageNumber", 3))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.totalElements").value(5))
                 .andExpect(jsonPath("$.data.content.length()").value(1));

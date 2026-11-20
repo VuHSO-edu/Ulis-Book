@@ -53,7 +53,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/book-categories",
                                 "/book-posts/search",
-                                "/book-posts/detail/**").permitAll()
+                                "/book-posts/detail/**",
+                                "/comments/by-post").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())

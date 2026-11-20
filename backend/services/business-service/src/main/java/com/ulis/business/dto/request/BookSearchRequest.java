@@ -9,7 +9,8 @@ import java.math.BigDecimal;
 
 /**
  * Bộ lọc tìm kiếm bài đăng — khớp BookSearchFilter bên FE (books.ts).
- * Số trang mặc định 0-based, 20 tin/trang; FE đọc data.content + data.totalElements.
+ * pageNumber 1-based như FE (mặc định 1 = trang đầu; backend quy về 0-based cho
+ * Spring Pageable); 20 tin/trang; FE chỉ đọc data.content + data.totalElements.
  */
 @Data
 @Builder

@@ -51,6 +51,10 @@ app:
     expiry:
       schedule-ms: 60000
       initial-delay-ms: 120000
+  comment:
+    # Giãn cách tối thiểu giữa 2 bình luận của cùng 1 user (ticket 07),
+    # in-memory; mặc định 3s — khớp guard "posting too fast" 3s bên FE.
+    cooldown-seconds: 3
 
 logging:
   level:

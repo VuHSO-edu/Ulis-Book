@@ -153,7 +153,8 @@ public class BookPostServiceImpl implements BookPostService {
     @Transactional(readOnly = true)
     public PageableResponse<BookPostResponse> search(BookSearchRequest request) {
         BookSearchRequest q = request == null ? new BookSearchRequest() : request;
-        int page = q.getPageNumber() == null ? 0 : Math.max(0, q.getPageNumber());
+        // FE gửi pageNumber 1-based (mặc định 1) — quy về 0-based cho Spring Pageable.
+        int page = q.getPageNumber() == null || q.getPageNumber() <= 0 ? 0 : q.getPageNumber() - 1;
         int size = q.getPageSize() == null ? 20 : Math.min(50, Math.max(1, q.getPageSize()));
 
         Page<BookPost> result = postRepository.findAll(
