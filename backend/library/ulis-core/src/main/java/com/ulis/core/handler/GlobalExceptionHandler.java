@@ -1,6 +1,7 @@
 package com.ulis.core.handler;
 
 import com.ulis.core.exception.BadRequestException;
+import com.ulis.core.exception.ForbiddenException;
 import com.ulis.core.exception.InputValidationException;
 import com.ulis.core.exception.NotFoundException;
 import com.ulis.core.exception.UnauthorizedException;
@@ -50,6 +51,12 @@ public class GlobalExceptionHandler {
         String message = ex.getMessage() != null && !ex.getMessage().isBlank()
                 ? ex.getMessage() : "UNAUTHORIZED";
         return ResponseBuilder.error(HttpStatus.UNAUTHORIZED.value(), message, null);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Object> handleForbidden(ForbiddenException ex, WebRequest request) {
+        log.warn("Forbidden on {}: {}", request.getDescription(false), ex.getMessage());
+        return ResponseBuilder.error(HttpStatus.FORBIDDEN.value(), ex.getMessage(), null);
     }
 
     @ExceptionHandler(NotFoundException.class)

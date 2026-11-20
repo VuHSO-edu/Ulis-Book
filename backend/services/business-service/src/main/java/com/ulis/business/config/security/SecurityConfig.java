@@ -50,6 +50,10 @@ public class SecurityConfig {
                                 "/auth/login", "/auth/register",
                                 "/auth/otp/verify", "/auth/otp/resend",
                                 "/auth/refresh", "/health").permitAll()
+                        .requestMatchers(
+                                "/book-categories",
+                                "/book-posts/search",
+                                "/book-posts/detail/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
