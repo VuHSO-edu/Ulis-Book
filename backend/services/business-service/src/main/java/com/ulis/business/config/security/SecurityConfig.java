@@ -56,6 +56,9 @@ public class SecurityConfig {
                                 "/book-posts/detail/**",
                                 "/comments/by-post").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        // WebSocket STOMP: handshake tự xác thực JWT (query param token=) trong
+                        // WsHandshakeInterceptor — tài khoản không hợp lệ bị từ chối ngay handshake.
+                        .requestMatchers("/ws", "/ws/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex

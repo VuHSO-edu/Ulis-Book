@@ -21,6 +21,15 @@ public interface ChatService {
 
     ChatConversationResponse open(Long userId, ConversationOpenRequest request);
 
+    /**
+     * Một hội thoại theo góc nhìn của viewer (peer, unread, lastMessage…) —
+     * dùng cho push realtime (ticket 09) để mỗi bên nhận unreadCount đúng.
+     *
+     * @throws com.ulis.core.exception.NotFoundException  nếu không tồn tại
+     * @throws com.ulis.core.exception.ForbiddenException nếu viewer không thuộc hội thoại
+     */
+    ChatConversationResponse getConversation(Long userId, Long conversationId);
+
     PageableResponse<ChatMessageResponse> listMessages(Long userId, Long conversationId,
                                                        ConversationMessageListRequest request);
 

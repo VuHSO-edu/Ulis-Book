@@ -121,6 +121,12 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Transactional(readOnly = true)
+    public ChatConversationResponse getConversation(Long userId, Long conversationId) {
+        return toResponse(requireMember(conversationId, userId), userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public PageableResponse<ChatMessageResponse> listMessages(Long userId, Long conversationId,
                                                               ConversationMessageListRequest request) {
         ChatConversation conversation = requireMember(conversationId, userId);
