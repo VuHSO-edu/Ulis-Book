@@ -6,11 +6,13 @@ import com.ulis.business.dto.request.BookPostUpsertFields;
 import com.ulis.business.dto.request.BookSearchRequest;
 import com.ulis.business.dto.request.BookUpdateRequest;
 import com.ulis.business.dto.response.BookPostResponse;
+import com.ulis.business.domain.BookPostStatusMachine;
 import com.ulis.business.entity.BookCategory;
 import com.ulis.business.entity.BookPost;
 import com.ulis.business.entity.BookPostImage;
 import com.ulis.business.entity.User;
 import com.ulis.business.enums.BookPostStatus;
+import com.ulis.business.enums.BookPostStatusTrigger;
 import com.ulis.business.repository.BookPostRepository;
 import com.ulis.business.repository.UserRepository;
 import com.ulis.business.service.BookCategoryService;
@@ -38,12 +40,14 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * BookPostServiceImpl (ticket 04):
+ * BookPostServiceImpl (ticket 04 + 05):
  * - status tự suy: quantity > 0 → SELLING, else SOLD (khớp fallback FE).
+ * - state machine (BookPostStatusMachine): mọi chuyển trạng thái đều được xác
+ *   minh — BANNED bị khoá (không update/sold/delete), markSold chỉ từ SELLING.
  * - tặng (giveaway) → price = 0.
  * - code unique (không phân biệt hoa thường); rỗng → sinh POST_XXXX.
  * - update/sold/delete chỉ chủ bài; vi phạm → ForbiddenException (403).
- * - delete = xoá mềm → HIDDEN (khớp FE).
+ * - delete = xoá mềm → HIDDEN (khớp FE). Bài hết hạn do job xử lý (EXPIRE).
  */
 @Slf4j
 @Service
@@ -65,8 +69,11 @@ public class BookPostServiceImpl implements BookPostService {
         post.setOwner(owner);
         applyRequest(post, request, null);
 
+        BookPostStatus targetStatus = statusForQuantity(post.getQuantity());
+        requireTransition(post, targetStatus, BookPostStatusTrigger.CREATE);
+
         LocalDateTime now = LocalDateTime.now();
-        post.setStatus(post.getQuantity() > 0 ? BookPostStatus.SELLING : BookPostStatus.SOLD);
+        post.setStatus(targetStatus);
         post.setViewCount(0);
         post.setCreatedAt(now);
         post.setUpdatedAt(now);
@@ -90,7 +97,9 @@ public class BookPostServiceImpl implements BookPostService {
         post.getImages().clear();
         post.getImages().addAll(toImageEntities(post, urls));
 
-        post.setStatus(post.getQuantity() > 0 ? BookPostStatus.SELLING : BookPostStatus.SOLD);
+        BookPostStatus targetStatus = statusForQuantity(post.getQuantity());
+        requireTransition(post, targetStatus, BookPostStatusTrigger.UPDATE);
+        post.setStatus(targetStatus);
         post.setUpdatedAt(LocalDateTime.now());
         post.setUpdatedBy(post.getOwner().getEmail());
 
@@ -102,6 +111,7 @@ public class BookPostServiceImpl implements BookPostService {
     @Override
     public BookPostResponse markSold(Long userId, Long postId) {
         BookPost post = requireOwner(postId, userId);
+        requireTransition(post, BookPostStatus.SOLD, BookPostStatusTrigger.MARK_SOLD);
         post.setStatus(BookPostStatus.SOLD);
         post.setQuantity(0);
         post.setUpdatedAt(LocalDateTime.now());
@@ -114,6 +124,7 @@ public class BookPostServiceImpl implements BookPostService {
     @Override
     public void delete(Long userId, Long postId) {
         BookPost post = requireOwner(postId, userId);
+        requireTransition(post, BookPostStatus.HIDDEN, BookPostStatusTrigger.DELETE);
         post.setStatus(BookPostStatus.HIDDEN);
         post.setUpdatedAt(LocalDateTime.now());
         post.setUpdatedBy(post.getOwner().getEmail());
@@ -286,6 +297,20 @@ public class BookPostServiceImpl implements BookPostService {
     private User findOwner(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(messageHelper.getMessage("auth.user.notFound")));
+    }
+
+    /** Đích trạng thái theo số lượng còn lại — quantity = 0 → SOLD (auto). */
+    private BookPostStatus statusForQuantity(int quantity) {
+        return quantity > 0 ? BookPostStatus.SELLING : BookPostStatus.SOLD;
+    }
+
+    /** Chặn chuyển trạng thái trái phép (state machine) → 400. */
+    private void requireTransition(BookPost post, BookPostStatus target,
+                                   BookPostStatusTrigger trigger) {
+        if (!BookPostStatusMachine.isAllowed(post.getStatus(), target, trigger)) {
+            throw new BadRequestException(messageHelper.getMessage(
+                    "bookPost.status.invalid", post.getStatus(), target));
+        }
     }
 
     private BigDecimal nz(BigDecimal value) {

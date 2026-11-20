@@ -46,6 +46,11 @@ app:
     issuer: ulis-books
     access-token-ttl-minutes: 15
     refresh-token-ttl-days: 14
+  post:
+    # Job hết hạn bài đăng (ticket 05): quét mỗi 60s, khởi động sau 120s.
+    expiry:
+      schedule-ms: 60000
+      initial-delay-ms: 120000
 
 logging:
   level:
