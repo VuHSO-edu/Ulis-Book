@@ -22,9 +22,8 @@ public final class BookPostConstants {
     /** Số ngày hiệu lực mặc định của một tin đăng. */
     public static final int EXPIRE_AFTER_DAYS = 30;
 
-    /** Danh mục chỉ hiển thị ở chợ: đang bán + đã bán. */
+    /** Chợ chỉ hiển thị tin đang bán (ticket 06): SOLD/HIDDEN/EXPIRED/BANNED đều bị loại. */
     public static final BookPostStatus[] PUBLIC_STATUSES = {
-            BookPostStatus.SELLING,
-            BookPostStatus.SOLD
+            BookPostStatus.SELLING
     };
 }

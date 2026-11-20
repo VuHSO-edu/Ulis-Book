@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * BookCategoryServiceImpl — danh sách danh mục active cho FE; bookCount được
- * tính động từ số bài đăng còn hiển thị (SELLING/SOLD).
+ * tính động từ số bài đăng còn hiển thị ở chợ (chỉ SELLING — ticket 06).
  */
 @Slf4j
 @Service

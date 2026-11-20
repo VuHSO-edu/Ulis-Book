@@ -26,7 +26,7 @@ public interface BookPostRepository
 
     List<BookPost> findByOwnerIdOrderByCreatedAtDesc(Long ownerId);
 
-    /** Số bài còn hiển thị của một danh mục (SELLING/SOLD) — cho category.bookCount. */
+    /** Số bài còn hiển thị ở chợ (SELLING) của một danh mục — cho category.bookCount. */
     long countByFacultyCodeAndStatusIn(String facultyCode, Collection<BookPostStatus> statuses);
 
     long countByBookTypeCodeAndStatusIn(String bookTypeCode, Collection<BookPostStatus> statuses);
