@@ -688,8 +688,8 @@
 
 .ulis-chat-sidebar {
   background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e2e7ff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -697,28 +697,28 @@
 
 .ulis-chat-thread-item {
   padding: 12px 14px;
-  border-bottom: 1px solid #f0f2f8;
+  border-bottom: 1px solid #f1f5f9;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   cursor: pointer;
   transition: background-color 0.15s ease;
-  border-left: 4px solid transparent;
+  border-left: 3px solid transparent;
 
   &:hover {
-    background: #f5f7ff;
+    background: #f8fafc;
   }
 
   &.active {
-    background: #eef2ff;
-    border-left-color: #004ac6;
+    background: #eff6ff;
+    border-left-color: #2563eb;
   }
 }
 
 .ulis-chat-main {
   background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e2e7ff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -728,7 +728,7 @@
   flex: 1;
   padding: 18px 20px;
   overflow-y: auto;
-  background: #f8f9fd;
+  background: #f8fafc;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -738,10 +738,9 @@
   max-width: 72%;
   padding: 10px 14px;
   background: #ffffff;
-  color: #131b2e;
-  border-radius: 14px 14px 14px 2px;
-  border: 1px solid #e2e7ff;
-  box-shadow: 0 2px 6px rgba(19, 27, 46, 0.04);
+  color: #0f172a;
+  border-radius: 12px 12px 12px 2px;
+  border: 1px solid #e2e8f0;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -749,10 +748,9 @@
 .ulis-chat-bubble-out {
   max-width: 72%;
   padding: 10px 14px;
-  background: linear-gradient(135deg, #004ac6 0%, #2563eb 100%);
+  background: #2563eb;
   color: #ffffff;
-  border-radius: 14px 14px 2px 14px;
-  box-shadow: 0 4px 12px rgba(0, 74, 198, 0.18);
+  border-radius: 12px 12px 2px 12px;
   font-size: 13px;
   line-height: 1.5;
 }

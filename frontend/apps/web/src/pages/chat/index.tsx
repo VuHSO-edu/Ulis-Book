@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Breadcrumb,
   Button,
@@ -17,13 +17,16 @@ import {
   useConversationMessages,
   useConversations,
   useMarkConversationRead,
+  useOpenConversation,
   useSendMessage,
 } from '../../services/chat';
 import { useReportModalStore } from '../../store/useReportModalStore';
 import { useAuth } from '../../store/useAuth';
+import { useBookCategories } from '../../services/books';
 
 export default function ChatPage() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const user = useAuth((s) => s.user);
   const openReportModal = useReportModalStore((s) => s.openReportModal);
 
@@ -37,9 +40,42 @@ export default function ChatPage() {
   const setDealModalOpen = useChatStore((s) => s.setDealModalOpen);
 
   const { data: conversations = [] } = useConversations();
+  const { data: categories = [] } = useBookCategories();
+  const campusLocationItems = categories.filter(
+    (c) => c.parentAxis === 'CAMPUS_LOCATION' && c.status === 'ACTIVE',
+  );
   const { data: messages = [] } = useConversationMessages(activeConversationId);
+  const openConversation = useOpenConversation();
   const sendMessage = useSendMessage();
   const markRead = useMarkConversationRead();
+
+  useEffect(() => {
+    const postIdParam = searchParams.get('postId');
+    const peerIdParam = searchParams.get('peerId');
+    if (!postIdParam || !peerIdParam) return;
+    const bookPostId = Number(postIdParam);
+    const peerId = Number(peerIdParam);
+    if (!Number.isFinite(bookPostId) || bookPostId <= 0 || !Number.isFinite(peerId) || peerId <= 0) {
+      return;
+    }
+
+    openConversation.mutate(
+      { bookPostId, peerId },
+      {
+        onSuccess: (conv) => {
+          if (conv?.id) {
+            setActiveConversationId(conv.id);
+          }
+          setSearchParams({}, { replace: true });
+        },
+        onError: () => {
+          message.error(translate('common:unknownError'));
+          setSearchParams({}, { replace: true });
+        },
+      },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const [inputText, setInputText] = useState('');
   const [olderLoaded, setOlderLoaded] = useState(false);
@@ -455,60 +491,6 @@ export default function ChatPage() {
               </Tooltip>
             </div>
 
-            {/* 2. Pinned Context Book Trading Banner */}
-            <div
-              style={{
-                padding: '10px 18px',
-                background: '#f2f3ff',
-                borderBottom: '1px solid #d5dcff',
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 12,
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <img
-                  src={activeConv.contextBook.coverUrl}
-                  alt={activeConv.contextBook.title}
-                  style={{ width: 38, height: 46, borderRadius: 6, objectFit: 'cover' }}
-                />
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#131b2e' }}>
-                    [{activeConv.contextBook.courseCode}] {activeConv.contextBook.title}
-                  </div>
-                  <div style={{ fontSize: 12, color: '#596377' }}>
-                    <strong style={{ color: '#004ac6' }}>
-                      {activeConv.contextBook.isGiveaway
-                        ? translate('home:freeTag')
-                        : formatCurrencyVnd(activeConv.contextBook.price)}
-                    </strong>{' '}
-                    · {activeConv.contextBook.condition} · 📍{' '}
-                    {activeConv.contextBook.campusLocation}
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', gap: 8 }}>
-                <Button
-                  size="small"
-                  onClick={() => navigate(`/books/${activeConv.contextBook.postId}`)}
-                >
-                  {translate('chat:contextBannerViewPost')}
-                </Button>
-                <Button
-                  size="small"
-                  type="primary"
-                  className="ulis-primary-btn"
-                  onClick={() => setDealModalOpen(true)}
-                >
-                  <MaterialIcon name="event_available" size={15} style={{ marginRight: 4 }} />
-                  {translate('chat:contextBannerConfirmDeal')}
-                </Button>
-              </div>
-            </div>
-
             {/* 3. Message Stream */}
             <div className="ulis-chat-messages">
               <div style={{ textAlign: 'center' }}>
@@ -663,20 +645,26 @@ export default function ChatPage() {
               {translate('chat:dealLocationLabel')}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-              {[
-                {
-                  title: translate('chat:dealLoc1Title'),
-                  sub: translate('chat:dealLoc1Sub'),
-                },
-                {
-                  title: translate('chat:dealLoc2Title'),
-                  sub: translate('chat:dealLoc2Sub'),
-                },
-                {
-                  title: translate('chat:dealLoc3Title'),
-                  sub: translate('chat:dealLoc3Sub'),
-                },
-              ].map((loc) => {
+              {(campusLocationItems.length > 0
+                ? campusLocationItems.map((c) => ({
+                    title: c.name,
+                    sub: c.subtitle || 'Địa điểm ULIS',
+                  }))
+                : [
+                    {
+                      title: translate('chat:dealLoc1Title'),
+                      sub: translate('chat:dealLoc1Sub'),
+                    },
+                    {
+                      title: translate('chat:dealLoc2Title'),
+                      sub: translate('chat:dealLoc2Sub'),
+                    },
+                    {
+                      title: translate('chat:dealLoc3Title'),
+                      sub: translate('chat:dealLoc3Sub'),
+                    },
+                  ]
+              ).map((loc) => {
                 const active = dealLocation === loc.title;
                 return (
                   <div
@@ -704,24 +692,10 @@ export default function ChatPage() {
             <div style={{ fontSize: 13, fontWeight: 700, color: '#000000', marginBottom: 6 }}>
               {translate('chat:dealTimeLabel')}
             </div>
-            <Select
-              style={{ width: '100%' }}
+            <Input
               value={dealTime}
-              onChange={(v) => setDealTime(v)}
-              options={[
-                {
-                  value: '14:30 - Chiều nay (19/11/2026)',
-                  label: '14:30 - Chiều nay (19/11/2026)',
-                },
-                {
-                  value: '16:15 - Sau ca học tiết 9 (19/11/2026)',
-                  label: '16:15 - Sau ca học tiết 9 (19/11/2026)',
-                },
-                {
-                  value: '09:30 - Giờ ra chơi sáng mai (20/11/2026)',
-                  label: '09:30 - Giờ ra chơi sáng mai (20/11/2026)',
-                },
-              ]}
+              onChange={(e) => setDealTime(e.target.value)}
+              placeholder="VD: 14:30 - Chiều nay (21/11/2026)"
             />
           </div>
 

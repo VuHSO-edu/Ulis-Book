@@ -6,5 +6,6 @@ package com.ulis.business.enums;
  */
 public enum BookCategoryAxis {
     FACULTY,
-    BOOK_TYPE
+    BOOK_TYPE,
+    CAMPUS_LOCATION
 }

@@ -118,18 +118,43 @@ export default function AdminBookPostsPage() {
       title: translate('admin:posts.colBook'),
       dataIndex: 'title',
       key: 'title',
+      width: 260,
       align: 'left',
       ellipsis: true,
       render: (val: string, record) => (
         <Tooltip title={val}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img
-              src={record.coverUrl}
-              alt={val}
-              style={{ width: 32, height: 40, borderRadius: 4, objectFit: 'cover', flexShrink: 0 }}
-            />
-            <div>
-              <div style={{ fontWeight: 700 }}>{val}</div>
+            <div
+              style={{
+                width: 32,
+                height: 40,
+                borderRadius: 4,
+                background: '#eef2ff',
+                color: '#2563eb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                overflow: 'hidden',
+              }}
+            >
+              {record.coverUrl ? (
+                <img
+                  src={record.coverUrl}
+                  alt={val}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <MaterialIcon name="menu_book" size={16} />
+              )}
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {val}
+              </div>
               <div style={{ fontSize: 11.5, color: '#596377' }}>
                 [{record.courseCode}] · {record.campusLocation}
               </div>
@@ -147,7 +172,8 @@ export default function AdminBookPostsPage() {
       render: (_v, record) => (
         <div>
           <div style={{ fontWeight: 700 }}>
-            {record.seller.fullName} ({record.seller.msv})
+            {record.seller.fullName}
+            {record.seller.msv && record.seller.msv !== '—' ? ` (${record.seller.msv})` : ''}
           </div>
           <div style={{ fontSize: 11.5, color: '#006c49' }}>✓ {record.seller.email}</div>
         </div>
@@ -347,6 +373,7 @@ export default function AdminBookPostsPage() {
           loading={isLoading}
           columns={columns}
           dataSource={filteredPosts}
+          scroll={{ x: 1150 }}
           rowClassName={(record) => (record.id === focusedPostId ? 'ulis-row-focused' : '')}
           onRow={(record) => ({
             onClick: () => focusRowByTableAction('posts', record.id),

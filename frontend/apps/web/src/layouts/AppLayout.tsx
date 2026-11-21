@@ -11,7 +11,6 @@ export default function AppLayout() {
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const logout = useAuth((s) => s.logout);
   const setFilter = useBookFilterStore((s) => s.setFilter);
-  const onlyGiveaway = useBookFilterStore((s) => s.onlyGiveaway);
   const navigate = useNavigate();
   const location = useLocation();
   const { data: conversations = [] } = useConversations();
@@ -25,11 +24,6 @@ export default function AppLayout() {
 
   const handleExploreClick = () => {
     setFilter({ onlyGiveaway: false, pageNumber: 1 });
-    navigate('/');
-  };
-
-  const handleFreeBooksClick = () => {
-    setFilter({ onlyGiveaway: true, pageNumber: 1 });
     navigate('/');
   };
 
@@ -80,18 +74,9 @@ export default function AppLayout() {
               <button
                 type="button"
                 onClick={handleExploreClick}
-                className={`nav-link-btn ${location.pathname === '/' && !onlyGiveaway ? 'active' : ''}`}
+                className={`nav-link-btn ${location.pathname === '/' ? 'active' : ''}`}
               >
                 {translate('nav:explore')}
-              </button>
-
-              <button
-                type="button"
-                onClick={handleFreeBooksClick}
-                className={`nav-link-btn free-highlight ${location.pathname === '/' && onlyGiveaway ? 'active' : ''}`}
-              >
-                <MaterialIcon name="volunteer_activism" size={16} />
-                {translate('nav:freeBooks')}
               </button>
 
               {isAuthenticated && (

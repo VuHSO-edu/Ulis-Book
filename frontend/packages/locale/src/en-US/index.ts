@@ -411,7 +411,7 @@ export default {
     navReports: 'Violation Reports',
     navPosts: 'Manage Listings',
     navUsers: 'ULIS Students',
-    navCategories: 'Faculties & Categories',
+    navCategories: 'Category Management',
     backToStudentView: 'Back to Student View',
     serverOnline: 'Server: Online (VNU-01)',
     breadcrumbRoot: 'Admin Console',

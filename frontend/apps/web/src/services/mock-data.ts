@@ -5,7 +5,7 @@
  */
 
 export type BookPostStatus = 'SELLING' | 'SOLD' | 'HIDDEN' | 'EXPIRED' | 'BANNED';
-export type CategoryAxis = 'BOOK_TYPE' | 'FACULTY';
+export type CategoryAxis = 'BOOK_TYPE' | 'FACULTY' | 'CAMPUS_LOCATION';
 
 export interface BookCategoryItem {
   id: number;

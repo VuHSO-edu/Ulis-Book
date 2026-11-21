@@ -75,6 +75,12 @@ export default function HomePage() {
   const { data: categories = [] } = useBookCategories();
   const faculties = categories.filter((c) => c.parentAxis === 'FACULTY');
   const bookTypes = categories.filter((c) => c.parentAxis === 'BOOK_TYPE');
+  const campusLocationOptions =
+    categories.filter((c) => c.parentAxis === 'CAMPUS_LOCATION' && c.status === 'ACTIVE').length > 0
+      ? categories
+          .filter((c) => c.parentAxis === 'CAMPUS_LOCATION' && c.status === 'ACTIVE')
+          .map((c) => c.name)
+      : CAMPUS_LOCATIONS;
 
   const { data: searchResult, isLoading } = useSearchBooks({
     keyword,
@@ -109,7 +115,7 @@ export default function HomePage() {
       navigate('/login');
       return;
     }
-    navigate(`/chat?postId=${book.id}`);
+    navigate(`/chat?postId=${book.id}&peerId=${book.seller.id}`);
   };
 
   const handleDateChange = (field: 'fromDate' | 'toDate', rawValue: string) => {
@@ -919,7 +925,7 @@ export default function HomePage() {
               onChange={(val) => setFilter({ campusLocation: val })}
               options={[
                 { value: 'ALL', label: translate('home:allFaculties') },
-                ...CAMPUS_LOCATIONS.map((loc) => ({
+                ...campusLocationOptions.map((loc) => ({
                   value: loc,
                   label: loc,
                 })),

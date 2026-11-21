@@ -49,8 +49,27 @@ services:
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost}
       APP_ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@ulis.edu.vn}
       APP_ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123456}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-ulisminio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-ulisminio123}
+      MINIO_BUCKET: ${MINIO_BUCKET:-ulis-books}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL:-/minio}
     ports:
       - "8080:8080"
+
+  minio:
+    image: cgr.dev/chainguard/minio:latest
+    container_name: ulis-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-ulisminio}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-ulisminio123}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ulis-minio-data:/data
 
   frontend:
     build:
@@ -67,4 +86,6 @@ services:
 
 volumes:
   ulis-postgres-data:
+    driver: local
+  ulis-minio-data:
     driver: local

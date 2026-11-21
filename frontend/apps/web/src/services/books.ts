@@ -64,7 +64,14 @@ export const useBookCategories = () =>
   });
 
 export const useSearchBooks = (filters: BookSearchFilter) => {
-  const normalized = normalizeFilterValues({ ...filters });
+  const cleaned: BookSearchFilter = {
+    ...filters,
+    facultyCode: filters.facultyCode === 'ALL' ? undefined : filters.facultyCode,
+    bookTypeCode: filters.bookTypeCode === 'ALL' ? undefined : filters.bookTypeCode,
+    campusLocation: filters.campusLocation === 'ALL' ? undefined : filters.campusLocation,
+    onlyGiveaway: filters.onlyGiveaway ? true : undefined,
+  };
+  const normalized = normalizeFilterValues({ ...cleaned });
   return useQuery({
     queryKey: bookQueryKey.search(normalized),
     queryFn: async (): Promise<{ items: BookPostItem[]; total: number }> => {

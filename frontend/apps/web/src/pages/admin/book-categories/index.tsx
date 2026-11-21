@@ -67,6 +67,7 @@ export default function AdminBookCategoriesPage() {
 
   const treeBookTypes = localFilteredTreeNodes.filter((c) => c.parentAxis === 'BOOK_TYPE');
   const treeFaculties = localFilteredTreeNodes.filter((c) => c.parentAxis === 'FACULTY');
+  const treeLocations = localFilteredTreeNodes.filter((c) => c.parentAxis === 'CAMPUS_LOCATION');
 
   // Table Grid Server Filter
   const filteredTableCategories = categories.filter((c) => {
@@ -209,7 +210,9 @@ export default function AdminBookCategoriesPage() {
       width: 120,
       align: 'center',
       render: (axis: CategoryAxis) => (
-        <Tag color={axis === 'FACULTY' ? 'blue' : 'purple'}>{axis}</Tag>
+        <Tag color={axis === 'FACULTY' ? 'blue' : axis === 'BOOK_TYPE' ? 'purple' : 'green'}>
+          {axis}
+        </Tag>
       ),
     },
     {
@@ -442,6 +445,53 @@ export default function AdminBookCategoriesPage() {
                 );
               })}
             </div>
+
+            {/* Axis 3: CAMPUS_LOCATION */}
+            <div style={{ marginTop: 14 }}>
+              <div
+                style={{
+                  padding: '6px 10px',
+                  borderRadius: 6,
+                  background: '#fef3c7',
+                  color: '#b45309',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  marginBottom: 6,
+                }}
+              >
+                ▾ Địa điểm giao dịch ({treeLocations.length})
+              </div>
+              {treeLocations.map((node) => {
+                const active = selectedTreeNodeCode === node.code;
+                return (
+                  <div
+                    key={node.id}
+                    onClick={() =>
+                      setCategoryFilter({
+                        selectedTreeNodeCode: active ? 'ALL' : node.code,
+                        categoryPage: 1,
+                      })
+                    }
+                    style={{
+                      padding: '8px 10px',
+                      marginLeft: 8,
+                      borderRadius: 6,
+                      background: active ? '#2563eb' : 'transparent',
+                      color: active ? '#ffffff' : '#0f172a',
+                      fontSize: 12.5,
+                      fontWeight: active ? 600 : 500,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <span>{node.name}</span>
+                    <span style={{ fontSize: 11, opacity: 0.8 }}>{node.bookCount}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -473,6 +523,7 @@ export default function AdminBookCategoriesPage() {
                 { value: 'ALL', label: translate('admin:categories.filterParentAll') },
                 { value: 'FACULTY', label: 'Khoa Đào Tạo' },
                 { value: 'BOOK_TYPE', label: 'Loại Tài Liệu' },
+                { value: 'CAMPUS_LOCATION', label: 'Địa điểm giao dịch' },
               ]}
             />
 
@@ -582,8 +633,9 @@ export default function AdminBookCategoriesPage() {
             >
               <Select
                 options={[
-                  { value: 'FACULTY', label: 'FACULTY - Nhóm Khoa Đào Tạo' },
-                  { value: 'BOOK_TYPE', label: 'BOOK_TYPE - Nhóm Loại Tài Liệu' },
+                  { value: 'FACULTY', label: 'Nhóm Khoa Đào Tạo' },
+                  { value: 'BOOK_TYPE', label: 'Nhóm Loại Tài Liệu' },
+                  { value: 'CAMPUS_LOCATION', label: 'Địa điểm giao dịch' },
                 ]}
               />
             </Form.Item>

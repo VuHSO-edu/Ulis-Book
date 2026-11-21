@@ -41,6 +41,9 @@ dependencies {
     // --- API docs ---
     implementation(libs.springdoc.openapi)
 
+    // --- MinIO Object Storage ---
+    implementation("io.minio:minio:8.5.12")
+
     // --- Annotation processors ---
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)

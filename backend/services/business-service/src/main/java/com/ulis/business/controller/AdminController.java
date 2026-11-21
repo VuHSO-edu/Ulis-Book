@@ -1,5 +1,6 @@
 package com.ulis.business.controller;
 
+import com.ulis.business.dto.response.BookPostResponse;
 import com.ulis.business.entity.BookCategory;
 import com.ulis.business.entity.BookPost;
 import com.ulis.business.entity.Report;
@@ -135,12 +136,14 @@ public class AdminController {
     // ---------------- Book Posts ----------------
 
     @PostMapping("/book-posts/search")
+    @Transactional(readOnly = true)
     @Operation(summary = "Danh sách bài đăng cho admin")
     public ResponseEntity<Object> searchBookPosts(@RequestBody(required = false) SearchPageRequest req) {
         requireAdmin();
         int page = req != null && req.getPageNumber() > 0 ? req.getPageNumber() - 1 : 0;
         int size = req != null && req.getPageSize() > 0 ? req.getPageSize() : 50;
-        return ResponseBuilder.ok(bookPostRepository.findAll(PageRequest.of(page, size)));
+        return ResponseBuilder.ok(
+                bookPostRepository.findAll(PageRequest.of(page, size)).map(BookPostResponse::from));
     }
 
     @PutMapping("/book-posts/{id}/ban")
@@ -209,7 +212,9 @@ public class AdminController {
         category.setParentAxis(
                 "BOOK_TYPE".equalsIgnoreCase(req.getParentAxis())
                         ? BookCategoryAxis.BOOK_TYPE
-                        : BookCategoryAxis.FACULTY);
+                        : "CAMPUS_LOCATION".equalsIgnoreCase(req.getParentAxis())
+                                ? BookCategoryAxis.CAMPUS_LOCATION
+                                : BookCategoryAxis.FACULTY);
         category.setSortOrder(req.getSortOrder() != null ? req.getSortOrder() : 1);
         category.setStatus(
                 "INACTIVE".equalsIgnoreCase(req.getStatus())
@@ -238,7 +243,9 @@ public class AdminController {
             category.setParentAxis(
                     "BOOK_TYPE".equalsIgnoreCase(req.getParentAxis())
                             ? BookCategoryAxis.BOOK_TYPE
-                            : BookCategoryAxis.FACULTY);
+                            : "CAMPUS_LOCATION".equalsIgnoreCase(req.getParentAxis())
+                                    ? BookCategoryAxis.CAMPUS_LOCATION
+                                    : BookCategoryAxis.FACULTY);
         }
         if (req.getSortOrder() != null) {
             category.setSortOrder(req.getSortOrder());

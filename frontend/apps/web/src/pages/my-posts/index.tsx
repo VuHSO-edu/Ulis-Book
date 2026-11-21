@@ -17,6 +17,7 @@ import {
   type TableProps,
 } from '@ulis/components';
 import { COMMON_VALIDATION_PATTERN, translate } from '@ulis/locale';
+import { httpBlocking } from '@ulis/apis';
 import { formatCurrencyVnd } from '@ulis/utils';
 import {
   useBookCategories,
@@ -64,6 +65,12 @@ export default function MyPostsPage() {
 
   const faculties = categories.filter((c) => c.parentAxis === 'FACULTY');
   const bookTypes = categories.filter((c) => c.parentAxis === 'BOOK_TYPE');
+  const campusLocationOptions =
+    categories.filter((c) => c.parentAxis === 'CAMPUS_LOCATION' && c.status === 'ACTIVE').length > 0
+      ? categories
+          .filter((c) => c.parentAxis === 'CAMPUS_LOCATION' && c.status === 'ACTIVE')
+          .map((c) => c.name)
+      : CAMPUS_LOCATIONS;
 
   const openCreateModal = () => {
     setEditingItem(null);
@@ -82,7 +89,7 @@ export default function MyPostsPage() {
       originalPrice: 120000,
       quantity: 1,
       condition: 'Mới 95% - Bìa bọc cẩn thận',
-      campusLocation: CAMPUS_LOCATIONS[0],
+      campusLocation: campusLocationOptions[0],
       description: '',
     });
     setModalOpen(true);
@@ -118,7 +125,7 @@ export default function MyPostsPage() {
     setModalOpen(true);
   };
 
-  const handlePhotoUpload = (slotIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (slotIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 10 * 1024 * 1024) {
@@ -129,13 +136,39 @@ export default function MyPostsPage() {
       message.error(translate('common:validation.fileTypeLimit'));
       return;
     }
-    const url = URL.createObjectURL(file);
-    setPhotoUrls((prev) => {
-      const next = [...prev];
-      next[slotIndex] = url;
-      return next.slice(0, 3);
-    });
-    setIsDirty(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await httpBlocking.post<{ data?: { url?: string } }>('/files/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      const uploadedUrl = res.data?.data?.url;
+      if (uploadedUrl) {
+        setPhotoUrls((prev) => {
+          const next = [...prev];
+          next[slotIndex] = uploadedUrl;
+          return next.slice(0, 3);
+        });
+        setIsDirty(true);
+        return;
+      }
+    } catch {
+      // Fallback Base64 nếu MinIO chưa bật
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = typeof reader.result === 'string' ? reader.result : '';
+      if (!dataUrl) return;
+      setPhotoUrls((prev) => {
+        const next = [...prev];
+        next[slotIndex] = dataUrl;
+        return next.slice(0, 3);
+      });
+      setIsDirty(true);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleFinish = (values: UpsertBookPostPayload) => {
@@ -296,7 +329,7 @@ export default function MyPostsPage() {
     {
       title: translate('common:actions'),
       key: 'actions',
-      width: 130,
+      width: 165,
       align: 'center',
       render: (_v, record) => (
         <div className="ulis-table-action-icons">
@@ -635,7 +668,7 @@ export default function MyPostsPage() {
               ]}
             >
               <Select
-                options={CAMPUS_LOCATIONS.map((loc) => ({
+                options={campusLocationOptions.map((loc) => ({
                   value: loc,
                   label: loc,
                 }))}

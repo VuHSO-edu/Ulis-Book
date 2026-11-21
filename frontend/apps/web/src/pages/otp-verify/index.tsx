@@ -205,7 +205,7 @@ export default function OtpVerifyPage() {
             {initialResetOpen ? translate('otp:resetSubmit') : translate('otp:title')}
           </h1>
           <p style={{ margin: '0 0 10px', fontSize: 13, color: '#64748b', lineHeight: 1.5 }}>
-            {translate('otp:subtitlePrefix')} <strong>{email}</strong>
+            {translate('otp:subtitle')} <strong>{email}</strong>
           </p>
 
           {devOtpHint && (

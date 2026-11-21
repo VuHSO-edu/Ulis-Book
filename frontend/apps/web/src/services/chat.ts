@@ -55,6 +55,25 @@ export const useConversationMessages = (conversationId: number) =>
     },
   });
 
+export const useOpenConversation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: {
+      bookPostId: number;
+      peerId: number;
+    }): Promise<ChatConversationItem> => {
+      const res = await httpBlocking.post<{ data?: ChatConversationItem }>(
+        '/conversations/open',
+        payload,
+      );
+      return res.data.data as ChatConversationItem;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: chatQueryKey.conversations() });
+    },
+  });
+};
+
 export const useSendMessage = () => {
   const queryClient = useQueryClient();
   return useMutation({

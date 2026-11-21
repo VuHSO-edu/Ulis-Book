@@ -412,7 +412,7 @@ export default {
     navReports: 'Báo cáo vi phạm',
     navPosts: 'Quản lý bài đăng',
     navUsers: 'Sinh viên ULIS',
-    navCategories: 'Danh mục khoa & sách',
+    navCategories: 'Quản lí danh mục',
     backToStudentView: 'Về trang sinh viên',
     serverOnline: 'Máy chủ: Hoạt động (VNU-01)',
     breadcrumbRoot: 'Bảng quản trị',
