@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes } from 'react-router-dom';
 import { MaterialIcon, Spin } from '@ulis/components';
 import { translate } from '@ulis/locale';
@@ -29,7 +29,7 @@ export default function App() {
           <div className="loader-brand-icon">
             <MaterialIcon name="menu_book" size={26} />
           </div>
-          <h1 className="loader-title">ULIS Books</h1>
+          <h1 className="loader-title">NextBooks</h1>
           <p className="loader-subtitle">{translate('home:heroSubtitle')}</p>
           <div style={{ marginTop: 16 }}>
             <Spin size="default" />

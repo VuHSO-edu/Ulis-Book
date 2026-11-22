@@ -19,6 +19,7 @@ export interface SendMessagePayload {
 export const useConversations = () =>
   useQuery({
     queryKey: chatQueryKey.conversations(),
+    refetchInterval: 4000,
     queryFn: async (): Promise<ChatConversationItem[]> => {
       try {
         const res = await http.post<{ data?: { content?: ChatConversationItem[] } }>(
@@ -38,6 +39,8 @@ export const useConversations = () =>
 export const useConversationMessages = (conversationId: number) =>
   useQuery({
     queryKey: chatQueryKey.messages(conversationId),
+    enabled: conversationId > 0,
+    refetchInterval: conversationId > 0 ? 3000 : false,
     queryFn: async (): Promise<ChatMessageItem[]> => {
       try {
         const res = await http.post<{ data?: { content?: ChatMessageItem[] } }>(

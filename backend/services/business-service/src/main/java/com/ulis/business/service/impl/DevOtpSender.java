@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +39,13 @@ public class DevOtpSender implements OtpSender {
 
         if (mailSender.isPresent() && mailUsername != null && !mailUsername.isBlank()) {
             try {
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setFrom(mailUsername);
-                message.setTo(toEmail);
-                message.setSubject(messageHelper.getMessage("otp.mail.subject"));
-                message.setText(messageHelper.getMessage(
-                        "otp.mail.body", otpCode, authProperties.getOtpExpiryMinutes()));
-                mailSender.get().send(message);
+                OtpMailHelper.sendHtmlOtp(
+                        mailSender.get(),
+                        mailUsername,
+                        toEmail,
+                        messageHelper.getMessage("otp.mail.subject"),
+                        otpCode,
+                        authProperties.getOtpExpiryMinutes());
                 log.info("[DEV-OTP] Đã gửi email OTP qua SMTP tới {}", toEmail);
             } catch (Exception ex) {
                 log.warn("[DEV-OTP] Không gửi được qua SMTP (vẫn dùng được mã dev {}): {}", otpCode, ex.getMessage());

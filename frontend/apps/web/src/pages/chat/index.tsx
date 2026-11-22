@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Breadcrumb,
@@ -40,11 +40,17 @@ export default function ChatPage() {
   const setDealModalOpen = useChatStore((s) => s.setDealModalOpen);
 
   const { data: conversations = [] } = useConversations();
+  const activeConv =
+    conversations.find((c) => c.id === activeConversationId) ?? conversations[0];
   const { data: categories = [] } = useBookCategories();
-  const campusLocationItems = categories.filter(
-    (c) => c.parentAxis === 'CAMPUS_LOCATION' && c.status === 'ACTIVE',
+  const campusLocationItems = useMemo(
+    () =>
+      categories.filter(
+        (c) => c.parentAxis === 'CAMPUS_LOCATION' && c.status === 'ACTIVE',
+      ),
+    [categories],
   );
-  const { data: messages = [] } = useConversationMessages(activeConversationId);
+  const { data: messages = [] } = useConversationMessages(activeConv?.id ?? 0);
   const openConversation = useOpenConversation();
   const sendMessage = useSendMessage();
   const markRead = useMarkConversationRead();
@@ -84,9 +90,6 @@ export default function ChatPage() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [localSearch, setLocalSearch] = useState(searchKeyword);
 
-  const activeConv =
-    conversations.find((c) => c.id === activeConversationId) ?? conversations[0];
-
   useEffect(() => {
     if (activeConv && activeConv.unreadCount > 0) {
       markRead.mutate(activeConv.id);
@@ -102,38 +105,45 @@ export default function ChatPage() {
     }, 500);
   };
 
-  const filteredConversations = conversations.filter((c) => {
-    if (activeTab === 'UNREAD' && c.unreadCount === 0) return false;
-    if (searchKeyword) {
-      const kw = searchKeyword.toLowerCase();
-      return (
-        c.peerName.toLowerCase().includes(kw) ||
-        c.contextBook.courseCode.toLowerCase().includes(kw) ||
-        c.contextBook.title.toLowerCase().includes(kw)
-      );
-    }
-    return true;
-  });
+  const filteredConversations = useMemo(
+    () =>
+      conversations.filter((c) => {
+        if (activeTab === 'UNREAD' && c.unreadCount === 0) return false;
+        if (searchKeyword) {
+          const kw = searchKeyword.toLowerCase();
+          return (
+            c.peerName.toLowerCase().includes(kw) ||
+            c.contextBook.courseCode.toLowerCase().includes(kw) ||
+            c.contextBook.title.toLowerCase().includes(kw)
+          );
+        }
+        return true;
+      }),
+    [conversations, activeTab, searchKeyword],
+  );
 
-  const unreadThreadsCount = conversations.filter((c) => c.unreadCount > 0).length;
+  const unreadThreadsCount = useMemo(
+    () => conversations.filter((c) => c.unreadCount > 0).length,
+    [conversations],
+  );
+
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [messages.length, activeConversationId]);
 
   const handleSendText = (contentToSend?: string, isAppointment?: boolean) => {
     const raw = (contentToSend ?? inputText).trim();
     if (!raw || !activeConv) return;
-    sendMessage.mutate(
-      {
-        conversationId: activeConv.id,
-        content: raw,
-        senderId: user?.id ?? 1,
-        senderName: user?.fullName ?? 'Nguyễn Văn An',
-        isAppointment,
-      },
-      {
-        onSuccess: () => {
-          if (!contentToSend) setInputText('');
-        },
-      },
-    );
+    if (!contentToSend) setInputText('');
+    sendMessage.mutate({
+      conversationId: activeConv.id,
+      content: raw,
+      senderId: user?.id ?? 1,
+      senderName: user?.fullName ?? 'Nguyễn Văn An',
+      isAppointment,
+    });
   };
 
   const handleConfirmDeal = () => {
@@ -553,47 +563,11 @@ export default function ChatPage() {
                   </div>
                 );
               })}
+              <div ref={messagesEndRef} />
             </div>
 
-            {/* 4. Quick Reply Chips & Input Composer */}
+            {/* 4. Input Composer */}
             <div style={{ padding: '10px 16px 12px', borderTop: '1px solid #eef1f8' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  gap: 6,
-                  marginBottom: 8,
-                }}
-              >
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#596377' }}>
-                  {translate('chat:quickReplyLabel')}
-                </span>
-                {[
-                  translate('chat:quickReply1'),
-                  translate('chat:quickReply2'),
-                  translate('chat:quickReply3'),
-                ].map((qr, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => handleSendText(qr)}
-                    style={{
-                      padding: '3px 10px',
-                      borderRadius: 999,
-                      border: '1px solid #d5dcff',
-                      background: '#f2f3ff',
-                      color: '#004ac6',
-                      fontSize: 11.5,
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {qr}
-                  </button>
-                ))}
-              </div>
-
               <div style={{ display: 'flex', gap: 8 }}>
                 <Input
                   value={inputText}
@@ -608,10 +582,6 @@ export default function ChatPage() {
                 >
                   <MaterialIcon name="send" size={16} />
                 </Button>
-              </div>
-
-              <div style={{ fontSize: 11, color: '#737686', marginTop: 6 }}>
-                🔒 {translate('chat:privacyNote')}
               </div>
             </div>
           </section>
@@ -685,6 +655,7 @@ export default function ChatPage() {
                   </div>
                 );
               })}
+              <div ref={messagesEndRef} />
             </div>
           </div>
 

@@ -1,9 +1,9 @@
-/**
+﻿/**
  * English resources — mirrors vi-VN structure.
  */
 export default {
   common: {
-    appName: 'ULIS Books',
+    appName: 'NextBooks',
     vnuBadge: 'VNU',
     vnuVerified: '100% VNU Mail Verified',
     loading: 'Loading...',
@@ -71,7 +71,7 @@ export default {
     breadcrumbHome: 'Home',
   },
   login: {
-    title: 'Welcome to ULIS Books',
+    title: 'Welcome to NextBooks',
     subtitle: 'Book marketplace for ULIS students',
     editorialBadge: 'Exclusive for ULIS & VNU Students',
     editorialTitle: 'Internal textbook exchange portal for ULIS.',
@@ -102,7 +102,7 @@ export default {
     forgotPassword: 'Forgot password?',
     keepLogin: 'Keep me signed in for 30 days',
     securityToken: 'VNU Token 256-bit',
-    submitLogin: 'Sign in to ULIS Books',
+    submitLogin: 'Sign in to NextBooks',
     noAccount: "Don't have an account?",
     toRegister: 'Create account',
     honorNote: 'Student data protected under VNU internal information policy.',
@@ -238,7 +238,7 @@ export default {
     communityBadge: 'ULIS Peer Support Culture',
     communityTitle: 'Exam Support Bookshelf — Pass textbooks on to juniors.',
     communityDesc:
-      'Finished a semester? Instead of letting textbooks gather dust, pass them on to junior students for free. Over 350 books have found new owners via ULIS Books.',
+      'Finished a semester? Instead of letting textbooks gather dust, pass them on to junior students for free. Over 350 books have found new owners via NextBooks.',
     communityExploreBtn: 'Explore 0đ free books',
     communityPostBtn: 'Donate your book',
     filterDrawerTitle: 'Advanced Filters',
@@ -401,7 +401,7 @@ export default {
     attachmentTitle: 'Evidence Screenshot (Optional, max 10MB)',
     submitReport: 'LƯU DỮ LIỆU',
     reportSuccess: 'Violation report submitted to Moderators (Status: PENDING).',
-    bhttCardTitle: 'ULIS Books Moderation Team (BHTT)',
+    bhttCardTitle: 'NextBooks Moderation Team (BHTT)',
     bhttCardDesc:
       'All scam, fake deposit, or copyright reports are reviewed within 2 campus hours.',
   },

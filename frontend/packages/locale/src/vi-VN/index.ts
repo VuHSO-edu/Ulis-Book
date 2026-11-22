@@ -1,10 +1,10 @@
-/**
+﻿/**
  * Tài nguyên tiếng Việt (mặc định + fallback) — theo vuhso-frontend-rules §8.
  * Mỗi module (common, button, login, home, ...) là một namespace.
  */
 export default {
   common: {
-    appName: 'ULIS Books',
+    appName: 'NextBooks',
     vnuBadge: 'VNU',
     vnuVerified: '100% Xác thực VNU Mail',
     loading: 'Đang tải...',
@@ -72,7 +72,7 @@ export default {
     breadcrumbHome: 'Trang chủ',
   },
   login: {
-    title: 'Chào mừng đến ULIS Books',
+    title: 'Chào mừng đến NextBooks',
     subtitle: 'Nền tảng mua bán sách cho sinh viên ULIS',
     editorialBadge: 'Dành riêng sinh viên ULIS & ĐHQGHN',
     editorialTitle: 'Cổng trao đổi giáo trình nội bộ Đại học Ngoại ngữ.',
@@ -103,7 +103,7 @@ export default {
     forgotPassword: 'Quên mật khẩu?',
     keepLogin: 'Duy trì đăng nhập 30 ngày',
     securityToken: 'VNU Token 256-bit',
-    submitLogin: 'Đăng nhập vào ULIS Books',
+    submitLogin: 'Đăng nhập vào NextBooks',
     noAccount: 'Chưa có tài khoản?',
     toRegister: 'Đăng ký tài khoản',
     honorNote: 'Bảo mật dữ liệu sinh viên theo quy định thông tin nội bộ ĐHQGHN.',
@@ -239,7 +239,7 @@ export default {
     communityBadge: 'Văn hoá tương trợ ULIS',
     communityTitle: 'Tủ sách tiếp sức mùa thi — Tặng lại đàn em khoá dưới.',
     communityDesc:
-      'Học xong một kỳ học, thay vì để giáo trình bám bụi, hãy trao lại cơ hội học tập cho các bạn sinh viên khoá sau hoàn toàn miễn phí. Hơn 350 cuốn sách đã tìm được chủ nhân mới qua ULIS Books.',
+      'Học xong một kỳ học, thay vì để giáo trình bám bụi, hãy trao lại cơ hội học tập cho các bạn sinh viên khoá sau hoàn toàn miễn phí. Hơn 350 cuốn sách đã tìm được chủ nhân mới qua NextBooks.',
     communityExploreBtn: 'Khám phá góc sách 0đ',
     communityPostBtn: 'Đăng tặng sách của bạn',
     filterDrawerTitle: 'Bộ lọc chi tiết',
@@ -402,7 +402,7 @@ export default {
     attachmentTitle: 'Ảnh chụp màn hình bằng chứng (Tuỳ chọn, tối đa 10MB)',
     submitReport: 'LƯU DỮ LIỆU',
     reportSuccess: 'Đã gửi báo cáo vi phạm tới Ban Quản Trị (Trạng thái: CHỜ XỬ LÝ).',
-    bhttCardTitle: 'Đội Hỗ Trợ ULIS Books (BHTT)',
+    bhttCardTitle: 'Đội Hỗ Trợ NextBooks (BHTT)',
     bhttCardDesc:
       'Tất cả báo cáo lừa đảo, cọc khống hoặc vi phạm bản quyền sách nội bộ sẽ được kiểm duyệt trực tiếp trong vòng 2 giờ học.',
   },
