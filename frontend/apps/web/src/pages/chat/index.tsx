@@ -112,9 +112,9 @@ export default function ChatPage() {
         if (searchKeyword) {
           const kw = searchKeyword.toLowerCase();
           return (
-            c.peerName.toLowerCase().includes(kw) ||
-            c.contextBook.courseCode.toLowerCase().includes(kw) ||
-            c.contextBook.title.toLowerCase().includes(kw)
+            (c.peerName ?? '').toLowerCase().includes(kw) ||
+            (c.contextBook?.courseCode ?? '').toLowerCase().includes(kw) ||
+            (c.contextBook?.title ?? '').toLowerCase().includes(kw)
           );
         }
         return true;
@@ -183,35 +183,6 @@ export default function ChatPage() {
             },
           ]}
         />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 12 }}>
-          <span style={{ color: '#596377' }}>
-            <MaterialIcon name="location_on" size={15} style={{ color: '#004ac6' }} />{' '}
-            {translate('chat:campusAddress')}
-          </span>
-          <span
-            style={{
-              padding: '3px 10px',
-              borderRadius: 999,
-              background: '#e6f9f1',
-              color: '#006c49',
-              fontWeight: 700,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-            }}
-          >
-            <span
-              style={{
-                width: 7,
-                height: 7,
-                borderRadius: '50%',
-                background: '#10b981',
-              }}
-            />
-            {translate('chat:wsConnected')}
-          </span>
-        </div>
       </div>
 
       {/* 2-Panel Chat Workspace (Stitch Screen 8: 98741f6091c249a3a5c7de9f13eb815b) */}
@@ -357,19 +328,22 @@ export default function ChatPage() {
                       </span>
                     </div>
 
-                    <div
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: '#006c49',
-                        marginBottom: 3,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      [{conv.contextBook.courseCode}] {conv.contextBook.title}
-                    </div>
+                    {(conv.contextBook?.courseCode || conv.contextBook?.title) && (
+                      <div
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 700,
+                          color: '#006c49',
+                          marginBottom: 3,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {conv.contextBook?.courseCode ? `[${conv.contextBook.courseCode}] ` : ''}
+                        {conv.contextBook?.title}
+                      </div>
+                    )}
 
                     <div
                       style={{
@@ -529,7 +503,7 @@ export default function ChatPage() {
               </div>
 
               {messages.map((msg) => {
-                const isMine = msg.senderId === (user?.id ?? 1) || msg.senderId === 1;
+                const isMine = user?.id != null ? msg.senderId === user.id : msg.senderId === 1;
                 return (
                   <div
                     key={msg.id}
@@ -544,9 +518,9 @@ export default function ChatPage() {
                     </div>
                     <div
                       style={{
-                        fontSize: 10.5,
-                        color: '#737686',
-                        marginTop: 3,
+                        fontSize: 11,
+                        color: '#596377',
+                        marginTop: 4,
                         display: 'flex',
                         gap: 6,
                       }}

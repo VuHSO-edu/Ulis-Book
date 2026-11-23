@@ -24,7 +24,19 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider locale={viVN} theme={{ token: { colorPrimary: '#1f3a93' } }}>
+      <ConfigProvider
+        locale={viVN}
+        theme={{
+          token: {
+            colorPrimary: '#3E4B8E',
+            colorText: '#3D1534',
+            colorBgBase: '#FFF4EB',
+            borderRadius: 4,
+            fontFamily:
+              "'Adobe Caslon Pro', 'Adobe Caslon', 'Libre Caslon Text', 'EB Garamond', Georgia, serif",
+          },
+        }}
+      >
         <AntdApp>
           <App />
         </AntdApp>

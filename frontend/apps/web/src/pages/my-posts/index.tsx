@@ -437,8 +437,8 @@ export default function MyPostsPage() {
         className="ulis-data-table"
         style={{
           background: '#ffffff',
-          borderRadius: 12,
-          border: '1px solid #e2e7ff',
+          borderRadius: 4,
+          border: 'none',
           overflow: 'hidden',
         }}
       >

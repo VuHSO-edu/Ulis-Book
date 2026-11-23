@@ -29,7 +29,7 @@ export default function App() {
           <div className="loader-brand-icon">
             <MaterialIcon name="menu_book" size={26} />
           </div>
-          <h1 className="loader-title">NextBooks</h1>
+          <h1 className="loader-title">{translate('common:appName')}</h1>
           <p className="loader-subtitle">{translate('home:heroSubtitle')}</p>
           <div style={{ marginTop: 16 }}>
             <Spin size="default" />

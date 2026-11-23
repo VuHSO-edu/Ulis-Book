@@ -1,21 +1,37 @@
-// Global styles dùng chung cho tất cả app — theo vuhso-frontend-rules + Stitch Design System
+// Global styles dùng chung cho tất cả app — Palette NYNÄ (Seashell, Wheat, Powder Blue, French Blue, Midnight Violet)
+// Text chính: Adobe Caslon | Text phụ: Futura
 :root {
-  --ulis-primary: #2563eb;
-  --ulis-primary-container: #2563eb;
-  --ulis-blue: #1677ff;
-  --ulis-navy: #0f172a;
-  --ulis-bg: #f0f2f5;
+  --ulis-seashell: #fff4eb;
+  --ulis-wheat: #f6e0b6;
+  --ulis-wheat-deep: #edd09a;
+  --ulis-powder-blue: #a6bcc9;
+  --ulis-powder-blue-light: #cddbe3;
+  --ulis-french-blue: #3e4b8e;
+  --ulis-french-blue-hover: #313c75;
+  --ulis-midnight-violet: #3d1534;
+  --ulis-midnight-muted: rgba(61, 21, 52, 0.72);
+
+  --ulis-primary: #3e4b8e;
+  --ulis-primary-container: #3e4b8e;
+  --ulis-blue: #3e4b8e;
+  --ulis-navy: #3d1534;
+  --ulis-bg: #fff4eb;
   --ulis-surface: #ffffff;
-  --ulis-surface-low: #f2f3ff;
-  --ulis-text: #0f172a;
-  --ulis-text-muted: #596377;
-  --ulis-border: #c3c6d7;
-  --ulis-emerald: #10b981;
-  --ulis-emerald-bg: #d1fae5;
-  --ulis-amber: #f59e0b;
-  --ulis-amber-bg: #fef3c7;
-  --ulis-error: #ba1a1a;
-  --ulis-error-bg: #ffdad6;
+  --ulis-surface-low: #f6e0b6;
+  --ulis-text: #3d1534;
+  --ulis-text-muted: rgba(61, 21, 52, 0.72);
+  --ulis-border: #e6d7c8;
+  --ulis-emerald: #2e6f5e;
+  --ulis-emerald-bg: #dceee9;
+  --ulis-amber: #c98a2c;
+  --ulis-amber-bg: #f6e0b6;
+  --ulis-error: #9e2a2b;
+  --ulis-error-bg: #f9dadd;
+
+  --font-primary: 'Adobe Caslon Pro', 'Adobe Caslon', 'ACaslonPro-Regular', 'Libre Caslon Text',
+    'EB Garamond', Georgia, serif;
+  --font-secondary: 'Futura', 'Futura PT', 'Futura Std', 'Jost', Tahoma, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 * {
@@ -31,10 +47,10 @@ body,
 }
 
 body {
-  background: var(--ulis-bg);
-  color: var(--ulis-text);
-  font-family: 'Lexend', Tahoma, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 13px;
+  background: var(--ulis-seashell);
+  color: var(--ulis-midnight-violet);
+  font-family: var(--font-primary);
+  font-size: 14px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -42,8 +58,14 @@ h1,
 h2,
 h3,
 h4,
-.font-headline {
-  font-family: 'Merriweather', Georgia, serif;
+.font-headline,
+.font-primary {
+  font-family: var(--font-primary);
+  color: var(--ulis-midnight-violet);
+}
+
+.font-secondary {
+  font-family: var(--font-secondary);
 }
 
 // Material Symbols support
@@ -57,33 +79,39 @@ h4,
   user-select: none;
 }
 
-// Global Rules (§2 & §3): Form labels #000000, Input text #1677ff, Tahoma 13px, 8-12px spacing
+// Form spacing & typography
 .ant-form-item {
   margin-bottom: 10px !important;
 }
 
 .ant-form-item-label > label {
-  font-family: 'Lexend', Tahoma, sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  color: #000000 !important;
+  font-family: var(--font-primary) !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: var(--ulis-midnight-violet) !important;
 }
 
 .ant-input,
+.ant-input-affix-wrapper,
 .ant-input-affix-wrapper input,
+.ant-input-number,
 .ant-input-number-input,
+.ant-select-selector,
 .ant-select-selection-item,
 textarea.ant-input {
-  font-family: 'Lexend', Tahoma, sans-serif !important;
+  font-family: var(--font-secondary) !important;
   font-size: 13px !important;
-  color: #1677ff !important;
+  color: var(--ulis-midnight-violet) !important;
   font-weight: 500;
+  border-radius: 4px !important;
+  box-shadow: none !important;
 }
 
 .ant-input::placeholder,
 .ant-input-affix-wrapper input::placeholder,
 textarea.ant-input::placeholder {
-  color: #8c95a6 !important;
+  font-family: var(--font-secondary) !important;
+  color: rgba(61, 21, 52, 0.48) !important;
   font-weight: 400;
 }
 
@@ -94,18 +122,19 @@ textarea.ant-input::placeholder {
 .ant-select-disabled .ant-select-selector,
 .ant-input-number-disabled {
   background-color: #f5f5f5 !important;
-  color: #737686 !important;
+  color: rgba(61, 21, 52, 0.5) !important;
   cursor: not-allowed !important;
 }
 
-// Modal Rules (§2): 8px border-radius, fixed 56px header height
+// Modal Rules (§2): 8px border-radius, fixed 56px header height, no heavy shadow
 .ulis-custom-modal .ant-modal-content,
 .ant-modal .ant-modal-content {
   border-radius: 8px !important;
   padding: 0 !important;
   overflow: hidden;
-  border: 1px solid #dbe1ff;
-  box-shadow: none !important;
+  background: var(--ulis-seashell) !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(61, 21, 52, 0.08) !important;
 }
 
 .ulis-custom-modal .ant-modal-header,
@@ -117,29 +146,30 @@ textarea.ant-input::placeholder {
   margin-bottom: 0 !important;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #e2e7ff;
-  background: #faf8ff;
+  border-bottom: 1px solid rgba(61, 21, 52, 0.1);
+  background: var(--ulis-wheat) !important;
 }
 
 .ulis-custom-modal .ant-modal-title,
 .ant-modal .ant-modal-title {
-  font-family: 'Merriweather', Georgia, serif !important;
-  font-size: 14px !important;
+  font-family: var(--font-primary) !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
-  color: #0f172a !important;
+  color: var(--ulis-midnight-violet) !important;
 }
 
 .ulis-custom-modal .ant-modal-body,
 .ant-modal .ant-modal-body {
   padding: 16px 20px !important;
+  background: var(--ulis-seashell);
 }
 
 .ulis-custom-modal .ant-modal-footer,
 .ant-modal .ant-modal-footer {
   margin-top: 0 !important;
   padding: 12px 20px !important;
-  background: #f2f3ff;
-  border-top: 1px solid #e2e7ff;
+  background: #f9ead8;
+  border-top: none;
 }
 
 // Confirm modal body padding
@@ -147,63 +177,103 @@ textarea.ant-input::placeholder {
   padding: 20px 24px !important;
 }
 
-// Form Buttons: #1677ff background, #ffffff text, Tahoma 13px
+// Primary Buttons: French Blue (#3E4B8E), rectangular corners (4px), Adobe Caslon (Text chính)
 .ulis-modal-btn-submit,
-.ulis-modal-btn-exit,
 .ulis-primary-btn {
-  background: #2563eb !important;
-  border-color: #2563eb !important;
+  background: var(--ulis-french-blue) !important;
+  border: none !important;
   color: #ffffff !important;
-  font-family: 'Lexend', Tahoma, sans-serif !important;
-  font-size: 13px !important;
+  font-family: var(--font-primary) !important;
+  font-size: 13.5px !important;
   font-weight: 600 !important;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
   height: 36px !important;
   padding: 0 18px !important;
   box-shadow: none !important;
-}
-
-.ulis-modal-btn-exit {
-  opacity: 0.92;
+  cursor: pointer;
 }
 
 .ulis-modal-btn-submit:hover,
-.ulis-modal-btn-exit:hover,
 .ulis-primary-btn:hover {
-  background: #004ac6 !important;
-  border-color: #004ac6 !important;
+  background: var(--ulis-french-blue-hover) !important;
   color: #ffffff !important;
 }
 
-// Table Grid Rules (§4): Hover light gray + blue text; Selected deep blue + white text
+// Secondary Buttons: Powder Blue (#A6BCC9) or Wheat (#F6E0B6)
+.ulis-modal-btn-exit,
+.ulis-secondary-btn-powder {
+  background: var(--ulis-powder-blue) !important;
+  border: none !important;
+  color: var(--ulis-midnight-violet) !important;
+  font-family: var(--font-primary) !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  border-radius: 4px !important;
+  height: 36px !important;
+  padding: 0 18px !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.ulis-modal-btn-exit:hover,
+.ulis-secondary-btn-powder:hover {
+  background: #95aebd !important;
+  color: var(--ulis-midnight-violet) !important;
+}
+
+.ulis-secondary-btn-wheat {
+  background: var(--ulis-wheat) !important;
+  border: none !important;
+  color: var(--ulis-midnight-violet) !important;
+  font-family: var(--font-primary) !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  border-radius: 4px !important;
+  height: 36px !important;
+  padding: 0 18px !important;
+  box-shadow: none !important;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--ulis-wheat-deep) !important;
+    color: var(--ulis-midnight-violet) !important;
+  }
+}
+
+// Table Grid Rules (§4) adapted to palette
 .ulis-data-table .ant-table {
-  font-family: 'Lexend', Tahoma, sans-serif;
+  font-family: var(--font-secondary);
   font-size: 13px;
+  background: #ffffff;
+  color: var(--ulis-midnight-violet);
 }
 
 .ulis-data-table .ant-table-thead > tr > th {
-  background: #eef1f8 !important;
-  color: #131b2e !important;
+  background: var(--ulis-wheat) !important;
+  color: var(--ulis-midnight-violet) !important;
+  font-family: var(--font-primary) !important;
   font-weight: 700 !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
   padding: 10px 12px !important;
-  border-bottom: 1px solid #d8deee !important;
+  border-bottom: none !important;
 }
 
 .ulis-data-table .ant-table-tbody > tr > td {
   padding: 10px 12px !important;
   font-size: 13px !important;
+  color: var(--ulis-midnight-violet);
+  border-bottom: 1px solid #f7ece1 !important;
   transition: background-color 0.12s ease, color 0.12s ease;
 }
 
 .ulis-data-table .ant-table-tbody > tr:hover > td {
-  background-color: #f5f5f5 !important;
-  color: #1677ff !important;
+  background-color: #faf0e4 !important;
+  color: var(--ulis-french-blue) !important;
 }
 
 .ulis-data-table .ant-table-tbody > tr.ulis-row-focused > td,
 .ulis-data-table .ant-table-tbody > tr.ulis-row-focused:hover > td {
-  background-color: #1677ff !important;
+  background-color: var(--ulis-french-blue) !important;
   color: #ffffff !important;
 }
 
@@ -222,28 +292,28 @@ textarea.ant-input::placeholder {
 .ulis-action-icon-btn {
   width: 28px;
   height: 28px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  background: transparent;
+  border-radius: 4px;
+  border: none;
+  background: rgba(166, 188, 201, 0.25);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #434655;
+  color: var(--ulis-midnight-violet);
   transition: all 0.15s ease;
 
   &:hover {
-    background: rgba(22, 119, 255, 0.12);
-    color: #1677ff;
+    background: var(--ulis-powder-blue);
+    color: var(--ulis-midnight-violet);
   }
 
   &.danger:hover {
-    background: rgba(186, 26, 26, 0.14);
-    color: #ba1a1a;
+    background: #f9dadd;
+    color: #9e2a2b;
   }
 
   &.success:hover {
-    background: rgba(0, 108, 73, 0.14);
-    color: #006c49;
+    background: var(--ulis-wheat);
+    color: var(--ulis-midnight-violet);
   }
 }

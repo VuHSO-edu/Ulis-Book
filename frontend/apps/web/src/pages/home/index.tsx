@@ -55,11 +55,24 @@ export default function HomePage() {
   const clearFocusedRow = useBookFilterStore((s) => s.clearFocusedRow);
 
   const [inputKeyword, setInputKeyword] = useState(keyword);
+  const [openMenu, setOpenMenu] = useState<'faculty' | 'type' | null>(null);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dropdownWrapRef = useRef<HTMLDivElement | null>(null);
+  const bookGridRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setInputKeyword(keyword);
   }, [keyword]);
+
+  useEffect(() => {
+    const handleClickOutside = (ev: MouseEvent) => {
+      if (dropdownWrapRef.current && !dropdownWrapRef.current.contains(ev.target as Node)) {
+        setOpenMenu(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Global Rules §4: Debounce 500ms + useBookFilterStore.getState() trong setTimeout + reset về trang 1
   const handleKeywordInput = (val: string) => {
@@ -151,240 +164,289 @@ export default function HomePage() {
     setFilter({ drawerOpen: false, pageNumber: 1 });
   };
 
+  const activeFacultyObj = faculties.find((f) => f.code === facultyCode);
+  const activeBookTypeObj = bookTypes.find((t) => t.code === bookTypeCode);
+
   return (
-    <div>
-      {/* 1. HERO SECTION & SEARCH COMMAND BAR — Minimalist & Flat */}
-      <section className="ulis-home-hero">
-        <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
-          <h1
-            style={{
-              margin: '0 auto 12px',
-              maxWidth: 760,
-              fontSize: 'clamp(26px, 3.4vw, 38px)',
-              fontWeight: 700,
-              lineHeight: 1.25,
-              color: '#131b2e',
-            }}
-          >
-            {translate('home:heroTitlePrefix')}{' '}
-            <span style={{ color: '#004ac6' }}>{translate('home:heroTitleHighlight')}</span>
-          </h1>
+    <div className="ulis-home-container">
+      {/* 1. BẢNG QUẢNG CÁO VỀ WEB (HERO PROMOTIONAL BANNER — BOOKNET STYLE) */}
+      <section className="ulis-promo-banner">
+        <div className="promo-content">
+          <h1 className="promo-headline">{translate('home:promoHeadline')}</h1>
 
-          <p
-            style={{
-              margin: '0 auto',
-              maxWidth: 600,
-              fontSize: 14,
-              color: '#596377',
-              lineHeight: 1.65,
-            }}
-          >
-            {translate('home:heroSubtitle')}
-          </p>
-
-          {/* Capsule Floating Search Command Bar */}
-          <div className="ulis-capsule-search">
-            <div className="capsule-segment">
-              <span className="segment-label">{translate('home:searchLabel')}</span>
-              <Input
-                variant="borderless"
-                value={inputKeyword}
-                onChange={(e) => handleKeywordInput(e.target.value)}
-                placeholder={translate('home:searchPlaceholder')}
-                prefix={<MaterialIcon name="search" size={18} style={{ color: '#004ac6' }} />}
-                allowClear
-                style={{ padding: 0 }}
-              />
-            </div>
-
-            <div className="capsule-segment">
-              <span className="segment-label">{translate('home:facultyLabel')}</span>
-              <Select
-                variant="borderless"
-                popupMatchSelectWidth={false}
-                value={facultyCode}
-                onChange={(val) => {
-                  clearFocusedRow();
-                  setFilter({ facultyCode: val, pageNumber: 1 });
-                }}
-                style={{ width: '100%' }}
-                options={[
-                  { value: 'ALL', label: translate('home:allFaculties') },
-                  ...faculties.map((f) => ({
-                    value: f.code,
-                    label: f.name,
-                  })),
-                ]}
-              />
-            </div>
-
-            <div className="capsule-segment">
-              <span className="segment-label">{translate('home:categoryLabel')}</span>
-              <Select
-                variant="borderless"
-                popupMatchSelectWidth={false}
-                value={bookTypeCode}
-                onChange={(val) => {
-                  clearFocusedRow();
-                  setFilter({ bookTypeCode: val, pageNumber: 1 });
-                }}
-                style={{ width: '100%' }}
-                options={[
-                  { value: 'ALL', label: translate('home:allCategories') },
-                  ...bookTypes.map((t) => ({
-                    value: t.code,
-                    label: t.name,
-                  })),
-                ]}
-              />
-            </div>
-
+          <div className="promo-cloud-badge">
+            <div className="cloud-sub">{translate('home:promoBadgeTop')}</div>
+            <div className="cloud-highlight">{translate('home:promoBadgeMain')}</div>
             <button
               type="button"
-              className="ulis-sell-cta-btn"
-              onClick={() => {
-                clearFocusedRow();
-                setFilter({ keyword: inputKeyword.trim(), pageNumber: 1 });
-              }}
-              style={{ height: 44, padding: '0 22px' }}
+              className="cloud-explore-btn"
+              onClick={() => bookGridRef.current?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <MaterialIcon name="travel_explore" size={18} />
-              <span>{translate('button:search')}</span>
+              <span>{translate('button:exploreArrow')}</span>
             </button>
+          </div>
+        </div>
+
+        <div className="promo-visual">
+          <div className="promo-books-cluster">
+            <img
+              className="cluster-book b1"
+              src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80"
+              alt="ULIS Book 1"
+            />
+            <img
+              className="cluster-book b2"
+              src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=400&q=80"
+              alt="ULIS Book 2"
+            />
+            <img
+              className="cluster-book b3"
+              src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80"
+              alt="ULIS Book 3"
+            />
+            <img
+              className="cluster-book b4"
+              src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80"
+              alt="ULIS Book 4"
+            />
           </div>
         </div>
       </section>
 
-      {/* 2. STICKY FACULTY HORIZONTAL FILTER BAR */}
-      <section className="ulis-faculty-bar">
-        <div
-          style={{
-            maxWidth: 1400,
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 12,
-          }}
-        >
-          <div className="ulis-faculty-pills">
+      {/* 2. THANH TÌM KIẾM (TEXT PHỤ FUTURA) + 2 DROPDOWN: KHOA, NGÀNH & THỂ LOẠI SÁCH */}
+      <section className="ulis-booknet-search-row">
+        <div className="ulis-booknet-search-box">
+          <input
+            type="text"
+            className="search-input-el"
+            value={inputKeyword}
+            onChange={(e) => handleKeywordInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                clearFocusedRow();
+                setFilter({ keyword: inputKeyword.trim(), pageNumber: 1 });
+              }
+            }}
+            placeholder={translate('home:searchBooknetPlaceholder')}
+          />
+          {inputKeyword && (
             <button
               type="button"
-              onClick={() => setFilter({ facultyCode: 'ALL', onlyGiveaway: false, pageNumber: 1 })}
-              className={`faculty-pill ${facultyCode === 'ALL' && !onlyGiveaway ? 'active' : ''}`}
+              className="search-clear-btn"
+              onClick={() => handleKeywordInput('')}
+              aria-label={translate('button:reset')}
             >
-              <MaterialIcon name="grid_view" size={16} />
-              <span>{translate('home:tabAll')}</span>
+              <MaterialIcon name="close" size={16} />
             </button>
+          )}
+          <button
+            type="button"
+            className="search-submit-btn"
+            onClick={() => {
+              clearFocusedRow();
+              setFilter({ keyword: inputKeyword.trim(), pageNumber: 1 });
+            }}
+            aria-label={translate('button:search')}
+          >
+            <MaterialIcon name="search" size={20} />
+          </button>
+        </div>
 
+        <div className="ulis-booknet-dropdowns" ref={dropdownWrapRef}>
+          {/* Dropdown 1: Khoa, ngành */}
+          <div className="ulis-custom-dropdown">
             <button
               type="button"
-              onClick={() => setFilter({ onlyGiveaway: !onlyGiveaway, pageNumber: 1 })}
-              className={`faculty-pill giveaway-pill ${onlyGiveaway ? 'active' : ''}`}
+              className={`dropdown-trigger-btn ${openMenu === 'faculty' ? 'open' : ''}`}
+              onClick={() => setOpenMenu(openMenu === 'faculty' ? null : 'faculty')}
             >
-              <MaterialIcon name="volunteer_activism" size={16} />
-              <span>{translate('home:tabFreeCorner')}</span>
+              <span>{activeFacultyObj ? activeFacultyObj.name : translate('home:dropdownFaculty')}</span>
+              <MaterialIcon name="expand_more" size={18} />
             </button>
 
-            {faculties.map((f) => (
-              <button
-                key={f.code}
-                type="button"
-                onClick={() =>
-                  setFilter({
-                    facultyCode: facultyCode === f.code ? 'ALL' : f.code,
-                    pageNumber: 1,
-                  })
-                }
-                className={`faculty-pill ${facultyCode === f.code ? 'active' : ''}`}
-              >
-                <MaterialIcon name="translate" size={15} />
-                <span>{f.name}</span>
-              </button>
-            ))}
+            {openMenu === 'faculty' && (
+              <div className="dropdown-menu-panel">
+                <button
+                  type="button"
+                  className={`dropdown-menu-item ${facultyCode === 'ALL' ? 'active' : ''}`}
+                  onClick={() => {
+                    clearFocusedRow();
+                    setFilter({ facultyCode: 'ALL', pageNumber: 1 });
+                    setOpenMenu(null);
+                  }}
+                >
+                  {translate('home:allFaculties')}
+                </button>
+                {faculties.map((f) => (
+                  <button
+                    key={f.code}
+                    type="button"
+                    className={`dropdown-menu-item ${facultyCode === f.code ? 'active' : ''}`}
+                    onClick={() => {
+                      clearFocusedRow();
+                      setFilter({ facultyCode: f.code, pageNumber: 1 });
+                      setOpenMenu(null);
+                    }}
+                  >
+                    {f.name}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          {/* Dropdown 2: Thể loại sách (Làm như mẫu Selling / Bidding / Exchange với nền Wheat #F6E0B6) */}
+          <div className="ulis-custom-dropdown">
             <button
               type="button"
-              onClick={() => setFilter({ drawerOpen: true })}
-              style={{
-                height: 36,
-                padding: '0 14px',
-                borderRadius: 10,
-                border: '1px solid #c3c6d7',
-                background: '#ffffff',
-                color: '#131b2e',
-                fontSize: 12.5,
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-              }}
+              className={`dropdown-trigger-btn ${openMenu === 'type' ? 'open' : ''}`}
+              onClick={() => setOpenMenu(openMenu === 'type' ? null : 'type')}
             >
-              <MaterialIcon name="tune" size={17} style={{ color: '#004ac6' }} />
-              <span>{translate('home:filterButton')}</span>
+              <span>
+                {onlyGiveaway
+                  ? translate('home:typeGiveaway')
+                  : activeBookTypeObj
+                    ? activeBookTypeObj.name
+                    : translate('home:dropdownBookType')}
+              </span>
+              <MaterialIcon name="expand_more" size={18} />
             </button>
 
-            {(keyword ||
-              facultyCode !== 'ALL' ||
-              bookTypeCode !== 'ALL' ||
-              onlyGiveaway ||
-              campusLocation !== 'ALL') && (
-              <button
-                type="button"
-                onClick={() => {
-                  setInputKeyword('');
-                  resetFilters();
-                }}
-                style={{
-                  height: 36,
-                  padding: '0 12px',
-                  borderRadius: 10,
-                  border: '1px solid #ffdad6',
-                  background: '#fff5f5',
-                  color: '#ba1a1a',
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                {translate('button:reset')}
-              </button>
+            {openMenu === 'type' && (
+              <div className="dropdown-menu-panel">
+                <button
+                  type="button"
+                  className={`dropdown-menu-item ${bookTypeCode === 'ALL' && !onlyGiveaway ? 'active' : ''}`}
+                  onClick={() => {
+                    clearFocusedRow();
+                    setFilter({ bookTypeCode: 'ALL', onlyGiveaway: false, pageNumber: 1 });
+                    setOpenMenu(null);
+                  }}
+                >
+                  {translate('home:typeSelling')}
+                </button>
+
+                {bookTypes.map((t) => (
+                  <button
+                    key={t.code}
+                    type="button"
+                    className={`dropdown-menu-item ${bookTypeCode === t.code && !onlyGiveaway ? 'active' : ''}`}
+                    onClick={() => {
+                      clearFocusedRow();
+                      setFilter({ bookTypeCode: t.code, onlyGiveaway: false, pageNumber: 1 });
+                      setOpenMenu(null);
+                    }}
+                  >
+                    {t.name}
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  className={`dropdown-menu-item ${onlyGiveaway ? 'active' : ''}`}
+                  onClick={() => {
+                    clearFocusedRow();
+                    setFilter({ bookTypeCode: 'ALL', onlyGiveaway: true, pageNumber: 1 });
+                    setOpenMenu(null);
+                  }}
+                >
+                  {translate('home:typeGiveaway')}
+                </button>
+              </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* 3. BOOK LISTINGS GRID (10 items/page default theo Global Rules §4) */}
-      <section style={{ maxWidth: 1400, margin: '0 auto', padding: '24px 24px 40px' }}>
+      {/* 3. HÀNG NÚT BẤM KHOA / NGÀNH VUÔNG GÓC (TEXT CHÍNH ADOBE CASLON, FRENCH BLUE + 2 MÀU PHỤ) */}
+      <section className="ulis-booknet-cat-row">
+        {faculties.map((f) => (
+          <button
+            key={f.code}
+            type="button"
+            onClick={() => {
+              clearFocusedRow();
+              setFilter({
+                facultyCode: facultyCode === f.code ? 'ALL' : f.code,
+                pageNumber: 1,
+              });
+            }}
+            className={`ulis-cat-rect-btn ${facultyCode === f.code ? 'active' : ''}`}
+          >
+            <span>{f.name.replace(/^Khoa\s+/i, '')}</span>
+          </button>
+        ))}
+
+        {/* Các nút phụ dùng 2 màu còn lại: Wheat (#F6E0B6) và Powder Blue (#A6BCC9) */}
+        <button
+          type="button"
+          onClick={() => {
+            clearFocusedRow();
+            setFilter({ onlyGiveaway: !onlyGiveaway, pageNumber: 1 });
+          }}
+          className={`ulis-cat-rect-btn secondary-wheat ${onlyGiveaway ? 'active' : ''}`}
+        >
+          <span>{translate('home:tabFreeCorner')}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setFilter({ drawerOpen: true })}
+          className="ulis-cat-rect-btn secondary-powder"
+        >
+          <MaterialIcon name="tune" size={16} />
+          <span>{translate('home:filterButton')}</span>
+        </button>
+
+        {(keyword ||
+          facultyCode !== 'ALL' ||
+          bookTypeCode !== 'ALL' ||
+          onlyGiveaway ||
+          campusLocation !== 'ALL') && (
+          <button
+            type="button"
+            onClick={() => {
+              setInputKeyword('');
+              resetFilters();
+            }}
+            className="ulis-cat-rect-btn secondary-wheat"
+          >
+            <span>{translate('button:reset')}</span>
+          </button>
+        )}
+      </section>
+
+      {/* 4. TIÊU ĐỀ PHẦN SÁCH & BỘ SẮP XẾP */}
+      <section ref={bookGridRef}>
         <div
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            alignItems: 'flex-end',
+            alignItems: 'center',
             justifyContent: 'space-between',
             gap: 12,
-            marginBottom: 20,
+            marginBottom: 18,
           }}
         >
           <div>
-            <div
+            <h2
               style={{
-                fontSize: 11,
-                fontWeight: 800,
-                color: '#004ac6',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
+                margin: 0,
+                fontFamily: 'var(--font-primary)',
+                fontSize: 22,
+                fontWeight: 700,
+                color: 'var(--ulis-midnight-violet)',
               }}
             >
-              {translate('home:sectionBadge')}
-            </div>
-            <h2 style={{ margin: '2px 0 4px', fontSize: 22, fontWeight: 800, color: '#131b2e' }}>
-              {translate('home:sectionTitle')}
+              {translate('home:booksForYouTitle')}
             </h2>
-            <div style={{ fontSize: 13, color: '#596377' }}>
+            <div
+              style={{
+                fontFamily: 'var(--font-secondary)',
+                fontSize: 13,
+                color: 'var(--ulis-midnight-muted)',
+              }}
+            >
               {translate('home:sectionSubtitle')} ·{' '}
               <strong>{translate('common:totalRecords', { total: totalCount })}</strong>
             </div>
@@ -394,8 +456,8 @@ export default function HomePage() {
             style={{
               display: 'inline-flex',
               padding: 4,
-              borderRadius: 10,
-              background: '#e5e9f5',
+              borderRadius: 4,
+              background: 'var(--ulis-wheat)',
               gap: 4,
             }}
           >
@@ -411,13 +473,15 @@ export default function HomePage() {
                 type="button"
                 onClick={() => setFilter({ sortBy: s.key, pageNumber: 1 })}
                 style={{
-                  padding: '6px 12px',
-                  borderRadius: 7,
+                  padding: '6px 14px',
+                  borderRadius: 4,
                   border: 'none',
-                  background: sortBy === s.key ? '#ffffff' : 'transparent',
-                  color: sortBy === s.key ? '#004ac6' : '#596377',
-                  fontSize: 12,
-                  fontWeight: 700,
+                  background:
+                    sortBy === s.key ? 'var(--ulis-french-blue)' : 'transparent',
+                  color: sortBy === s.key ? '#ffffff' : 'var(--ulis-midnight-violet)',
+                  fontFamily: 'var(--font-primary)',
+                  fontSize: 13.5,
+                  fontWeight: 600,
                   cursor: 'pointer',
                 }}
               >
@@ -427,6 +491,7 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* 5. LƯỚI SÁCH 3 CỘT NGANG (BOOKNET HORIZONTAL CARDS) */}
         {isLoading ? (
           <div style={{ textAlign: 'center', padding: 60 }}>
             <Spin size="large" />
@@ -435,14 +500,21 @@ export default function HomePage() {
           <div
             style={{
               background: '#ffffff',
-              borderRadius: 16,
+              borderRadius: 4,
               padding: 48,
               textAlign: 'center',
-              border: '1px solid #e2e7ff',
             }}
           >
             <Empty description={translate('home:emptyResultTitle')} />
-            <p style={{ color: '#596377', marginTop: 8 }}>{translate('home:emptyResultDesc')}</p>
+            <p
+              style={{
+                fontFamily: 'var(--font-secondary)',
+                color: 'var(--ulis-midnight-muted)',
+                marginTop: 8,
+              }}
+            >
+              {translate('home:emptyResultDesc')}
+            </p>
             <Button
               type="primary"
               className="ulis-primary-btn"
@@ -456,296 +528,100 @@ export default function HomePage() {
           </div>
         ) : (
           <>
-            <div className="ulis-book-grid">
+            <div className="ulis-booknet-grid">
               {pagedItems.map((book) => {
-                const discountPercent =
-                  book.originalPrice > 0 && book.price > 0
-                    ? Math.round(((book.originalPrice - book.price) / book.originalPrice) * 100)
-                    : 0;
+                const isAvailable = book.status === 'SELLING' && book.quantity > 0;
                 return (
                   <article
                     key={book.id}
-                    className={`ulis-book-card ${book.isGiveaway ? 'giveaway-card' : ''}`}
+                    className="ulis-booknet-card"
                     onClick={() => navigate(`/books/${book.id}`)}
                   >
-                    <div className="card-cover">
+                    {/* Left: Ảnh bìa sách */}
+                    <div className="booknet-card-cover">
                       <img src={book.coverUrl} alt={book.title} loading="lazy" />
-
-                      {/* Top Badges */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: 10,
-                          left: 10,
-                          right: 10,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        {book.isGiveaway ? (
-                          <span
-                            style={{
-                              padding: '4px 10px',
-                              borderRadius: 6,
-                              background: '#004ac6',
-                              color: '#ffffff',
-                              fontSize: 11,
-                              fontWeight: 700,
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 4,
-                            }}
-                          >
-                            <MaterialIcon name="volunteer_activism" size={14} />
-                            <span>{translate('home:freeTag')}</span>
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              padding: '4px 10px',
-                              borderRadius: 6,
-                              background: 'rgba(255,255,255,0.95)',
-                              color: '#004ac6',
-                              fontSize: 11,
-                              fontWeight: 700,
-                            }}
-                          >
-                            ● {book.conditionBadge}
-                          </span>
-                        )}
-
-                        <Tooltip title={translate('home:reportTooltip')}>
-                          <button
-                            type="button"
-                            onClick={(e) => handleReportClick(e, book)}
-                            style={{
-                              width: 30,
-                              height: 30,
-                              borderRadius: '50%',
-                              border: 'none',
-                              background: 'rgba(255,255,255,0.9)',
-                              color: '#596377',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                            }}
-                          >
-                            <MaterialIcon name="flag" size={15} />
-                          </button>
-                        </Tooltip>
-                      </div>
-
-                      {/* Bottom Location Pill */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          bottom: 10,
-                          left: 10,
-                          right: 10,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <span
-                          style={{
-                            padding: '3px 8px',
-                            borderRadius: 6,
-                            background: 'rgba(19, 27, 46, 0.78)',
-                            color: '#ffffff',
-                            fontSize: 11,
-                            fontWeight: 600,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4,
-                          }}
-                        >
-                          <MaterialIcon name="location_on" size={13} style={{ color: '#6cf8bb' }} />
-                          <span>{book.campusLocation}</span>
-                        </span>
-                        <span
-                          style={{
-                            padding: '2px 7px',
-                            borderRadius: 5,
-                            background: '#004ac6',
-                            color: '#ffffff',
-                            fontSize: 11,
-                            fontWeight: 800,
-                          }}
-                        >
-                          {book.courseCode}
-                        </span>
-                      </div>
+                      <span className="course-tag">{book.courseCode}</span>
                     </div>
 
-                    <div className="card-body">
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          marginBottom: 6,
-                          fontSize: 11,
-                        }}
-                      >
-                        <span
-                          style={{
-                            padding: '2px 7px',
-                            borderRadius: 4,
-                            background: '#eef2ff',
-                            color: '#004ac6',
-                            fontWeight: 700,
-                          }}
-                        >
-                          {book.facultyName}
-                        </span>
-                        <span style={{ color: '#737686' }}>{book.createdAt}</span>
-                      </div>
-
-                      <h3
-                        style={{
-                          margin: '0 0 10px',
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: '#131b2e',
-                          lineHeight: 1.4,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {book.title}
-                      </h3>
-
-                      <div
-                        style={{
-                          marginTop: 'auto',
-                          paddingTop: 10,
-                          borderTop: '1px solid #f0f2f8',
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'baseline',
-                            justifyContent: 'space-between',
-                            marginBottom: 10,
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                            <span
+                    {/* Right: Thông tin sách theo đúng thứ tự đánh giá trên ảnh */}
+                    <div className="booknet-card-info">
+                      <div>
+                        {/* Hàng sao màu Wheat + nút báo cáo nhỏ */}
+                        <div className="booknet-stars">
+                          <span className="stars-row" aria-label="5 stars">
+                            ★★★★★
+                          </span>
+                          <Tooltip title={translate('home:reportTooltip')}>
+                            <button
+                              type="button"
+                              onClick={(e) => handleReportClick(e, book)}
                               style={{
-                                fontSize: 17,
-                                fontWeight: 700,
-                                color: '#004ac6',
+                                border: 'none',
+                                background: 'transparent',
+                                color: 'var(--ulis-midnight-muted)',
+                                cursor: 'pointer',
+                                padding: 2,
                               }}
                             >
-                              {book.isGiveaway
-                                ? translate('home:freePrice')
-                                : formatCurrencyVnd(book.price)}
-                            </span>
-                            {book.originalPrice > 0 && (
-                              <span
-                                style={{
-                                  fontSize: 11.5,
-                                  color: '#8c95a6',
-                                  textDecoration: 'line-through',
-                                }}
-                              >
-                                {formatCurrencyVnd(book.originalPrice)}
-                              </span>
-                            )}
-                          </div>
+                              <MaterialIcon name="flag" size={14} />
+                            </button>
+                          </Tooltip>
+                        </div>
 
-                          {discountPercent > 0 && !book.isGiveaway && (
-                            <span
-                              style={{
-                                padding: '2px 6px',
-                                borderRadius: 4,
-                                background: '#eef2ff',
-                                color: '#004ac6',
-                                fontSize: 10.5,
-                                fontWeight: 700,
-                              }}
-                            >
-                              -{discountPercent}%
+                        {/* Tên sách: Text chính (Adobe Caslon) */}
+                        <h3 className="booknet-title" title={book.title}>
+                          {book.title}
+                        </h3>
+
+                        {/* Người đăng: Text phụ (Futura), gạch chân */}
+                        <div className="booknet-poster">{book.seller.fullName}</div>
+
+                        {/* Giá sách: Text phụ (Futura) */}
+                        <div className="booknet-price-row">
+                          <span className="booknet-price">
+                            {book.isGiveaway
+                              ? translate('home:freeTag')
+                              : formatCurrencyVnd(book.price)}
+                          </span>
+                          {book.originalPrice > 0 && !book.isGiveaway && (
+                            <span className="booknet-old-price">
+                              {formatCurrencyVnd(book.originalPrice)}
                             </span>
                           )}
                         </div>
 
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
+                        {/* Tình trạng: Còn -> Text chính (Adobe Caslon) */}
+                        <div className="booknet-status-text">
+                          {isAvailable
+                            ? translate('home:cardStatusAvailable')
+                            : translate('home:cardStatusSold')}
+                        </div>
+                      </div>
+
+                      {/* Nút bấm: Text chính (Adobe Caslon), vuông góc */}
+                      <div className="booknet-actions">
+                        <button
+                          type="button"
+                          className={`booknet-buy-btn ${book.isGiveaway ? 'secondary-wheat' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/books/${book.id}`);
                           }}
                         >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <span
-                              style={{
-                                width: 26,
-                                height: 26,
-                                borderRadius: '50%',
-                                background: book.seller.avatarBg,
-                                color: '#131b2e',
-                                fontSize: 10.5,
-                                fontWeight: 800,
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              {book.seller.avatarInitials}
-                            </span>
-                            <div style={{ lineHeight: 1.2 }}>
-                              <div
-                                style={{
-                                  fontSize: 12,
-                                  fontWeight: 700,
-                                  color: '#131b2e',
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: 3,
-                                }}
-                              >
-                                <span>{book.seller.fullName}</span>
-                                <MaterialIcon
-                                  name="verified"
-                                  size={13}
-                                  style={{ color: '#004ac6' }}
-                                />
-                              </div>
-                              <div style={{ fontSize: 10.5, color: '#737686' }}>
-                                {book.seller.cohort}
-                              </div>
-                            </div>
-                          </div>
+                          {book.isGiveaway
+                            ? translate('button:receiveFree')
+                            : translate('button:buyNow')}
+                        </button>
 
-                          <Tooltip title={translate('home:chatTooltip')}>
-                            <button
-                              type="button"
-                              onClick={(e) => handleChatClick(e, book)}
-                              style={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 8,
-                                border: 'none',
-                                background: '#eef2ff',
-                                color: '#004ac6',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                              }}
-                            >
-                              <MaterialIcon name="chat" size={16} />
-                            </button>
-                          </Tooltip>
-                        </div>
+                        <Tooltip title={translate('home:chatTooltip')}>
+                          <button
+                            type="button"
+                            className="booknet-icon-btn"
+                            onClick={(e) => handleChatClick(e, book)}
+                          >
+                            <MaterialIcon name="chat_bubble_outline" size={15} />
+                          </button>
+                        </Tooltip>
                       </div>
                     </div>
                   </article>
@@ -758,9 +634,8 @@ export default function HomePage() {
               style={{
                 marginTop: 28,
                 padding: '14px 18px',
-                borderRadius: 12,
+                borderRadius: 4,
                 background: '#ffffff',
-                border: '1px solid #e2e7ff',
                 display: 'flex',
                 flexWrap: 'wrap',
                 alignItems: 'center',
@@ -768,7 +643,14 @@ export default function HomePage() {
                 gap: 12,
               }}
             >
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#131b2e' }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-primary)',
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: 'var(--ulis-midnight-violet)',
+                }}
+              >
                 {translate('common:totalRecords', { total: totalCount })}
               </span>
               <Pagination
@@ -782,14 +664,13 @@ export default function HomePage() {
           </>
         )}
 
-        {/* 4. COMMUNITY GIVING 0Đ CALLOUT BANNER — Flat & Uniform Palette */}
+        {/* 6. GÓC SÁCH 0Đ SINH VIÊN (CALLOUT BANNER — WHEAT & POWDER BLUE) */}
         <div
           style={{
-            marginTop: 36,
-            padding: '28px 32px',
-            borderRadius: 12,
-            background: '#ffffff',
-            border: '1px solid #dbe1ff',
+            marginTop: 32,
+            padding: '26px 32px',
+            borderRadius: 4,
+            background: 'var(--ulis-wheat)',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
@@ -804,10 +685,11 @@ export default function HomePage() {
                 alignItems: 'center',
                 gap: 6,
                 padding: '4px 10px',
-                borderRadius: 6,
-                background: '#eef2ff',
-                color: '#004ac6',
-                fontSize: 11,
+                borderRadius: 4,
+                background: 'var(--ulis-powder-blue)',
+                color: 'var(--ulis-midnight-violet)',
+                fontFamily: 'var(--font-primary)',
+                fontSize: 12,
                 fontWeight: 700,
                 marginBottom: 10,
               }}
@@ -815,10 +697,26 @@ export default function HomePage() {
               <MaterialIcon name="favorite" size={14} />
               <span>{translate('home:communityBadge')}</span>
             </span>
-            <h3 style={{ margin: '0 0 8px', fontSize: 20, fontWeight: 700, color: '#131b2e' }}>
+            <h3
+              style={{
+                margin: '0 0 8px',
+                fontFamily: 'var(--font-primary)',
+                fontSize: 21,
+                fontWeight: 700,
+                color: 'var(--ulis-midnight-violet)',
+              }}
+            >
               {translate('home:communityTitle')}
             </h3>
-            <p style={{ margin: 0, fontSize: 13.5, color: '#596377', lineHeight: 1.6 }}>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: 'var(--font-secondary)',
+                fontSize: 13.5,
+                color: 'var(--ulis-midnight-violet)',
+                lineHeight: 1.6,
+              }}
+            >
               {translate('home:communityDesc')}
             </p>
           </div>
@@ -826,35 +724,15 @@ export default function HomePage() {
           <div style={{ display: 'flex', gap: 10 }}>
             <button
               type="button"
+              className="ulis-primary-btn"
               onClick={() => setFilter({ onlyGiveaway: true, pageNumber: 1 })}
-              style={{
-                height: 40,
-                padding: '0 18px',
-                borderRadius: 8,
-                border: '1px solid #004ac6',
-                background: '#004ac6',
-                color: '#ffffff',
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
             >
               {translate('home:communityExploreBtn')}
             </button>
             <button
               type="button"
+              className="ulis-secondary-btn-powder"
               onClick={() => navigate(isAuthenticated ? '/my-posts?create=1' : '/login')}
-              style={{
-                height: 40,
-                padding: '0 18px',
-                borderRadius: 8,
-                border: '1px solid #dbe1ff',
-                background: '#eef2ff',
-                color: '#004ac6',
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
             >
               {translate('home:communityPostBtn')}
             </button>
@@ -862,7 +740,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. SLIDE-OVER FILTER DRAWER (Stitch Screen 2 Drawer + dd/mm/yyyy date range validation) */}
+      {/* 7. SLIDE-OVER FILTER DRAWER (dd/mm/yyyy date range validation) */}
       <Drawer
         title={translate('home:filterDrawerTitle')}
         placement="right"
@@ -872,7 +750,15 @@ export default function HomePage() {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#000000', marginBottom: 8 }}>
+            <div
+              style={{
+                fontFamily: 'var(--font-primary)',
+                fontSize: 14,
+                fontWeight: 700,
+                color: 'var(--ulis-midnight-violet)',
+                marginBottom: 8,
+              }}
+            >
               {translate('home:priceRangeLabel')}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -898,15 +784,21 @@ export default function HomePage() {
           <div
             style={{
               padding: 12,
-              borderRadius: 10,
-              background: '#fff8eb',
-              border: '1px solid #fcd34d',
+              borderRadius: 4,
+              background: 'var(--ulis-wheat)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
             }}
           >
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#784b00' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-primary)',
+                fontSize: 14,
+                fontWeight: 700,
+                color: 'var(--ulis-midnight-violet)',
+              }}
+            >
               {translate('home:onlyFreeLabel')}
             </span>
             <Switch
@@ -916,7 +808,15 @@ export default function HomePage() {
           </div>
 
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#000000', marginBottom: 8 }}>
+            <div
+              style={{
+                fontFamily: 'var(--font-primary)',
+                fontSize: 14,
+                fontWeight: 700,
+                color: 'var(--ulis-midnight-violet)',
+                marginBottom: 8,
+              }}
+            >
               {translate('home:campusLocationLabel')}
             </div>
             <Select
@@ -934,7 +834,15 @@ export default function HomePage() {
           </div>
 
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#000000', marginBottom: 8 }}>
+            <div
+              style={{
+                fontFamily: 'var(--font-primary)',
+                fontSize: 14,
+                fontWeight: 700,
+                color: 'var(--ulis-midnight-violet)',
+                marginBottom: 8,
+              }}
+            >
               {translate('home:dateRangeLabel')}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -956,6 +864,7 @@ export default function HomePage() {
           <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
             <Button
               block
+              className="ulis-secondary-btn-powder"
               onClick={() => {
                 setInputKeyword('');
                 resetFilters();

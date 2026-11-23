@@ -1,10 +1,13 @@
-// Styles của riêng app web — thiết kế theo 8 màn hình Stitch (ULIS Books UI Prompts)
+// Styles của app web — Thiết kế theo Dribbble BookNet + Palette NYNÄ (Seashell, Wheat, Powder Blue, French Blue, Midnight Violet)
+// Text chính: Adobe Caslon (--font-primary) | Text phụ: Futura (--font-secondary)
+// Design vuông góc (4px), hạn chế đổ bóng, không có viền quanh
+
 .page-loading {
   display: flex;
   height: 100vh;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
+  background: var(--ulis-seashell);
 }
 
 .ulis-initial-loader {
@@ -12,13 +15,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
+  background: var(--ulis-seashell);
   padding: 24px;
 
   .loader-card {
     background: #ffffff;
-    border: 1px solid #dbe1ff;
-    border-radius: 12px;
+    border: none;
+    border-radius: 4px;
     padding: 36px 40px;
     max-width: 420px;
     width: 100%;
@@ -26,10 +29,10 @@
   }
 
   .loader-brand-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-    background: #004ac6;
+    width: 46px;
+    height: 46px;
+    border-radius: 4px;
+    background: var(--ulis-french-blue);
     color: #ffffff;
     display: inline-flex;
     align-items: center;
@@ -38,30 +41,31 @@
   }
 
   .loader-title {
-    font-family: 'Merriweather', Georgia, serif;
-    font-size: 22px;
+    font-family: var(--font-primary);
+    font-size: 24px;
     font-weight: 700;
-    color: #131b2e;
+    color: var(--ulis-midnight-violet);
     margin: 0 0 8px;
   }
 
   .loader-subtitle {
-    font-family: 'Lexend', Tahoma, sans-serif;
+    font-family: var(--font-secondary);
     font-size: 13px;
-    color: #596377;
+    color: var(--ulis-midnight-muted);
     line-height: 1.55;
     margin: 0;
   }
 }
 
 // =============================================================================
-// 1. TOP STICKY HEADER & STUDENT APP LAYOUT
+// 1. THANH TRÊN CÙNG (TOP HEADER BAR) — Text chính: Adobe Caslon
 // =============================================================================
 .ulis-student-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f0f2f5;
+  background: var(--ulis-seashell);
+  color: var(--ulis-midnight-violet);
 }
 
 .ulis-top-header {
@@ -69,18 +73,16 @@
   top: 0;
   z-index: 100;
   height: 64px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid #e2e7ff;
-  padding: 0 24px;
+  background: var(--ulis-seashell);
+  padding: 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  border-bottom: none;
 }
 
 .ulis-header-inner {
-  max-width: 1440px;
+  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -97,10 +99,10 @@
   cursor: pointer;
 
   .brand-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: #004ac6;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+    background: var(--ulis-french-blue);
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -108,38 +110,40 @@
   }
 
   .brand-title {
-    font-family: 'Merriweather', Georgia, serif;
-    font-size: 18px;
+    font-family: var(--font-primary);
+    font-size: 19px;
     font-weight: 700;
-    color: #131b2e;
+    color: var(--ulis-midnight-violet);
     letter-spacing: -0.01em;
   }
 
   .brand-badge {
     padding: 2px 7px;
-    border-radius: 6px;
-    background: #dbe1ff;
-    color: #004ac6;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.05em;
+    border-radius: 3px;
+    background: var(--ulis-wheat);
+    color: var(--ulis-midnight-violet);
+    font-family: var(--font-primary);
+    font-size: 10.5px;
+    font-weight: 700;
   }
 }
 
+// Nav links ở giữa thanh trên cùng: Text chính (Adobe Caslon), nhấn vào chỗ nào text đổi màu
 .ulis-nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
 
   a,
   .nav-link-btn {
-    font-size: 13px;
+    font-family: var(--font-primary);
+    font-size: 15px;
     font-weight: 600;
-    color: #596377;
+    color: var(--ulis-midnight-violet);
     text-decoration: none;
-    padding: 18px 2px;
+    padding: 16px 4px;
     border-bottom: 2px solid transparent;
-    transition: all 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease;
     cursor: pointer;
     background: none;
     border-top: none;
@@ -150,18 +154,13 @@
     gap: 6px;
 
     &:hover {
-      color: #004ac6;
+      color: var(--ulis-french-blue);
     }
 
     &.active {
-      color: #004ac6;
+      color: var(--ulis-french-blue);
       font-weight: 700;
-      border-bottom-color: #004ac6;
-    }
-
-    &.free-highlight {
-      color: #006c49;
-      font-weight: 700;
+      border-bottom-color: var(--ulis-french-blue);
     }
   }
 }
@@ -172,85 +171,668 @@
   gap: 12px;
 }
 
+// Nút "Đăng bài": French Blue (#3E4B8E), vuông góc (4px), Text chính (Adobe Caslon)
 .ulis-sell-cta-btn {
-  height: 38px;
-  padding: 0 16px;
-  border-radius: 8px;
-  border: 1px solid #004ac6;
-  background: #004ac6;
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 4px;
+  border: none;
+  background: var(--ulis-french-blue);
   color: #ffffff;
-  font-size: 13px;
+  font-family: var(--font-primary);
+  font-size: 14px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   cursor: pointer;
   transition: background 0.15s ease;
 
   &:hover {
-    background: #003da3;
+    background: var(--ulis-french-blue-hover);
   }
 }
 
 .ulis-icon-pill-btn {
   position: relative;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid #e2e7ff;
-  background: #f2f3ff;
-  color: #131b2e;
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--ulis-midnight-violet);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 
   &:hover {
-    background: #dbe1ff;
-    color: #004ac6;
+    background: var(--ulis-wheat);
+    color: var(--ulis-french-blue);
   }
 
   .unread-dot {
     position: absolute;
-    top: -2px;
-    right: -2px;
-    min-width: 18px;
-    height: 18px;
+    top: 1px;
+    right: 1px;
+    min-width: 16px;
+    height: 16px;
     padding: 0 4px;
-    border-radius: 999px;
-    background: #ba1a1a;
+    border-radius: 4px;
+    background: #c83e3b;
     color: #ffffff;
+    font-family: var(--font-secondary);
     font-size: 10px;
-    font-weight: 800;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #ffffff;
   }
 }
 
 .ulis-footer {
   margin-top: auto;
-  background: #ffffff;
-  border-top: 1px solid #e2e7ff;
-  padding: 24px;
+  background: #faeadd;
+  border-top: none;
+  padding: 24px 28px;
 }
 
 .ulis-footer-inner {
-  max-width: 1440px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  font-size: 12px;
-  color: #596377;
+  font-family: var(--font-secondary);
+  font-size: 12.5px;
+  color: var(--ulis-midnight-violet);
 }
 
 // =============================================================================
-// 2. SCREEN 3: LOGIN & REGISTER 12-COL SPLIT HUB (571a230665d14229bd9ad442e4c4de80)
+// 2. BẢNG QUẢNG CÁO VỀ WEB (HERO PROMO BANNER — BOOKNET STYLE)
+// =============================================================================
+.ulis-home-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 8px 24px 48px;
+}
+
+.ulis-promo-banner {
+  position: relative;
+  border-radius: 4px;
+  background: linear-gradient(125deg, #f9e6c7 0%, var(--ulis-wheat) 58%, #f2d49f 100%);
+  padding: 36px 48px;
+  display: grid;
+  grid-template-columns: 1.25fr 0.85fr;
+  align-items: center;
+  gap: 28px;
+  overflow: hidden;
+  border: none;
+  box-shadow: none;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .promo-content {
+    z-index: 2;
+  }
+
+  .promo-headline {
+    font-family: var(--font-primary);
+    font-size: clamp(24px, 3vw, 35px);
+    font-weight: 700;
+    line-height: 1.28;
+    color: var(--ulis-midnight-violet);
+    margin: 0 0 22px;
+    max-width: 580px;
+
+    @media (max-width: 860px) {
+      margin: 0 auto 20px;
+    }
+  }
+
+  .promo-cloud-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #edd09a;
+    padding: 18px 42px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+
+    .cloud-sub {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ulis-midnight-violet);
+      margin-bottom: 2px;
+    }
+
+    .cloud-highlight {
+      font-family: var(--font-primary);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--ulis-french-blue);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .cloud-explore-btn {
+      height: 30px;
+      padding: 0 18px;
+      border-radius: 4px;
+      border: none;
+      background: var(--ulis-powder-blue);
+      color: var(--ulis-midnight-violet);
+      font-family: var(--font-primary);
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+
+      &:hover {
+        background: var(--ulis-french-blue);
+        color: #ffffff;
+      }
+    }
+  }
+
+  .promo-visual {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 2;
+
+    @media (max-width: 860px) {
+      justify-content: center;
+    }
+
+    .promo-books-cluster {
+      position: relative;
+      width: 340px;
+      height: 245px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .cluster-book {
+        position: absolute;
+        width: 112px;
+        height: 158px;
+        border-radius: 3px;
+        object-fit: cover;
+        background: #ffffff;
+        padding: 4px;
+        transition: transform 0.25s ease;
+
+        &.b1 {
+          transform: rotate(-18deg) translate(-72px, 10px);
+          z-index: 1;
+        }
+        &.b2 {
+          transform: rotate(-4deg) translate(-12px, -18px);
+          z-index: 2;
+        }
+        &.b3 {
+          transform: rotate(14deg) translate(58px, 6px);
+          z-index: 3;
+        }
+        &.b4 {
+          transform: rotate(28deg) translate(96px, 34px);
+          z-index: 2;
+        }
+      }
+
+      &:hover .cluster-book.b1 {
+        transform: rotate(-22deg) translate(-80px, 6px);
+      }
+      &:hover .cluster-book.b2 {
+        transform: rotate(-4deg) translate(-12px, -24px);
+      }
+      &:hover .cluster-book.b3 {
+        transform: rotate(18deg) translate(66px, 2px);
+      }
+    }
+  }
+}
+
+// =============================================================================
+// 3. THANH TÌM KIẾM & DROPDOWN (KHOA, NGÀNH & THỂ LOẠI SÁCH)
+// =============================================================================
+.ulis-booknet-search-row {
+  margin: 28px auto 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.ulis-booknet-search-box {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 560px;
+  height: 44px;
+  background: #ffffff;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .search-input-el {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0 16px;
+    background: #ffffff;
+    font-family: var(--font-secondary); // Text phụ: Futura
+    font-size: 13.5px;
+    color: var(--ulis-midnight-violet);
+
+    &::placeholder {
+      font-family: var(--font-secondary);
+      color: rgba(61, 21, 52, 0.48);
+    }
+  }
+
+  .search-clear-btn {
+    border: none;
+    background: transparent;
+    color: rgba(61, 21, 52, 0.45);
+    padding: 0 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+
+    &:hover {
+      color: var(--ulis-midnight-violet);
+    }
+  }
+
+  .search-submit-btn {
+    width: 52px;
+    border: none;
+    background: var(--ulis-french-blue);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--ulis-french-blue-hover);
+    }
+  }
+}
+
+.ulis-booknet-dropdowns {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+}
+
+.ulis-custom-dropdown {
+  position: relative;
+
+  .dropdown-trigger-btn {
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+    color: var(--ulis-midnight-violet);
+    font-family: var(--font-primary); // Text chính: Adobe Caslon
+    font-size: 15px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover,
+    &.open {
+      background: var(--ulis-wheat);
+    }
+  }
+
+  // Menu xổ xuống giống mẫu "làm ntn": nền trắng, item được chọn/hover nền Wheat (#F6E0B6)
+  .dropdown-menu-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 210px;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 0;
+    z-index: 95;
+    overflow: hidden;
+
+    .dropdown-menu-item {
+      width: 100%;
+      padding: 12px 18px;
+      border: none;
+      background: #ffffff;
+      color: var(--ulis-midnight-violet);
+      font-family: var(--font-primary);
+      font-size: 14.5px;
+      font-weight: 600;
+      text-align: center;
+      display: block;
+      cursor: pointer;
+      transition: background 0.12s ease;
+
+      &:hover,
+      &.active {
+        background: var(--ulis-wheat);
+        color: var(--ulis-midnight-violet);
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// 4. HÀNG NÚT BẤM KHOA / NGÀNH (CATEGORY RECTANGULAR BUTTONS — TEXT CHÍNH)
+// =============================================================================
+.ulis-booknet-cat-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.ulis-cat-rect-btn {
+  min-width: 138px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 4px; // Vuông góc, không tròn quá
+  border: none;
+  background: var(--ulis-french-blue);
+  color: #ffffff;
+  font-family: var(--font-primary); // Text chính: Adobe Caslon
+  font-size: 14.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.12s ease;
+
+  &:hover {
+    background: var(--ulis-french-blue-hover);
+  }
+
+  &.active {
+    background: var(--ulis-midnight-violet);
+    color: var(--ulis-wheat);
+  }
+
+  // Nút phụ dùng 2 màu còn lại: Powder Blue (#A6BCC9) và Wheat (#F6E0B6)
+  &.secondary-powder {
+    background: var(--ulis-powder-blue);
+    color: var(--ulis-midnight-violet);
+
+    &:hover {
+      background: #93adbc;
+    }
+
+    &.active {
+      background: var(--ulis-french-blue);
+      color: #ffffff;
+    }
+  }
+
+  &.secondary-wheat {
+    background: var(--ulis-wheat);
+    color: var(--ulis-midnight-violet);
+
+    &:hover {
+      background: var(--ulis-wheat-deep);
+    }
+
+    &.active {
+      background: var(--ulis-french-blue);
+      color: #ffffff;
+    }
+  }
+}
+
+// =============================================================================
+// 5. LƯỚI SÁCH 3 CỘT NGANG (BOOKNET HORIZONTAL CARDS)
+// =============================================================================
+.ulis-booknet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+
+  @media (max-width: 1080px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ulis-booknet-card {
+  background: #ffffff;
+  border-radius: 4px; // Vuông góc
+  border: none; // Không có viền quanh
+  box-shadow: none; // Hạn chế đổ bóng
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 16px;
+  align-items: stretch;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #fdfaf6;
+  }
+
+  @media (max-width: 420px) {
+    grid-template-columns: 108px 1fr;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .booknet-card-cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--ulis-wheat);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .course-tag {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--ulis-french-blue);
+      color: #ffffff;
+      font-family: var(--font-secondary);
+      font-size: 10px;
+      font-weight: 700;
+    }
+  }
+
+  .booknet-card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  // Hàng sao màu Wheat (#F6E0B6 / đậm hơn chút để nổi trên nền trắng)
+  .booknet-stars {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px;
+    margin-bottom: 4px;
+
+    .stars-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      color: #e6b85c;
+      font-size: 14px;
+    }
+  }
+
+  // Tên sách: Text chính (Adobe Caslon), màu Midnight Violet
+  .booknet-title {
+    font-family: var(--font-primary);
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--ulis-midnight-violet);
+    line-height: 1.28;
+    margin: 0 0 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  // Người đăng: Text phụ (Futura), có gạch chân nhẹ như mẫu
+  .booknet-poster {
+    font-family: var(--font-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ulis-midnight-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Giá sách: Text phụ (Futura)
+  .booknet-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+
+    .booknet-price {
+      font-family: var(--font-secondary);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ulis-midnight-violet);
+    }
+
+    .booknet-old-price {
+      font-family: var(--font-secondary);
+      font-size: 11.5px;
+      color: rgba(61, 21, 52, 0.45);
+      text-decoration: line-through;
+    }
+  }
+
+  // Tình trạng: Còn -> Text chính (Adobe Caslon)
+  .booknet-status-text {
+    font-family: var(--font-primary);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ulis-midnight-violet);
+    margin-bottom: 10px;
+  }
+
+  // Nút hành động dưới cùng: Text chính (Adobe Caslon), vuông góc
+  .booknet-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+
+    .booknet-buy-btn {
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 4px;
+      border: none;
+      background: var(--ulis-french-blue);
+      color: #ffffff;
+      font-family: var(--font-primary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+
+      &:hover {
+        background: var(--ulis-french-blue-hover);
+      }
+
+      &.secondary-wheat {
+        background: var(--ulis-wheat);
+        color: var(--ulis-midnight-violet);
+
+        &:hover {
+          background: var(--ulis-french-blue);
+          color: #ffffff;
+        }
+      }
+
+      &.secondary-powder {
+        background: var(--ulis-powder-blue);
+        color: var(--ulis-midnight-violet);
+
+        &:hover {
+          background: var(--ulis-french-blue);
+          color: #ffffff;
+        }
+      }
+    }
+
+    .booknet-icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      border: none;
+      background: var(--ulis-seashell);
+      color: var(--ulis-midnight-violet);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease;
+
+      &:hover {
+        background: var(--ulis-powder-blue);
+      }
+    }
+  }
+}
+
+// =============================================================================
+// 6. LOGIN & REGISTER SPLIT SCREEN (BOOKNET LOGIN LAYOUT)
 // =============================================================================
 .ulis-auth-page {
   min-height: 100vh;
@@ -258,15 +840,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
+  background: var(--ulis-seashell);
+}
+
+.ulis-auth-booknet-shell {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 32px;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 40px 44px;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+    padding: 28px 22px;
+  }
 }
 
 .ulis-auth-minimal-card {
   width: 100%;
   max-width: 520px;
   background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  border: none;
   padding: 32px 36px;
 
   @media (max-width: 520px) {
@@ -274,145 +873,24 @@
   }
 }
 
-.ulis-auth-shell {
-  width: 100%;
-  max-width: 1120px;
-  display: grid;
-  grid-template-columns: 5fr 7fr;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #dbe1ff;
-
-  @media (max-width: 960px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.ulis-auth-editorial {
-  background: #004ac6;
-  color: #ffffff;
-  padding: 40px 36px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-
-  .editorial-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 20px;
-    width: fit-content;
-  }
-
-  .editorial-title {
-    font-size: 26px;
-    font-weight: 800;
-    line-height: 1.25;
-    margin: 0 0 12px;
-    color: #ffffff;
-  }
-
-  .editorial-desc {
-    font-size: 13px;
-    color: rgba(219, 225, 255, 0.86);
-    line-height: 1.6;
-    margin-bottom: 24px;
-  }
-
-  .trust-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    margin-bottom: 10px;
-
-    .trust-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: rgba(108, 248, 187, 0.18);
-      color: #6cf8bb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .trust-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 2px;
-    }
-
-    .trust-desc {
-      font-size: 12px;
-      color: rgba(219, 225, 255, 0.78);
-      line-height: 1.45;
-    }
-  }
-
-  .quote-card {
-    margin-top: 20px;
-    padding: 16px;
-    border-radius: 14px;
-    background: rgba(19, 27, 46, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-
-    .quote-text {
-      font-size: 12.5px;
-      font-style: italic;
-      color: #eef2ff;
-      line-height: 1.55;
-      margin: 8px 0 12px;
-    }
-  }
-}
-
-.ulis-auth-form-col {
-  padding: 36px 44px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  @media (max-width: 640px) {
-    padding: 24px 20px;
-  }
-}
-
 .ulis-auth-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding: 5px;
-  background: #f2f3ff;
-  border-radius: 10px;
-  border: 1px solid #e2e7ff;
+  padding: 4px;
+  background: var(--ulis-seashell);
+  border-radius: 4px;
+  border: none;
   margin-bottom: 20px;
 
   .auth-tab-btn {
     height: 38px;
-    border: 1px solid transparent;
-    border-radius: 8px;
+    border: none;
+    border-radius: 4px;
     background: transparent;
-    font-family: 'Lexend', Tahoma, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #596377;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ulis-midnight-violet);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -421,44 +899,21 @@
     transition: all 0.15s ease;
 
     &.active {
-      background: #ffffff;
-      color: #2563eb;
-      border-color: #dbe1ff;
+      background: var(--ulis-french-blue);
+      color: #ffffff;
     }
   }
 }
 
-.ulis-sso-fastlane-btn {
-  width: 100%;
-  height: 42px;
-  border-radius: 8px;
-  border: 1px solid #c3c6d7;
-  background: #faf8ff;
-  color: #131b2e;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-
-  &:hover {
-    border-color: #004ac6;
-    background: #eef2ff;
-  }
-}
-
 // =============================================================================
-// 3. SCREEN 1: OTP VERIFY & PASSWORD RESET (e8fbfd61556442c38530505407e13fc2)
+// 7. OTP VERIFY & PASSWORD RESET
 // =============================================================================
 .ulis-otp-card {
   width: 100%;
   max-width: 480px;
   background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #dbe1ff;
+  border-radius: 4px;
+  border: none;
   overflow: hidden;
 }
 
@@ -472,205 +927,108 @@
     width: 100%;
     height: 54px;
     text-align: center;
-    font-family: 'Lexend', Tahoma, monospace;
+    font-family: var(--font-secondary);
     font-size: 20px;
     font-weight: 700;
-    color: #1677ff;
-    background: #f4f6fb;
-    border: 1px solid #c3c6d7;
-    border-radius: 8px;
+    color: var(--ulis-french-blue);
+    background: var(--ulis-seashell);
+    border: none;
+    border-radius: 4px;
     outline: none;
-    transition: border-color 0.15s ease;
 
     &:focus {
-      background: #ffffff;
-      border-color: #1677ff;
+      background: var(--ulis-wheat);
     }
   }
 }
 
 // =============================================================================
-// 4. SCREEN 2: HOME & BOOK DISCOVERY (645618ae43d74c7db2114d085fcd783d)
+// 8. PROFILE DASHBOARD (BOOKNET PROFILE SCREEN — WHEAT & POWDER BLUE CARDS)
 // =============================================================================
-.ulis-home-hero {
+.ulis-profile-pattern-banner {
+  height: 132px;
+  border-radius: 4px;
+  background-color: var(--ulis-wheat);
+  background-image: radial-gradient(rgba(61, 21, 52, 0.12) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
   position: relative;
-  padding: 48px 24px 40px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e7ff;
-}
-
-.ulis-capsule-search {
-  max-width: 1080px;
-  margin: 28px auto 0;
-  background: #f8faff;
-  padding: 8px 10px;
-  border-radius: 12px;
-  border: 1px solid #dbe1ff;
-  display: grid;
-  grid-template-columns: 1.3fr 1.15fr 1.15fr auto;
-  align-items: center;
-  gap: 8px;
-
-  @media (max-width: 860px) {
-    border-radius: 16px;
-    grid-template-columns: 1fr;
-    padding: 14px;
-  }
-
-  .capsule-segment {
-    padding: 4px 14px;
-    border-right: 1px solid #e2e7ff;
-    text-align: left;
-
-    &:last-of-type {
-      border-right: none;
-    }
-
-    @media (max-width: 860px) {
-      border-right: none;
-      border-bottom: 1px solid #e2e7ff;
-      padding: 8px 6px;
-    }
-
-    .segment-label {
-      display: block;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #000000;
-      margin-bottom: 2px;
-    }
-  }
-}
-
-.ulis-faculty-bar {
-  position: sticky;
-  top: 64px;
-  z-index: 80;
-  background: rgba(250, 248, 255, 0.94);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e2e7ff;
-  padding: 12px 24px;
-}
-
-.ulis-faculty-pills {
   display: flex;
   align-items: center;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  .faculty-pill {
-    height: 36px;
-    padding: 0 14px;
-    border-radius: 999px;
-    border: 1px solid #d5dcff;
-    background: #ffffff;
-    color: #434655;
-    font-size: 12.5px;
-    font-weight: 700;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-
-    &:hover {
-      border-color: #004ac6;
-      color: #004ac6;
-    }
-
-    &.active {
-      background: #004ac6;
-      border-color: #004ac6;
-      color: #ffffff;
-    }
-
-    &.giveaway-pill {
-      background: #eef2ff;
-      border-color: #dbe1ff;
-      color: #004ac6;
-
-      &.active {
-        background: #004ac6;
-        border-color: #004ac6;
-        color: #ffffff;
-      }
-    }
-  }
+  justify-content: space-around;
+  overflow: hidden;
 }
 
-.ulis-book-grid {
+.ulis-profile-summary-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 18px;
+  margin-top: 18px;
 
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
   @media (max-width: 860px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @media (max-width: 540px) {
+  @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
-}
 
-.ulis-book-card {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e2e7ff;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: border-color 0.18s ease;
-
-  &:hover {
-    border-color: #004ac6;
-  }
-
-  &.giveaway-card {
-    border: 1px solid #b4c5ff;
-  }
-
-  .card-cover {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    background: #eef2ff;
+  .summary-box {
+    background: #ffffff;
+    border-radius: 4px;
     overflow: hidden;
-    cursor: pointer;
+    text-align: center;
+    padding-bottom: 16px;
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.35s ease;
+    .summary-top {
+      padding: 18px 14px;
+      margin-bottom: 12px;
+
+      &.wheat {
+        background: var(--ulis-wheat);
+        color: var(--ulis-midnight-violet);
+      }
+
+      &.powder {
+        background: var(--ulis-powder-blue);
+        color: var(--ulis-midnight-violet);
+      }
+
+      .summary-label {
+        font-family: var(--font-primary);
+        font-size: 16px;
+        font-weight: 700;
+        text-align: left;
+        margin-bottom: 6px;
+      }
+
+      .summary-count {
+        font-family: var(--font-secondary);
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .summary-view-link {
+        font-family: var(--font-primary);
+        font-size: 12.5px;
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
 
-    &:hover img {
-      transform: scale(1.04);
+    .summary-caption {
+      font-family: var(--font-secondary);
+      font-size: 12px;
+      color: var(--ulis-midnight-muted);
+      margin-bottom: 10px;
     }
-  }
-
-  .card-body {
-    padding: 14px 16px 16px;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
   }
 }
 
 // =============================================================================
-// 5. SCREEN 8: 1-1 REALTIME CHAT WORKSPACE (98741f6091c249a3a5c7de9f13eb815b)
+// 9. CHAT WORKSPACE
 // =============================================================================
 .ulis-chat-workspace {
-  max-width: 1400px;
+  max-width: 1280px;
   width: 100%;
   margin: 16px auto;
   padding: 0 20px;
@@ -688,8 +1046,8 @@
 
 .ulis-chat-sidebar {
   background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  border: none;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -697,7 +1055,7 @@
 
 .ulis-chat-thread-item {
   padding: 12px 14px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--ulis-seashell);
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -706,19 +1064,19 @@
   border-left: 3px solid transparent;
 
   &:hover {
-    background: #f8fafc;
+    background: var(--ulis-seashell);
   }
 
   &.active {
-    background: #eff6ff;
-    border-left-color: #2563eb;
+    background: var(--ulis-wheat);
+    border-left-color: var(--ulis-french-blue);
   }
 }
 
 .ulis-chat-main {
   background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  border: none;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -728,74 +1086,49 @@
   flex: 1;
   padding: 18px 20px;
   overflow-y: auto;
-  overscroll-behavior: contain;
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-  background: #f8fafc;
+  background: #fdf9f4;
   display: flex;
   flex-direction: column;
   gap: 14px;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 999px;
-  }
-}
-
-@keyframes ulisChatBubbleIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .ulis-chat-bubble-in {
   max-width: 72%;
   padding: 10px 14px;
-  background: #ffffff;
-  color: #0f172a;
-  border-radius: 12px 12px 12px 2px;
-  border: 1px solid #e2e8f0;
+  background: var(--ulis-wheat);
+  color: var(--ulis-midnight-violet);
+  border-radius: 4px;
+  font-family: var(--font-secondary);
   font-size: 13px;
   line-height: 1.5;
   word-break: break-word;
-  animation: ulisChatBubbleIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ulis-chat-bubble-out {
   max-width: 72%;
   padding: 10px 14px;
-  background: #2563eb;
+  background: var(--ulis-french-blue);
   color: #ffffff;
-  border-radius: 12px 12px 2px 12px;
+  border-radius: 4px;
+  font-family: var(--font-secondary);
   font-size: 13px;
   line-height: 1.5;
   word-break: break-word;
-  animation: ulisChatBubbleIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 // =============================================================================
-// 6. SCREENS 5, 6, 7: ADMIN SAAS CONSOLE LAYOUT (Flat & Minimal Pro Max)
+// 10. ADMIN CONSOLE LAYOUT
 // =============================================================================
 .ulis-admin-shell {
   min-height: 100vh;
   display: flex;
-  background: #f0f2f5;
+  background: var(--ulis-seashell);
 }
 
 .ulis-admin-sidebar {
   width: 256px;
   background: #ffffff;
-  border-right: 1px solid #e2e8f0;
+  border-right: none;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -809,25 +1142,24 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: 4px;
   margin-bottom: 6px;
-  font-family: 'Lexend', Tahoma, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: #475569;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ulis-midnight-violet);
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
 
   &:hover {
-    background: #f1f5f9;
-    color: #2563eb;
+    background: var(--ulis-wheat);
+    color: var(--ulis-midnight-violet);
   }
 
   &.active {
-    background: #2563eb;
+    background: var(--ulis-french-blue);
     color: #ffffff;
-    font-weight: 600;
   }
 }
 
@@ -840,8 +1172,7 @@
 
 .ulis-admin-topbar {
   height: 60px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--ulis-seashell);
   padding: 0 28px;
   display: flex;
   align-items: center;
@@ -852,7 +1183,7 @@
 }
 
 .ulis-admin-content {
-  padding: 24px 28px 40px;
+  padding: 20px 28px 40px;
   max-width: 1520px;
   width: 100%;
   margin: 0 auto;
@@ -868,15 +1199,16 @@
 
   h1 {
     margin: 0 0 4px;
-    font-family: 'Merriweather', Georgia, serif;
+    font-family: var(--font-primary);
     font-size: 22px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--ulis-midnight-violet);
   }
 
   .page-subtitle {
+    font-family: var(--font-secondary);
     font-size: 13px;
-    color: #64748b;
+    color: var(--ulis-midnight-muted);
   }
 }
 
@@ -896,8 +1228,8 @@
 
 .ulis-kpi-card {
   background: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  border: none;
   padding: 16px 18px;
   display: flex;
   align-items: center;
@@ -906,9 +1238,9 @@
 
 .ulis-admin-filter-bar {
   padding: 14px 16px;
-  border-radius: 10px;
+  border-radius: 4px;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: none;
   margin-bottom: 16px;
   display: grid;
   gap: 12px;
@@ -917,32 +1249,32 @@
 
 .ulis-admin-table-card {
   background: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  border: none;
   overflow: hidden;
 }
 
 .ulis-admin-segmented {
   display: inline-flex;
   padding: 4px;
-  border-radius: 8px;
-  background: #e2e8f0;
+  border-radius: 4px;
+  background: var(--ulis-wheat);
   gap: 4px;
 
   .seg-btn {
     padding: 6px 14px;
-    border-radius: 6px;
+    border-radius: 4px;
     border: none;
     background: transparent;
-    color: #475569;
-    font-family: 'Lexend', Tahoma, sans-serif;
-    font-size: 12.5px;
+    color: var(--ulis-midnight-violet);
+    font-family: var(--font-primary);
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
 
     &.active {
-      background: #2563eb;
+      background: var(--ulis-french-blue);
       color: #ffffff;
     }
   }

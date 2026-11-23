@@ -37,6 +37,7 @@ services:
       db:
         condition: service_healthy
     environment:
+      TZ: Asia/Ho_Chi_Minh
       SPRING_PROFILES_ACTIVE: prod
       DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-ulis}
       DB_USERNAME: ${POSTGRES_USER:-ulis}

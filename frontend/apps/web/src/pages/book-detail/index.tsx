@@ -174,17 +174,17 @@ export default function BookDetailPage() {
         />
       </div>
 
-      {/* Main 12-Col Detail Card */}
+      {/* Main 12-Col Detail Card — Vuông góc, không viền, không đổ bóng */}
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: '5fr 7fr',
           gap: 24,
           background: '#ffffff',
-          borderRadius: 16,
-          border: '1px solid #e2e7ff',
+          borderRadius: 4,
+          border: 'none',
           padding: 24,
-          boxShadow: '0 8px 28px rgba(19, 27, 46, 0.06)',
+          boxShadow: 'none',
         }}
       >
         {/* Left: 1-3 Photos Gallery */}
@@ -192,10 +192,10 @@ export default function BookDetailPage() {
           <div
             style={{
               aspectRatio: '4 / 3',
-              borderRadius: 12,
+              borderRadius: 4,
               overflow: 'hidden',
-              background: '#eef2ff',
-              border: '1px solid #e2e7ff',
+              background: 'var(--ulis-wheat)',
+              border: 'none',
               marginBottom: 12,
             }}
           >
@@ -214,9 +214,12 @@ export default function BookDetailPage() {
                 style={{
                   width: 78,
                   height: 60,
-                  borderRadius: 8,
+                  borderRadius: 4,
                   overflow: 'hidden',
-                  border: activePhotoIndex === idx ? '2px solid #1677ff' : '1px solid #c3c6d7',
+                  border:
+                    activePhotoIndex === idx
+                      ? '2px solid var(--ulis-french-blue)'
+                      : '2px solid transparent',
                   cursor: 'pointer',
                 }}
               >
@@ -242,29 +245,76 @@ export default function BookDetailPage() {
               }}
             >
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <Tag color="blue">{book.courseCode}</Tag>
-                <Tag color="geekblue">{book.bookTypeName}</Tag>
-                <Tag color={book.status === 'SELLING' ? 'success' : 'default'}>
+                <span
+                  style={{
+                    padding: '3px 10px',
+                    borderRadius: 4,
+                    background: 'var(--ulis-french-blue)',
+                    color: '#ffffff',
+                    fontFamily: 'var(--font-secondary)',
+                    fontSize: 12,
+                    fontWeight: 700,
+                  }}
+                >
+                  {book.courseCode}
+                </span>
+                <span
+                  style={{
+                    padding: '3px 10px',
+                    borderRadius: 4,
+                    background: 'var(--ulis-powder-blue)',
+                    color: 'var(--ulis-midnight-violet)',
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: 13,
+                    fontWeight: 700,
+                  }}
+                >
+                  {book.bookTypeName}
+                </span>
+                <span
+                  style={{
+                    padding: '3px 10px',
+                    borderRadius: 4,
+                    background: 'var(--ulis-wheat)',
+                    color: 'var(--ulis-midnight-violet)',
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: 13,
+                    fontWeight: 700,
+                  }}
+                >
                   {book.status === 'SELLING'
-                    ? translate('bookDetail:statusSelling')
-                    : translate('bookDetail:statusSold')}
-                </Tag>
+                    ? translate('home:cardStatusAvailable')
+                    : translate('home:cardStatusSold')}
+                </span>
               </div>
-              <span style={{ fontSize: 12, color: '#596377' }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-secondary)',
+                  fontSize: 12,
+                  color: 'var(--ulis-midnight-muted)',
+                }}
+              >
                 {translate('bookDetail:viewCount', { count: book.viewCount })}
               </span>
             </div>
 
-            <h1 style={{ margin: '0 0 12px', fontSize: 22, fontWeight: 800, color: '#131b2e' }}>
+            <h1
+              style={{
+                margin: '0 0 12px',
+                fontFamily: 'var(--font-primary)',
+                fontSize: 24,
+                fontWeight: 700,
+                color: 'var(--ulis-midnight-violet)',
+              }}
+            >
               {book.title}
             </h1>
 
             <div
               style={{
                 padding: '14px 18px',
-                borderRadius: 12,
-                background: book.isGiveaway ? '#fff8eb' : '#f2f3ff',
-                border: book.isGiveaway ? '1px solid #fcd34d' : '1px solid #d5dcff',
+                borderRadius: 4,
+                background: 'var(--ulis-wheat)',
                 display: 'flex',
                 alignItems: 'baseline',
                 gap: 14,
@@ -273,15 +323,23 @@ export default function BookDetailPage() {
             >
               <span
                 style={{
-                  fontSize: 26,
-                  fontWeight: 800,
-                  color: book.isGiveaway ? '#d97706' : '#004ac6',
+                  fontFamily: 'var(--font-secondary)',
+                  fontSize: 24,
+                  fontWeight: 700,
+                  color: 'var(--ulis-midnight-violet)',
                 }}
               >
                 {book.isGiveaway ? translate('home:freeTag') : formatCurrencyVnd(book.price)}
               </span>
               {book.originalPrice > 0 && (
-                <span style={{ fontSize: 13, color: '#737686', textDecoration: 'line-through' }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-secondary)',
+                    fontSize: 13,
+                    color: 'var(--ulis-midnight-muted)',
+                    textDecoration: 'line-through',
+                  }}
+                >
                   {translate('bookDetail:originalPrice')}: {formatCurrencyVnd(book.originalPrice)}
                 </span>
               )}
@@ -294,29 +352,46 @@ export default function BookDetailPage() {
                 gridTemplateColumns: '1fr 1fr',
                 gap: '10px 18px',
                 padding: '12px 14px',
-                borderRadius: 10,
-                background: '#faf8ff',
-                border: '1px solid #e2e7ff',
+                borderRadius: 4,
+                background: 'var(--ulis-seashell)',
                 marginBottom: 16,
+                fontFamily: 'var(--font-secondary)',
                 fontSize: 13,
               }}
             >
               <div>
-                <span style={{ color: '#596377' }}>{translate('bookDetail:condition')}: </span>
-                <strong style={{ color: '#131b2e' }}>{book.condition}</strong>
+                <span style={{ color: 'var(--ulis-midnight-muted)' }}>
+                  {translate('bookDetail:condition')}:{' '}
+                </span>
+                <strong
+                  style={{
+                    fontFamily: 'var(--font-primary)',
+                    color: 'var(--ulis-midnight-violet)',
+                  }}
+                >
+                  {book.condition}
+                </strong>
               </div>
               <div>
-                <span style={{ color: '#596377' }}>{translate('bookDetail:quantity')}: </span>
-                <strong style={{ color: '#1677ff' }}>
+                <span style={{ color: 'var(--ulis-midnight-muted)' }}>
+                  {translate('bookDetail:quantity')}:{' '}
+                </span>
+                <strong style={{ color: 'var(--ulis-french-blue)' }}>
                   {translate('bookDetail:quantityUnit', { count: book.quantity })}
                 </strong>
               </div>
               <div>
-                <span style={{ color: '#596377' }}>{translate('bookDetail:campusLocation')}: </span>
-                <strong style={{ color: '#006c49' }}>{book.campusLocation}</strong>
+                <span style={{ color: 'var(--ulis-midnight-muted)' }}>
+                  {translate('bookDetail:campusLocation')}:{' '}
+                </span>
+                <strong style={{ color: 'var(--ulis-midnight-violet)' }}>
+                  {book.campusLocation}
+                </strong>
               </div>
               <div>
-                <span style={{ color: '#596377' }}>{translate('bookDetail:createdAt')}: </span>
+                <span style={{ color: 'var(--ulis-midnight-muted)' }}>
+                  {translate('bookDetail:createdAt')}:{' '}
+                </span>
                 <strong>
                   {book.createdAt} → {book.expiredAt}
                 </strong>
@@ -324,10 +399,26 @@ export default function BookDetailPage() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#000000', marginBottom: 4 }}>
+              <div
+                style={{
+                  fontFamily: 'var(--font-primary)',
+                  fontSize: 14.5,
+                  fontWeight: 700,
+                  color: 'var(--ulis-midnight-violet)',
+                  marginBottom: 4,
+                }}
+              >
                 {translate('bookDetail:descriptionTitle')}
               </div>
-              <p style={{ margin: 0, fontSize: 13, color: '#434655', lineHeight: 1.6 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: 'var(--font-secondary)',
+                  fontSize: 13,
+                  color: 'var(--ulis-midnight-muted)',
+                  lineHeight: 1.6,
+                }}
+              >
                 {book.description}
               </p>
             </div>
@@ -337,9 +428,8 @@ export default function BookDetailPage() {
           <div
             style={{
               padding: 14,
-              borderRadius: 12,
-              background: '#f8f9fd',
-              border: '1px solid #e2e7ff',
+              borderRadius: 4,
+              background: 'var(--ulis-seashell)',
               display: 'flex',
               flexWrap: 'wrap',
               alignItems: 'center',
@@ -352,10 +442,11 @@ export default function BookDetailPage() {
                 style={{
                   width: 40,
                   height: 40,
-                  borderRadius: '50%',
-                  background: book.seller.avatarBg,
-                  color: '#131b2e',
-                  fontWeight: 800,
+                  borderRadius: 4,
+                  background: 'var(--ulis-french-blue)',
+                  color: '#ffffff',
+                  fontFamily: 'var(--font-primary)',
+                  fontWeight: 700,
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -364,10 +455,24 @@ export default function BookDetailPage() {
                 {book.seller.avatarInitials}
               </span>
               <div>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: '#131b2e' }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-secondary)',
+                    fontSize: 13.5,
+                    fontWeight: 700,
+                    color: 'var(--ulis-midnight-violet)',
+                    textDecoration: 'underline',
+                  }}
+                >
                   {book.seller.fullName} · MSV: {book.seller.msv}
                 </div>
-                <div style={{ fontSize: 11.5, color: '#006c49', fontWeight: 600 }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-secondary)',
+                    fontSize: 11.5,
+                    color: 'var(--ulis-midnight-muted)',
+                  }}
+                >
                   ✓ {translate('bookDetail:sellerVerified')} ({book.seller.email})
                 </div>
               </div>
@@ -377,18 +482,24 @@ export default function BookDetailPage() {
               <Button
                 type="primary"
                 className="ulis-primary-btn"
-                onClick={() => navigate(isAuthenticated ? '/chat' : '/login')}
+                onClick={() =>
+                  navigate(
+                    isAuthenticated ? `/chat?postId=${book.id}&peerId=${book.seller.id}` : '/login',
+                  )
+                }
               >
                 <MaterialIcon name="chat" size={16} style={{ marginRight: 6 }} />
                 {translate('bookDetail:chatWithSeller')}
               </Button>
 
               {isOwner && book.status === 'SELLING' && (
-                <Button onClick={handleMarkSold}>{translate('bookDetail:markAsSoldBtn')}</Button>
+                <Button className="ulis-secondary-btn-wheat" onClick={handleMarkSold}>
+                  {translate('bookDetail:markAsSoldBtn')}
+                </Button>
               )}
 
               <Button
-                danger
+                className="ulis-secondary-btn-powder"
                 onClick={() =>
                   openReportModal({
                     sourceType: 'POST',
@@ -406,13 +517,13 @@ export default function BookDetailPage() {
         </div>
       </div>
 
-      {/* 1-Level Q&A Comment Section (doc/04: 1 cấp, tối đa 500 ký tự, mới nhất lên đầu) */}
+      {/* 1-Level Q&A Comment Section */}
       <div
         style={{
           marginTop: 24,
           background: '#ffffff',
-          borderRadius: 16,
-          border: '1px solid #e2e7ff',
+          borderRadius: 4,
+          border: 'none',
           padding: 24,
         }}
       >
@@ -463,9 +574,9 @@ export default function BookDetailPage() {
                 key={c.id}
                 style={{
                   padding: '12px 16px',
-                  borderRadius: 10,
-                  background: c.isSeller ? '#f2f3ff' : '#f8f9fd',
-                  border: '1px solid #e2e7ff',
+                  borderRadius: 4,
+                  background: c.isSeller ? 'var(--ulis-wheat)' : 'var(--ulis-seashell)',
+                  border: 'none',
                 }}
               >
                 <div
@@ -481,9 +592,12 @@ export default function BookDetailPage() {
                       style={{
                         width: 28,
                         height: 28,
-                        borderRadius: '50%',
-                        background: c.isSeller ? '#004ac6' : '#dbe1ff',
-                        color: c.isSeller ? '#ffffff' : '#004ac6',
+                        borderRadius: 4,
+                        background: c.isSeller
+                          ? 'var(--ulis-french-blue)'
+                          : 'var(--ulis-powder-blue)',
+                        color: c.isSeller ? '#ffffff' : 'var(--ulis-midnight-violet)',
+                        fontFamily: 'var(--font-primary)',
                         fontSize: 11,
                         fontWeight: 800,
                         display: 'inline-flex',
@@ -493,11 +607,27 @@ export default function BookDetailPage() {
                     >
                       {c.authorInitials}
                     </span>
-                    <strong style={{ fontSize: 13, color: '#131b2e' }}>{c.authorName}</strong>
+                    <strong
+                      style={{
+                        fontFamily: 'var(--font-primary)',
+                        fontSize: 13.5,
+                        color: 'var(--ulis-midnight-violet)',
+                      }}
+                    >
+                      {c.authorName}
+                    </strong>
                     {c.isSeller && (
                       <Tag color="blue">{translate('bookDetail:sellerAuthorBadge')}</Tag>
                     )}
-                    <span style={{ fontSize: 11.5, color: '#737686' }}>{c.createdAt}</span>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-secondary)',
+                        fontSize: 11.5,
+                        color: 'var(--ulis-midnight-muted)',
+                      }}
+                    >
+                      {c.createdAt}
+                    </span>
                   </div>
 
                   <div style={{ display: 'flex', gap: 8 }}>
