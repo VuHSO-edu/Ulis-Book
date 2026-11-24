@@ -351,7 +351,7 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
             </Form>
           ) : (
             <Form<RegisterFormValues> layout="vertical" onFinish={onRegisterFinish}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, alignItems: 'end' }}>
                 <Form.Item
                   name="fullName"
                   label={translate('register:fullName')}
@@ -386,7 +386,7 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
                 </Form.Item>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, alignItems: 'end' }}>
                 <Form.Item name="faculty" label={translate('profile:faculty')}>
                   <Input placeholder={translate('profile:facultyPlaceholder')} />
                 </Form.Item>
@@ -396,7 +396,7 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
                 </Form.Item>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, alignItems: 'end' }}>
                 <Form.Item
                   name="email"
                   label={translate('register:email')}
@@ -427,7 +427,7 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
                 </Form.Item>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, alignItems: 'end' }}>
                 <Form.Item
                   name="password"
                   label={translate('register:password')}
