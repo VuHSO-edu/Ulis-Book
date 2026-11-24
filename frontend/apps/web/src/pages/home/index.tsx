@@ -192,22 +192,22 @@ export default function HomePage() {
             <img
               className="cluster-book b1"
               src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80"
-              alt="ULIS Book 1"
+              alt="NextBook 1"
             />
             <img
               className="cluster-book b2"
               src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=400&q=80"
-              alt="ULIS Book 2"
+              alt="NextBook 2"
             />
             <img
               className="cluster-book b3"
               src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80"
-              alt="ULIS Book 3"
+              alt="NextBook 3"
             />
             <img
               className="cluster-book b4"
               src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80"
-              alt="ULIS Book 4"
+              alt="NextBook 4"
             />
           </div>
         </div>
@@ -358,65 +358,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. HÀNG NÚT BẤM KHOA / NGÀNH VUÔNG GÓC (TEXT CHÍNH ADOBE CASLON, FRENCH BLUE + 2 MÀU PHỤ) */}
-      <section className="ulis-booknet-cat-row">
-        {faculties.map((f) => (
-          <button
-            key={f.code}
-            type="button"
-            onClick={() => {
-              clearFocusedRow();
-              setFilter({
-                facultyCode: facultyCode === f.code ? 'ALL' : f.code,
-                pageNumber: 1,
-              });
-            }}
-            className={`ulis-cat-rect-btn ${facultyCode === f.code ? 'active' : ''}`}
-          >
-            <span>{f.name.replace(/^Khoa\s+/i, '')}</span>
-          </button>
-        ))}
-
-        {/* Các nút phụ dùng 2 màu còn lại: Wheat (#F6E0B6) và Powder Blue (#A6BCC9) */}
-        <button
-          type="button"
-          onClick={() => {
-            clearFocusedRow();
-            setFilter({ onlyGiveaway: !onlyGiveaway, pageNumber: 1 });
-          }}
-          className={`ulis-cat-rect-btn secondary-wheat ${onlyGiveaway ? 'active' : ''}`}
-        >
-          <span>{translate('home:tabFreeCorner')}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setFilter({ drawerOpen: true })}
-          className="ulis-cat-rect-btn secondary-powder"
-        >
-          <MaterialIcon name="tune" size={16} />
-          <span>{translate('home:filterButton')}</span>
-        </button>
-
-        {(keyword ||
-          facultyCode !== 'ALL' ||
-          bookTypeCode !== 'ALL' ||
-          onlyGiveaway ||
-          campusLocation !== 'ALL') && (
-          <button
-            type="button"
-            onClick={() => {
-              setInputKeyword('');
-              resetFilters();
-            }}
-            className="ulis-cat-rect-btn secondary-wheat"
-          >
-            <span>{translate('button:reset')}</span>
-          </button>
-        )}
-      </section>
-
-      {/* 4. TIÊU ĐỀ PHẦN SÁCH & BỘ SẮP XẾP */}
+      {/* 3. TIÊU ĐỀ PHẦN SÁCH & BỘ SẮP XẾP */}
       <section ref={bookGridRef}>
         <div
           style={{

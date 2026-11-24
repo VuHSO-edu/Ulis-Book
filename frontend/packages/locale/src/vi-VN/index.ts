@@ -4,7 +4,7 @@
  */
 export default {
   common: {
-    appName: 'ULIS BookExchange',
+    appName: 'NextBook',
     vnuBadge: 'VNU',
     vnuVerified: '100% Xác thực VNU Mail',
     loading: 'Đang tải...',
@@ -225,7 +225,7 @@ export default {
     promoHeadline: 'Kết nối, Chia sẻ và Trao đổi Giáo trình Yêu thích của Bạn.....',
     promoBadgeTop: 'Trao đổi nhiều hơn, Tiết kiệm hơn',
     promoBadgeMain: 'TIẾT KIỆM 70%',
-    searchBooknetPlaceholder: 'Tìm kiếm giáo trình, tên sách trong ULIS BookExchange...',
+    searchBooknetPlaceholder: 'Tìm kiếm giáo trình, tên sách trong NextBook...',
     dropdownFaculty: 'Khoa, ngành',
     dropdownBookType: 'Thể loại sách',
     typeAll: 'Tất cả thể loại',
@@ -235,11 +235,11 @@ export default {
     cardStatusSold: 'Tình trạng: Đã bán',
     endingSoonTitle: 'Giáo trình nổi bật trong tuần.',
     booksForYouTitle: 'Sách dành cho bạn',
-    aboutModalTitle: 'Về chúng tôi — ULIS BookExchange',
+    aboutModalTitle: 'Về chúng tôi — NextBook',
     aboutModalDesc:
-      'ULIS BookExchange là nền tảng kết nối, chia sẻ và trao đổi giáo trình nội bộ dành cho sinh viên Trường Đại học Ngoại ngữ - ĐHQGHN (ULIS - VNU). Giúp sinh viên tiết kiệm tới 70% chi phí giáo trình mỗi học kỳ và lan toả văn hoá chia sẻ tri thức.',
+      'NextBook là nền tảng kết nối, chia sẻ và trao đổi giáo trình nội bộ dành cho sinh viên Trường Đại học Ngoại ngữ - ĐHQGHN (ULIS - VNU). Giúp sinh viên tiết kiệm tới 70% chi phí giáo trình mỗi học kỳ và lan toả văn hoá chia sẻ tri thức.',
     faqModalTitle: 'Câu hỏi thường gặp (FAQ)',
-    faqQ1: '1. Ai có thể đăng bài trên ULIS BookExchange?',
+    faqQ1: '1. Ai có thể đăng bài trên NextBook?',
     faqA1:
       'Tất cả sinh viên sở hữu email giáo dục @ulis.edu.vn hoặc .edu.vn đã xác thực đều có thể đăng bán, trao đổi hoặc tặng sách 0đ.',
     faqQ2: '2. Giao nhận sách như thế nào?',

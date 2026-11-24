@@ -3,7 +3,7 @@
  */
 export default {
   common: {
-    appName: 'ULIS BookExchange',
+    appName: 'NextBook',
     vnuBadge: 'VNU',
     vnuVerified: '100% VNU Mail Verified',
     loading: 'Loading...',
@@ -224,7 +224,7 @@ export default {
     promoHeadline: 'Connect, Share and Trade Your Favourite Reads.....',
     promoBadgeTop: 'Get More, Save More',
     promoBadgeMain: '70% OFF',
-    searchBooknetPlaceholder: 'Search in ULIS BookExchange...',
+    searchBooknetPlaceholder: 'Search in NextBook...',
     dropdownFaculty: 'Categories',
     dropdownBookType: 'Type',
     typeAll: 'All Types',
@@ -234,11 +234,11 @@ export default {
     cardStatusSold: 'Status: Sold',
     endingSoonTitle: 'Featured Textbooks This Week.',
     booksForYouTitle: 'Books for You',
-    aboutModalTitle: 'About Us — ULIS BookExchange',
+    aboutModalTitle: 'About Us — NextBook',
     aboutModalDesc:
-      'ULIS BookExchange is the student textbook sharing and trading platform for ULIS - VNU. Connect with classmates, save up to 70% each semester, and share knowledge sustainably.',
+      'NextBook is the student textbook sharing and trading platform for ULIS - VNU. Connect with classmates, save up to 70% each semester, and share knowledge sustainably.',
     faqModalTitle: 'Frequently Asked Questions (FAQ)',
-    faqQ1: '1. Who can list books on ULIS BookExchange?',
+    faqQ1: '1. Who can list books on NextBook?',
     faqA1:
       'Any student with a verified @ulis.edu.vn or .edu.vn educational email can list textbooks for sale, exchange, or free giveaway.',
     faqQ2: '2. How does book pickup work?',

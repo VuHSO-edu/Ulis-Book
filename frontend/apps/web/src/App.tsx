@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes } from 'react-router-dom';
-import { MaterialIcon, Spin } from '@ulis/components';
+import { Spin } from '@ulis/components';
 import { translate } from '@ulis/locale';
 import { SESSION_EXPIRED_EVENT } from '@ulis/utils';
 import { routes } from './routes';
@@ -27,7 +27,20 @@ export default function App() {
       <div className="ulis-initial-loader">
         <div className="loader-card">
           <div className="loader-brand-icon">
-            <MaterialIcon name="menu_book" size={26} />
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </svg>
           </div>
           <h1 className="loader-title">{translate('common:appName')}</h1>
           <p className="loader-subtitle">{translate('home:heroSubtitle')}</p>
