@@ -47,8 +47,8 @@ JWT_SECRET=${RANDOM_JWT_SECRET}
 
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=587
-MAIL_USERNAME=nv.vuhso@gmail.com
-MAIL_PASSWORD=bgjf vdzm qbsv hrow
+MAIL_USERNAME=nexteraofbooks@gmail.com
+MAIL_PASSWORD=plcg ozzc nerr hwez
 
 CORS_ALLOWED_ORIGINS=http://localhost:*,http://127.0.0.1:*,http://${SERVER_IP},http://${SERVER_IP}:*,https://${SERVER_IP}
 ADMIN_EMAIL=admin@ulis.edu.vn
