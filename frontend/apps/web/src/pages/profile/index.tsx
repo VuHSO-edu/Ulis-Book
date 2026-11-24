@@ -8,6 +8,7 @@ import {
   Form,
   Input,
   MaterialIcon,
+  Select,
   Space,
 } from '@ulis/components';
 import { translate } from '@ulis/locale';
@@ -17,6 +18,17 @@ import { useMyBookPosts } from '../../services/books';
 import { useAuth } from '../../store/useAuth';
 import { showBhttConfirm } from '../../components/bhtt-confirm';
 
+const COURSE_CATEGORY_OPTIONS = [
+  'Ngôn ngữ Anh (FELTE)',
+  'Giáo trình HSK / Tiếng Trung',
+  'Minna no Nihongo / JLPT',
+  'Giáo trình Tiếng Hàn / Pháp',
+  'Sách bài tập & Workbook',
+  'Đề cương ôn thi học phần',
+  'Từ điển chuyên ngành',
+  'Văn học & Đọc hiểu',
+];
+
 interface ProfileFormValues {
   msv: string;
   fullName: string;
@@ -25,6 +37,8 @@ interface ProfileFormValues {
   className?: string;
   phone?: string;
   avatarUrl?: string;
+  coverUrl?: string;
+  preferredCategories?: string[];
 }
 
 export default function ProfilePage() {
@@ -40,22 +54,34 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'settings'>('dashboard');
   const formSectionRef = useRef<HTMLDivElement | null>(null);
   const avatarUrl = Form.useWatch('avatarUrl', form);
+  const coverUrlWatch = Form.useWatch('coverUrl', form);
+  const preferredCategoriesWatch = Form.useWatch('preferredCategories', form) ?? [];
   const fullNameWatch = Form.useWatch('fullName', form);
   const phoneWatch = Form.useWatch('phone', form);
   const facultyWatch = Form.useWatch('faculty', form);
+  const prefsStorageKey = `ulis_profile_prefs_${user?.email ?? 'guest'}`;
 
   useEffect(() => {
     const profile = data?.data?.data;
+    let savedPrefs: { coverUrl?: string; preferredCategories?: string[] } = {};
+    try {
+      const raw = localStorage.getItem(prefsStorageKey);
+      if (raw) savedPrefs = JSON.parse(raw);
+    } catch {
+      // ignore storage errors
+    }
     form.setFieldsValue({
-      msv: profile?.msv ?? '22041982',
-      fullName: profile?.fullName ?? user?.fullName ?? 'Nguyễn Văn An',
-      faculty: profile?.faculty ?? 'Khoa Sư phạm Tiếng Anh (FELTE)',
-      major: profile?.major ?? 'Sư phạm Tiếng Anh',
-      className: profile?.className ?? 'QH-2022.F1',
-      phone: profile?.phone ?? '0987654321',
+      msv: profile?.msv ?? '',
+      fullName: profile?.fullName ?? user?.fullName ?? '',
+      faculty: profile?.faculty ?? '',
+      major: profile?.major ?? '',
+      className: profile?.className ?? '',
+      phone: profile?.phone ?? '',
       avatarUrl: profile?.avatarUrl ?? '',
+      coverUrl: savedPrefs.coverUrl ?? '',
+      preferredCategories: savedPrefs.preferredCategories ?? [],
     });
-  }, [data, form, user]);
+  }, [data, form, user, prefsStorageKey]);
 
   const onFinish = async (values: ProfileFormValues) => {
     const cleanName = values.fullName?.trim() ?? '';
@@ -64,6 +90,17 @@ export default function ProfilePage() {
         translate('common:validation.whitespace', { field: translate('profile:fullName') }),
       );
       return;
+    }
+    try {
+      localStorage.setItem(
+        prefsStorageKey,
+        JSON.stringify({
+          coverUrl: values.coverUrl?.trim() ?? '',
+          preferredCategories: values.preferredCategories ?? [],
+        }),
+      );
+    } catch {
+      // ignore storage errors
     }
     setSaving(true);
     try {
@@ -93,19 +130,22 @@ export default function ProfilePage() {
 
   const handleExit = () => {
     if (!isDirty) {
-      navigate('/');
+      setActiveTab('dashboard');
       return;
     }
     showBhttConfirm({
       content: translate('common:dirtyConfirmMessage'),
-      onConfirm: () => navigate('/'),
+      onConfirm: () => {
+        setIsDirty(false);
+        setActiveTab('dashboard');
+      },
     });
   };
 
-  const sellingCount = myPosts.filter((p) => !p.isGiveaway && p.status === 'SELLING').length || 10;
-  const courseBookCount = myPosts.length || 4;
-  const swapCount = 5;
-  const donateCount = myPosts.filter((p) => p.isGiveaway).length || 7;
+  const sellingCount = myPosts.filter((p) => !p.isGiveaway && p.status === 'SELLING').length;
+  const courseBookCount = myPosts.length;
+  const swapCount = 0;
+  const donateCount = myPosts.filter((p) => p.isGiveaway).length;
 
   return (
     <div style={{ maxWidth: 1080, margin: '0 auto', padding: '16px 24px 48px' }}>
@@ -153,18 +193,30 @@ export default function ProfilePage() {
         }}
       >
         {/* Top Patterned Wheat Banner */}
-        <div className="ulis-profile-pattern-banner">
-          {Array.from({ length: 8 }).map((_, idx) => (
-            <MaterialIcon
-              key={idx}
-              name="menu_book"
-              size={30}
-              style={{
-                color: 'rgba(61, 21, 52, 0.24)',
-                transform: idx % 2 === 0 ? 'rotate(-16deg)' : 'rotate(14deg)',
-              }}
-            />
-          ))}
+        <div
+          className="ulis-profile-pattern-banner"
+          style={
+            coverUrlWatch
+              ? {
+                  backgroundImage: `url(${coverUrlWatch})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }
+              : undefined
+          }
+        >
+          {!coverUrlWatch &&
+            Array.from({ length: 8 }).map((_, idx) => (
+              <MaterialIcon
+                key={idx}
+                name="menu_book"
+                size={30}
+                style={{
+                  color: 'rgba(61, 21, 52, 0.24)',
+                  transform: idx % 2 === 0 ? 'rotate(-16deg)' : 'rotate(14deg)',
+                }}
+              />
+            ))}
         </div>
 
         <div style={{ padding: '0 36px' }}>
@@ -205,7 +257,7 @@ export default function ProfilePage() {
                     color: 'var(--ulis-midnight-violet)',
                   }}
                 >
-                  {fullNameWatch || user?.fullName || 'Nguyễn Văn An'}
+                  {fullNameWatch || user?.fullName || ''}
                 </h1>
                 <button
                   type="button"
@@ -233,69 +285,64 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'auto auto',
-                gap: '6px 28px',
-                fontFamily: 'var(--font-secondary)',
-                fontSize: 13,
-                color: 'var(--ulis-midnight-violet)',
-                paddingBottom: 6,
-              }}
-            >
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                <MaterialIcon name="mail" size={15} />
-                <span>{user?.email ?? 'an.nv@ulis.edu.vn'}</span>
+            {(phoneWatch || facultyWatch) && (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'auto auto',
+                  gap: '6px 28px',
+                  fontFamily: 'var(--font-secondary)',
+                  fontSize: 13,
+                  color: 'var(--ulis-midnight-violet)',
+                  paddingBottom: 6,
+                }}
+              >
+                {phoneWatch && (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <MaterialIcon name="call" size={15} />
+                    <span>{phoneWatch}</span>
+                  </div>
+                )}
+                {facultyWatch && (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <MaterialIcon name="school" size={15} />
+                    <span>{facultyWatch}</span>
+                  </div>
+                )}
               </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                <MaterialIcon name="location_on" size={15} />
-                <span>{translate('profile:campusAddress')}</span>
-              </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                <MaterialIcon name="call" size={15} />
-                <span>{phoneWatch || '0987654321'}</span>
-              </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                <MaterialIcon name="school" size={15} />
-                <span>{facultyWatch || 'ULIS - VNU'}</span>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Preferred Book Categories (Danh mục giáo trình quan tâm) */}
-          <div style={{ marginBottom: 24 }}>
-            <h3
-              style={{
-                margin: '0 0 10px',
-                fontFamily: 'var(--font-primary)',
-                fontSize: 16,
-                fontWeight: 700,
-                color: 'var(--ulis-french-blue)',
-              }}
-            >
-              {translate('profile:preferredCategories')}
-            </h3>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '6px 16px',
-                fontFamily: 'var(--font-secondary)',
-                fontSize: 13,
-                color: 'var(--ulis-midnight-violet)',
-              }}
-            >
-              <span>• Ngôn ngữ Anh (FELTE)</span>
-              <span>• Giáo trình HSK / Tiếng Trung</span>
-              <span>• Minna no Nihongo / JLPT</span>
-              <span>• Giáo trình Tiếng Hàn / Pháp</span>
-              <span>• Sách bài tập & Workbook</span>
-              <span>• Đề cương ôn thi học phần</span>
-              <span>• Từ điển chuyên ngành</span>
-              <span>• Văn học & Đọc hiểu</span>
+          {preferredCategoriesWatch.length > 0 && (
+            <div style={{ marginBottom: 24 }}>
+              <h3
+                style={{
+                  margin: '0 0 10px',
+                  fontFamily: 'var(--font-primary)',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  color: 'var(--ulis-french-blue)',
+                }}
+              >
+                {translate('profile:preferredCategories')}
+              </h3>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(4, 1fr)',
+                  gap: '6px 16px',
+                  fontFamily: 'var(--font-secondary)',
+                  fontSize: 13,
+                  color: 'var(--ulis-midnight-violet)',
+                }}
+              >
+                {preferredCategoriesWatch.map((cat) => (
+                  <span key={cat}>• {cat}</span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Horizontal Profile Tabs */}
           <div
@@ -483,16 +530,17 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Form Cập nhật Hồ sơ Sinh viên */}
-          <div
-            ref={formSectionRef}
-            style={{
-              marginTop: 28,
-              padding: 24,
-              borderRadius: 4,
-              background: 'var(--ulis-seashell)',
-            }}
-          >
+          {/* Form Cập nhật Hồ sơ Sinh viên - Chỉ hiện khi nhấn Chỉnh sửa hồ sơ / Cài đặt hồ sơ */}
+          {activeTab === 'settings' && (
+            <div
+              ref={formSectionRef}
+              style={{
+                marginTop: 28,
+                padding: 24,
+                borderRadius: 4,
+                background: 'var(--ulis-seashell)',
+              }}
+            >
             <h2
               style={{
                 margin: '0 0 16px',
@@ -560,6 +608,46 @@ export default function ProfilePage() {
                 <Input placeholder={translate('profile:avatarUrlPlaceholder')} />
               </Form.Item>
 
+              <Form.Item name="coverUrl" label={translate('profile:coverUrl')}>
+                <Input
+                  placeholder={translate('profile:coverUrlPlaceholder')}
+                  addonAfter={
+                    <label style={{ cursor: 'pointer', fontSize: 12 }}>
+                      {translate('profile:uploadCover')}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const reader = new FileReader();
+                          reader.onload = () => {
+                            if (typeof reader.result === 'string') {
+                              form.setFieldValue('coverUrl', reader.result);
+                              setIsDirty(true);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }}
+                      />
+                    </label>
+                  }
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="preferredCategories"
+                label={translate('profile:preferredCategories')}
+              >
+                <Select
+                  mode="multiple"
+                  allowClear
+                  placeholder={translate('profile:preferredCategoriesPlaceholder')}
+                  options={COURSE_CATEGORY_OPTIONS.map((c) => ({ label: c, value: c }))}
+                />
+              </Form.Item>
+
               <Space style={{ marginTop: 12 }}>
                 <Button
                   type="primary"
@@ -574,7 +662,8 @@ export default function ProfilePage() {
                 </Button>
               </Space>
             </Form>
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

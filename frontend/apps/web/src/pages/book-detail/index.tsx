@@ -464,7 +464,7 @@ export default function BookDetailPage() {
                     textDecoration: 'underline',
                   }}
                 >
-                  {book.seller.fullName} · MSV: {book.seller.msv}
+                  {book.seller.fullName}
                 </div>
                 <div
                   style={{
@@ -473,7 +473,7 @@ export default function BookDetailPage() {
                     color: 'var(--ulis-midnight-muted)',
                   }}
                 >
-                  ✓ {translate('bookDetail:sellerVerified')} ({book.seller.email})
+                  ✓ {translate('bookDetail:sellerVerified')}
                 </div>
               </div>
             </div>
