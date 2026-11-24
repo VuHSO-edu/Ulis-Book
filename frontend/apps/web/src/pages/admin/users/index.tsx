@@ -12,7 +12,7 @@ import {
   type TableProps,
 } from '@ulis/components';
 import { translate } from '@ulis/locale';
-import { useAdminToggleBanUser, useAdminUsers } from '../../../services/admin';
+import { useAdminBookPosts, useAdminToggleBanUser, useAdminUsers } from '../../../services/admin';
 import { useAdminStore } from '../../../store/useAdminStore';
 import { showBhttConfirm } from '../../../components/bhtt-confirm';
 import type { StudentUserItem } from '../../../services/mock-data';
@@ -127,6 +127,16 @@ export default function AdminUsersPage() {
       key: 'postCount',
       width: 105,
       align: 'right',
+      render: (val: number, record) => {
+        const computed = allPosts.filter(
+          (p) =>
+            p.seller.id === record.id ||
+            (p.seller.email &&
+              record.email &&
+              p.seller.email.toLowerCase() === record.email.toLowerCase()),
+        ).length;
+        return computed > 0 ? computed : val;
+      },
     },
     {
       title: translate('admin:users.colCreatedAt'),
