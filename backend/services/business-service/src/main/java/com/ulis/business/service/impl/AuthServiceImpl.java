@@ -70,6 +70,16 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException(messageHelper.getMessage("auth.email.taken"));
         }
 
+        String msv = request.getMsv() != null ? request.getMsv().trim() : "";
+        if (!msv.isEmpty()) {
+            User msvOwner = userRepository.findByMsvIgnoreCase(msv).orElse(null);
+            if (msvOwner != null
+                    && !msvOwner.getEmail().equalsIgnoreCase(email)
+                    && (msvOwner.getStatus() == UserStatus.ACTIVE || msvOwner.getStatus() == UserStatus.BANNED)) {
+                throw new BadRequestException("Mã sinh viên " + msv + " đã được đăng ký bởi một tài khoản khác.");
+            }
+        }
+
         LocalDateTime now = LocalDateTime.now();
         User user;
         if (existing != null) {
