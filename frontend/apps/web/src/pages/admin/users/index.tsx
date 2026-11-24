@@ -20,6 +20,7 @@ import type { StudentUserItem } from '../../../services/mock-data';
 export default function AdminUsersPage() {
   const navigate = useNavigate();
   const { data: users = [], isLoading } = useAdminUsers();
+  const { data: allPosts = [] } = useAdminBookPosts();
   const toggleBanUser = useAdminToggleBanUser();
 
   const userKeyword = useAdminStore((s) => s.userKeyword);
