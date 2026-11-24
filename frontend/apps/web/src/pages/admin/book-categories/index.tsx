@@ -45,7 +45,12 @@ export default function AdminBookCategoriesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<BookCategoryItem | null>(null);
   const [isDirty, setIsDirty] = useState(false);
+  const [collapsedAxes, setCollapsedAxes] = useState<Record<string, boolean>>({});
   const [form] = Form.useForm<UpsertCategoryPayload>();
+
+  const toggleAxis = (axis: string) => {
+    setCollapsedAxes((prev) => ({ ...prev, [axis]: !prev[axis] }));
+  };
 
   // Global Rules §4: Server filter debounce 500ms + useAdminStore.getState() + reset page 1
   const handleKeywordChange = (val: string) => {
@@ -88,7 +93,7 @@ export default function AdminBookCategoriesPage() {
     setEditingItem(null);
     setIsDirty(false);
     form.setFieldsValue({
-      code: '',
+      code: `CAT_${Math.floor(1000 + Math.random() * 9000)}`,
       name: '',
       subtitle: '',
       parentAxis: 'FACULTY',
@@ -355,6 +360,7 @@ export default function AdminBookCategoriesPage() {
             {/* Axis 1: BOOK_TYPE */}
             <div style={{ marginBottom: 14 }}>
               <div
+                onClick={() => toggleAxis('BOOK_TYPE')}
                 style={{
                   padding: '6px 10px',
                   borderRadius: 6,
@@ -363,11 +369,15 @@ export default function AdminBookCategoriesPage() {
                   fontSize: 12,
                   fontWeight: 700,
                   marginBottom: 6,
+                  cursor: 'pointer',
+                  userSelect: 'none',
                 }}
               >
-                ▾ {translate('admin:categories.branchBookType')} ({treeBookTypes.length})
+                {collapsedAxes['BOOK_TYPE'] ? '▸' : '▾'}{' '}
+                {translate('admin:categories.branchBookType')} ({treeBookTypes.length})
               </div>
-              {treeBookTypes.map((node) => {
+              {!collapsedAxes['BOOK_TYPE'] &&
+                treeBookTypes.map((node) => {
                 const active = selectedTreeNodeCode === node.code;
                 return (
                   <div
@@ -402,6 +412,7 @@ export default function AdminBookCategoriesPage() {
             {/* Axis 2: FACULTY */}
             <div>
               <div
+                onClick={() => toggleAxis('FACULTY')}
                 style={{
                   padding: '6px 10px',
                   borderRadius: 6,
@@ -410,11 +421,15 @@ export default function AdminBookCategoriesPage() {
                   fontSize: 12,
                   fontWeight: 700,
                   marginBottom: 6,
+                  cursor: 'pointer',
+                  userSelect: 'none',
                 }}
               >
-                ▾ {translate('admin:categories.branchFaculty')} ({treeFaculties.length})
+                {collapsedAxes['FACULTY'] ? '▸' : '▾'}{' '}
+                {translate('admin:categories.branchFaculty')} ({treeFaculties.length})
               </div>
-              {treeFaculties.map((node) => {
+              {!collapsedAxes['FACULTY'] &&
+                treeFaculties.map((node) => {
                 const active = selectedTreeNodeCode === node.code;
                 return (
                   <div
@@ -449,6 +464,7 @@ export default function AdminBookCategoriesPage() {
             {/* Axis 3: CAMPUS_LOCATION */}
             <div style={{ marginTop: 14 }}>
               <div
+                onClick={() => toggleAxis('CAMPUS_LOCATION')}
                 style={{
                   padding: '6px 10px',
                   borderRadius: 6,
@@ -457,11 +473,15 @@ export default function AdminBookCategoriesPage() {
                   fontSize: 12,
                   fontWeight: 700,
                   marginBottom: 6,
+                  cursor: 'pointer',
+                  userSelect: 'none',
                 }}
               >
-                ▾ Địa điểm giao dịch ({treeLocations.length})
+                {collapsedAxes['CAMPUS_LOCATION'] ? '▸' : '▾'} Địa điểm giao dịch (
+                {treeLocations.length})
               </div>
-              {treeLocations.map((node) => {
+              {!collapsedAxes['CAMPUS_LOCATION'] &&
+                treeLocations.map((node) => {
                 const active = selectedTreeNodeCode === node.code;
                 return (
                   <div
