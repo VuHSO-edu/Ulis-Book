@@ -18,6 +18,7 @@ import { translate } from '@ulis/locale';
 import { formatAndValidateDateInput, formatCurrencyVnd } from '@ulis/utils';
 import { useBookFilterStore, type SortMode } from '../../store/useBookFilterStore';
 import { useBookCategories, useSearchBooks } from '../../services/books';
+import { useAddToCart, useSystemAppearance } from '../../services/v2';
 import { useReportModalStore } from '../../store/useReportModalStore';
 import { useAuth } from '../../store/useAuth';
 import type { BookPostItem } from '../../services/mock-data';
@@ -56,9 +57,23 @@ export default function HomePage() {
 
   const [inputKeyword, setInputKeyword] = useState(keyword);
   const [openMenu, setOpenMenu] = useState<'faculty' | 'type' | null>(null);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownWrapRef = useRef<HTMLDivElement | null>(null);
   const bookGridRef = useRef<HTMLDivElement | null>(null);
+
+  const { data: appearance } = useSystemAppearance();
+  const addToCart = useAddToCart();
+  const activeHeroBanners = (appearance?.heroBanners ?? []).filter((b) => b.active);
+
+  // TASK-05: Auto-play loop carousel mỗi 3 giây cho ảnh trong tiêu đề
+  useEffect(() => {
+    if (activeHeroBanners.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveSlideIndex((prev) => (prev + 1) % activeHeroBanners.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [activeHeroBanners.length]);
 
   useEffect(() => {
     setInputKeyword(keyword);
@@ -131,6 +146,18 @@ export default function HomePage() {
     navigate(`/chat?postId=${book.id}&peerId=${book.seller.id}`);
   };
 
+  const handleAddToCartClick = (e: React.MouseEvent, book: BookPostItem) => {
+    e.stopPropagation();
+    addToCart.mutate(
+      { book, quantity: 1 },
+      {
+        onSuccess: () => {
+          message.success(translate('v2:cart.addedSuccess'));
+        },
+      },
+    );
+  };
+
   const handleDateChange = (field: 'fromDate' | 'toDate', rawValue: string) => {
     const { formatted, isValid } = formatAndValidateDateInput(rawValue);
     setFilter({ [field]: formatted });
@@ -188,28 +215,133 @@ export default function HomePage() {
         </div>
 
         <div className="promo-visual">
-          <div className="promo-books-cluster">
-            <img
-              className="cluster-book b1"
-              src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80"
-              alt="NextBook 1"
-            />
-            <img
-              className="cluster-book b2"
-              src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=400&q=80"
-              alt="NextBook 2"
-            />
-            <img
-              className="cluster-book b3"
-              src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80"
-              alt="NextBook 3"
-            />
-            <img
-              className="cluster-book b4"
-              src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80"
-              alt="NextBook 4"
-            />
-          </div>
+          {activeHeroBanners.length > 0 ? (
+            <div
+              style={{
+                width: 340,
+                background: '#ffffff',
+                borderRadius: 6,
+                padding: 12,
+                position: 'relative',
+              }}
+            >
+              {(() => {
+                const currentSlide =
+                  activeHeroBanners[activeSlideIndex % activeHeroBanners.length] ??
+                  activeHeroBanners[0];
+                return (
+                  <>
+                    <div
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        height: 205,
+                        borderRadius: 4,
+                        overflow: 'hidden',
+                        background: 'var(--ulis-wheat)',
+                      }}
+                    >
+                      <img
+                        src={currentSlide.imageUrl}
+                        alt={currentSlide.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                        }}
+                      />
+                      {currentSlide.badgeText && (
+                        <span
+                          style={{
+                            position: 'absolute',
+                            top: 8,
+                            left: 8,
+                            padding: '3px 9px',
+                            borderRadius: 4,
+                            background: 'var(--ulis-french-blue)',
+                            color: '#ffffff',
+                            fontSize: 11,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {currentSlide.badgeText}
+                        </span>
+                      )}
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 8,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 8,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 12.5,
+                          fontWeight: 700,
+                          color: 'var(--ulis-midnight-violet)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {currentSlide.title}
+                      </div>
+                      <div style={{ display: 'inline-flex', gap: 5, flexShrink: 0 }}>
+                        {activeHeroBanners.map((b, idx) => (
+                          <button
+                            key={b.id}
+                            type="button"
+                            aria-label={`Slide ${idx + 1}`}
+                            onClick={() => setActiveSlideIndex(idx)}
+                            style={{
+                              width: idx === activeSlideIndex % activeHeroBanners.length ? 16 : 7,
+                              height: 7,
+                              borderRadius: 999,
+                              border: 'none',
+                              padding: 0,
+                              cursor: 'pointer',
+                              background:
+                                idx === activeSlideIndex % activeHeroBanners.length
+                                  ? 'var(--ulis-french-blue)'
+                                  : 'var(--ulis-powder-blue)',
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+          ) : (
+            <div className="promo-books-cluster">
+              <img
+                className="cluster-book b1"
+                src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80"
+                alt="NextBook 1"
+              />
+              <img
+                className="cluster-book b2"
+                src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=400&q=80"
+                alt="NextBook 2"
+              />
+              <img
+                className="cluster-book b3"
+                src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80"
+                alt="NextBook 3"
+              />
+              <img
+                className="cluster-book b4"
+                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80"
+                alt="NextBook 4"
+              />
+            </div>
+          )}
         </div>
       </section>
 
@@ -488,27 +620,53 @@ export default function HomePage() {
                     {/* Right: Thông tin sách theo đúng thứ tự đánh giá trên ảnh */}
                     <div className="booknet-card-info">
                       <div>
-                        {/* Hàng sao màu Wheat + nút báo cáo nhỏ */}
-                        <div className="booknet-stars">
-                          <span className="stars-row" aria-label="5 stars">
-                            ★★★★★
-                          </span>
-                          <Tooltip title={translate('home:reportTooltip')}>
-                            <button
-                              type="button"
-                              onClick={(e) => handleReportClick(e, book)}
-                              style={{
-                                border: 'none',
-                                background: 'transparent',
-                                color: 'var(--ulis-midnight-muted)',
-                                cursor: 'pointer',
-                                padding: 2,
-                              }}
-                            >
-                              <MaterialIcon name="flag" size={14} />
-                            </button>
-                          </Tooltip>
-                        </div>
+                        {/* Hàng sao điểm uy tín (1-5) + Cảnh báo dưới 3 (TASK-02) */}
+                        {(() => {
+                          const rep = book.seller.reputationScore ?? 4;
+                          const isLowRep = rep < 3;
+                          return (
+                            <div className="booknet-stars">
+                              <span
+                                className="stars-row"
+                                style={{
+                                  color: isLowRep ? '#c83e3b' : '#e6b85c',
+                                  fontSize: 12,
+                                  fontWeight: 700,
+                                }}
+                              >
+                                {'★'.repeat(rep)}
+                                {'☆'.repeat(Math.max(0, 5 - rep))}{' '}
+                                <span
+                                  style={{
+                                    marginLeft: 4,
+                                    padding: '1px 6px',
+                                    borderRadius: 3,
+                                    background: isLowRep ? '#f9dadd' : 'var(--ulis-seashell)',
+                                    color: isLowRep ? '#9e2a2b' : 'var(--ulis-midnight-violet)',
+                                    fontSize: 10.5,
+                                  }}
+                                >
+                                  {isLowRep ? `⚠️ Uy tín ${rep}/5` : `Uy tín ${rep}/5`}
+                                </span>
+                              </span>
+                              <Tooltip title={translate('home:reportTooltip')}>
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleReportClick(e, book)}
+                                  style={{
+                                    border: 'none',
+                                    background: 'transparent',
+                                    color: 'var(--ulis-midnight-muted)',
+                                    cursor: 'pointer',
+                                    padding: 2,
+                                  }}
+                                >
+                                  <MaterialIcon name="flag" size={14} />
+                                </button>
+                              </Tooltip>
+                            </div>
+                          );
+                        })()}
 
                         {/* Tên sách: Text chính (Adobe Caslon) */}
                         <h3 className="booknet-title" title={book.title}>
@@ -540,7 +698,7 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      {/* Nút bấm: Text chính (Adobe Caslon), vuông góc */}
+                      {/* Nút bấm: Mua ngay + Thêm Giỏ hàng (TASK-08) + Chat */}
                       <div className="booknet-actions">
                         <button
                           type="button"
@@ -554,6 +712,18 @@ export default function HomePage() {
                             ? translate('button:receiveFree')
                             : translate('button:buyNow')}
                         </button>
+
+                        {isAvailable && (
+                          <Tooltip title={translate('v2:cart.addToCartBtn')}>
+                            <button
+                              type="button"
+                              className="booknet-icon-btn"
+                              onClick={(e) => handleAddToCartClick(e, book)}
+                            >
+                              <MaterialIcon name="add_shopping_cart" size={15} />
+                            </button>
+                          </Tooltip>
+                        )}
 
                         <Tooltip title={translate('home:chatTooltip')}>
                           <button
@@ -585,16 +755,6 @@ export default function HomePage() {
                 gap: 12,
               }}
             >
-              <span
-                style={{
-                  fontFamily: 'var(--font-primary)',
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: 'var(--ulis-midnight-violet)',
-                }}
-              >
-                {translate('common:totalRecords', { total: totalCount })}
-              </span>
               <Pagination
                 current={pageNumber}
                 pageSize={pageSize}

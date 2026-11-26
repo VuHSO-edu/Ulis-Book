@@ -38,6 +38,9 @@ public class SellerInfo {
 
     private String avatarBg;
 
+    /** Điểm uy tín V2.0 (TASK-02): mặc định 3, min 1, max 5. */
+    private Integer reputationScore;
+
     /** Bảng màu nền avatar pastel — cùng tông mock-data FE. */
     static final List<String> AVATAR_BG = List.of(
             "#dbe1ff", "#ffddb8", "#d3f3d3", "#ffe0ec", "#d9f0ff", "#f5e6ff", "#fff3cc", "#cfe8ff");
@@ -55,6 +58,7 @@ public class SellerInfo {
                 .phone(user.getPhone() == null ? "" : user.getPhone())
                 .avatarInitials(initials(fullName))
                 .avatarBg(AVATAR_BG.get(Math.floorMod(safeHash(fullName), AVATAR_BG.size())))
+                .reputationScore(user.getReputationScore() == null ? 3 : user.getReputationScore())
                 .build();
     }
 

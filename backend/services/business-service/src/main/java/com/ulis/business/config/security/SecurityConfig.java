@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +56,9 @@ public class SecurityConfig {
                                 "/book-categories",
                                 "/book-posts/search",
                                 "/book-posts/detail/**",
-                                "/comments/by-post").permitAll()
+                                "/comments/by-post",
+                                "/system-settings/public",
+                                "/feedbacks/submit").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // WebSocket STOMP: handshake tự xác thực JWT (query param token=) trong
                         // WsHandshakeInterceptor — tài khoản không hợp lệ bị từ chối ngay handshake.
@@ -72,9 +75,29 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(Arrays.asList(allowedOrigins));
+        List<String> patterns = new ArrayList<>();
+        if (allowedOrigins != null) {
+            for (String origin : allowedOrigins) {
+                if (origin != null && !origin.isBlank()) {
+                    patterns.add(origin.trim());
+                }
+            }
+        }
+        patterns.addAll(List.of(
+                "https://nextbooks.online",
+                "https://*.nextbooks.online",
+                "http://nextbooks.online",
+                "http://*.nextbooks.online",
+                "https://nextbook.ulis.edu.vn",
+                "http://nextbook.ulis.edu.vn",
+                "http://localhost:*",
+                "http://127.0.0.1:*",
+                "*"
+        ));
+        config.setAllowedOriginPatterns(patterns);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization", "Content-Disposition"));
         config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

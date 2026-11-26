@@ -41,9 +41,19 @@ public class ProfileResponse {
 
     private UserStatus status;
 
+    private Integer reputationScore;
+
+    private Integer monthlyPostCount;
+
+    private Integer monthlyPostLimit;
+
     private LocalDateTime createdAt;
 
     public static ProfileResponse from(User user) {
+        return from(user, 0, 15);
+    }
+
+    public static ProfileResponse from(User user, int monthlyPostCount, int monthlyPostLimit) {
         return ProfileResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -56,6 +66,9 @@ public class ProfileResponse {
                 .avatarUrl(user.getAvatarUrl())
                 .role(user.getRole())
                 .status(user.getStatus())
+                .reputationScore(user.getReputationScore() == null ? 3 : user.getReputationScore())
+                .monthlyPostCount(monthlyPostCount)
+                .monthlyPostLimit(monthlyPostLimit)
                 .createdAt(user.getCreatedAt())
                 .build();
     }

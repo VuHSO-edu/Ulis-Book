@@ -52,6 +52,7 @@ export interface BookPostItem {
     phone: string;
     avatarInitials: string;
     avatarBg: string;
+    reputationScore?: number;
   };
 }
 
@@ -77,6 +78,9 @@ export interface ChatMessageItem {
   createdAt: string;
   isRead: boolean;
   isAppointment?: boolean;
+  messageType?: 'TEXT' | 'INVOICE_CARD' | 'INVOICE_REMINDER';
+  invoiceId?: number;
+  invoicePayload?: string;
 }
 
 export interface ChatConversationItem {
@@ -88,6 +92,7 @@ export interface ChatConversationItem {
   peerFaculty: string;
   peerInitials: string;
   peerAvatarBg: string;
+  peerReputationScore?: number;
   isOnline: boolean;
   unreadCount: number;
   lastMessage: string;
@@ -138,9 +143,80 @@ export interface StudentUserItem {
   className: string;
   phone: string;
   postCount: number;
+  reputationScore?: number;
   createdAt: string;
   status: 'ACTIVE' | 'INACTIVE' | 'BANNED';
   role: 'USER' | 'ADMIN';
+}
+
+export type InvoiceStatusType = 'CONFIRMED_BY_SELLER' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
+
+export interface InvoiceLineItem {
+  bookPostId: number;
+  bookCode: string;
+  bookTitle: string;
+  courseCode: string;
+  coverUrl: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+export interface InvoiceItem {
+  id: number;
+  invoiceCode: string;
+  conversationId: number;
+  sellerId: number;
+  sellerName: string;
+  sellerEmail: string;
+  sellerReputation: number;
+  buyerId: number;
+  buyerName: string;
+  buyerEmail: string;
+  buyerReputation: number;
+  totalAmount: number;
+  meetLocation: string;
+  meetTime: string;
+  note: string;
+  status: InvoiceStatusType;
+  reminderCount: number;
+  maxReminders: number;
+  lastReminderAt?: string | null;
+  createdAt: string;
+  completedAt?: string | null;
+  items: InvoiceLineItem[];
+}
+
+export interface CartRecordItem {
+  id: number;
+  quantity: number;
+  book: BookPostItem;
+}
+
+export interface HeroLoopBannerItem {
+  id: number;
+  title: string;
+  imageUrl: string;
+  badgeText: string;
+  sortOrder: number;
+  active: boolean;
+}
+
+export interface SystemAppearanceConfig {
+  bgColor: string;
+  surfaceColor: string;
+  primaryColor: string;
+  presetName: string;
+  domain: string;
+  heroBanners: HeroLoopBannerItem[];
+}
+
+export interface FeedbackRecordItem {
+  id: number;
+  senderName: string;
+  senderEmail: string;
+  category: string;
+  content: string;
+  createdAt: string;
 }
 
 export const INITIAL_CATEGORIES: BookCategoryItem[] = [
@@ -259,7 +335,7 @@ export const INITIAL_CATEGORIES: BookCategoryItem[] = [
 export const INITIAL_BOOKS: BookPostItem[] = [
   {
     id: 101,
-    code: 'POST_ENG2014',
+    code: 'NB-100001',
     title: 'Academic Writing for Graduate Students B2 (3rd Edition)',
     courseCode: 'ENG2014',
     bookTypeCode: 'TYPE_GIAOTRINH',
@@ -296,11 +372,12 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0987654321',
       avatarInitials: 'NA',
       avatarBg: '#dbe1ff',
+      reputationScore: 5,
     },
   },
   {
     id: 102,
-    code: 'POST_ENG1052_FREE',
+    code: 'NB-100002',
     title: 'Tặng: Tuyển tập Đề thi Ngữ pháp B2 ULIS 2024 + Sổ tay từ vựng',
     courseCode: 'ENG1052',
     bookTypeCode: 'TYPE_LUYENTHI',
@@ -335,11 +412,12 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0912345678',
       avatarInitials: 'TH',
       avatarBg: '#ffddb8',
+      reputationScore: 4,
     },
   },
   {
     id: 103,
-    code: 'POST_JPN1011',
+    code: 'NB-100003',
     title: 'Combo Minna no Nihongo Sơ cấp 1 & 2 (Bản dịch + Giải thích Ngữ pháp)',
     courseCode: 'JPN1011',
     bookTypeCode: 'TYPE_GIAOTRINH',
@@ -374,11 +452,12 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0978112233',
       avatarInitials: 'LĐ',
       avatarBg: '#6cf8bb',
+      reputationScore: 4,
     },
   },
   {
     id: 104,
-    code: 'POST_KOR2012',
+    code: 'NB-100004',
     title: 'Giáo trình Tiếng Hàn Tổng hợp dành cho người Việt Nam - Tập 3 (Trung cấp)',
     courseCode: 'KOR2012',
     bookTypeCode: 'TYPE_GIAOTRINH',
@@ -413,11 +492,12 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0965443322',
       avatarInitials: 'PL',
       avatarBg: '#e5deff',
+      reputationScore: 3,
     },
   },
   {
     id: 105,
-    code: 'POST_CHN3005',
+    code: 'NB-100005',
     title: 'Giáo trình Chuẩn HSK 4 - Tập 1 + Sách Bài Tập (Ấn bản ĐHQG)',
     courseCode: 'CHN3005',
     bookTypeCode: 'TYPE_LUYENTHI',
@@ -452,11 +532,12 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0934556677',
       avatarInitials: 'VT',
       avatarBg: '#ffdad6',
+      reputationScore: 2,
     },
   },
   {
     id: 106,
-    code: 'POST_FRA1002_FREE',
+    code: 'NB-100006',
     title: 'Tặng: Giáo trình Le Nouveau Taxi! 1 + Tập thẻ Flashcard Động từ tiếng Pháp',
     courseCode: 'FRA1002',
     bookTypeCode: 'TYPE_GIAOTRINH',
@@ -491,11 +572,12 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0944778899',
       avatarInitials: 'ĐÁ',
       avatarBg: '#d8e2ff',
+      reputationScore: 5,
     },
   },
   {
     id: 107,
-    code: 'POST_ENG3021',
+    code: 'NB-100007',
     title: 'English Phonetics and Phonology: A Practical Course (Peter Roach)',
     courseCode: 'ENG3021',
     bookTypeCode: 'TYPE_GIAOTRINH',
@@ -530,11 +612,12 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0987654321',
       avatarInitials: 'NA',
       avatarBg: '#dbe1ff',
+      reputationScore: 5,
     },
   },
   {
     id: 108,
-    code: 'POST_GER1008',
+    code: 'NB-100008',
     title: 'Studio d A1 - Deutsch als Fremdsprache (Kurs- und Übungsbuch)',
     courseCode: 'GER1008',
     bookTypeCode: 'TYPE_BAITAP',
@@ -569,6 +652,7 @@ export const INITIAL_BOOKS: BookPostItem[] = [
       phone: '0909887766',
       avatarInitials: 'HB',
       avatarBg: '#d0f8e8',
+      reputationScore: 3,
     },
   },
 ];
@@ -624,6 +708,7 @@ export const INITIAL_CONVERSATIONS: ChatConversationItem[] = [
     peerFaculty: 'QH-2022.F1 · Khoa Sư phạm Tiếng Anh',
     peerInitials: 'LH',
     peerAvatarBg: '#dbe1ff',
+    peerReputationScore: 4,
     isOnline: true,
     unreadCount: 2,
     lastMessage: 'Vâng thế chốt 14h30 chiều nay ở ghế đá sảnh A1 bạn nhé!',
@@ -702,6 +787,7 @@ export const INITIAL_CONVERSATIONS: ChatConversationItem[] = [
     peerFaculty: 'QH-2023.F1 · Khoa NN & VH Trung Quốc',
     peerInitials: 'HĐ',
     peerAvatarBg: '#e5deff',
+    peerReputationScore: 2,
     isOnline: false,
     unreadCount: 0,
     lastMessage: 'Mai sau ca học tiết 3 mình qua cổng Phạm Văn Đồng lấy sách HSK 4 nhé.',
@@ -1056,5 +1142,187 @@ export const INITIAL_USERS: StudentUserItem[] = [
     createdAt: '01/01/2026',
     status: 'ACTIVE',
     role: 'ADMIN',
+    reputationScore: 5,
+  },
+];
+
+export const INITIAL_HERO_BANNERS: HeroLoopBannerItem[] = [
+  {
+    id: 1,
+    title: 'Academic Writing B2 - Khoa Anh ULIS',
+    imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=500&q=80',
+    badgeText: 'ENG2014 · Tiết kiệm 70%',
+    sortOrder: 1,
+    active: true,
+  },
+  {
+    id: 2,
+    title: 'Minna no Nihongo Sơ cấp 1 & 2 - Khoa Nhật',
+    imageUrl: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=500&q=80',
+    badgeText: 'JPN1011 · Bản chuẩn',
+    sortOrder: 2,
+    active: true,
+  },
+  {
+    id: 3,
+    title: 'Giáo trình Chuẩn HSK 4 - Khoa Trung',
+    imageUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80',
+    badgeText: 'CHN3005 · Kèm bài tập',
+    sortOrder: 3,
+    active: true,
+  },
+  {
+    id: 4,
+    title: 'Tủ sách 0đ Cho Tặng Sinh Viên ULIS',
+    imageUrl: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=500&q=80',
+    badgeText: 'Góc 0đ · Lan tỏa tri thức',
+    sortOrder: 4,
+    active: true,
+  },
+];
+
+export const INITIAL_APPEARANCE: SystemAppearanceConfig = {
+  bgColor: '#fff4eb',
+  surfaceColor: '#f6e0b6',
+  primaryColor: '#3e4b8e',
+  presetName: 'Seashell & French Blue (Mặc định NextBook)',
+  domain: 'nextbooks.online',
+  heroBanners: INITIAL_HERO_BANNERS,
+};
+
+export const INITIAL_INVOICES: InvoiceItem[] = [
+  {
+    id: 901,
+    invoiceCode: 'INV-01001',
+    conversationId: 501,
+    sellerId: 1,
+    sellerName: 'Nguyễn Văn An',
+    sellerEmail: 'an.nv@ulis.edu.vn',
+    sellerReputation: 5,
+    buyerId: 301,
+    buyerName: 'Lê Thu Hà',
+    buyerEmail: 'ha.lt2204@ulis.edu.vn',
+    buyerReputation: 4,
+    totalAmount: 45000,
+    meetLocation: 'Sảnh A1 ULIS',
+    meetTime: '14:30 - 19/11/2026',
+    note: 'Tặng kèm đề cương ôn tập môn ENG2014',
+    status: 'CONFIRMED_BY_SELLER',
+    reminderCount: 1,
+    maxReminders: 3,
+    lastReminderAt: '19/11/2026 11:15',
+    createdAt: '19/11/2026 10:45',
+    completedAt: null,
+    items: [
+      {
+        bookPostId: 101,
+        bookCode: 'NB-100001',
+        bookTitle: 'Academic Writing for Graduate Students B2 (3rd Edition)',
+        courseCode: 'ENG2014',
+        coverUrl:
+          'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80',
+        quantity: 1,
+        unitPrice: 45000,
+      },
+    ],
+  },
+  {
+    id: 902,
+    invoiceCode: 'INV-01002',
+    conversationId: 503,
+    sellerId: 2,
+    sellerName: 'Trần Minh Hương',
+    sellerEmail: 'huong.tm@ulis.edu.vn',
+    sellerReputation: 4,
+    buyerId: 303,
+    buyerName: 'Phạm Hương Giang',
+    buyerEmail: 'giang.ph2404@ulis.edu.vn',
+    buyerReputation: 4,
+    totalAmount: 0,
+    meetLocation: 'Sân C1 ULIS',
+    meetTime: '16:00 - 18/11/2026',
+    note: 'Sách tặng 0đ cho khóa dưới',
+    status: 'COMPLETED',
+    reminderCount: 0,
+    maxReminders: 3,
+    lastReminderAt: null,
+    createdAt: '18/11/2026 15:20',
+    completedAt: '18/11/2026 16:25',
+    items: [
+      {
+        bookPostId: 102,
+        bookCode: 'NB-100002',
+        bookTitle: 'Tặng: Tuyển tập Đề thi Ngữ pháp B2 ULIS 2024 + Sổ tay từ vựng',
+        courseCode: 'ENG1052',
+        coverUrl:
+          'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80',
+        quantity: 1,
+        unitPrice: 0,
+      },
+    ],
+  },
+  {
+    id: 903,
+    invoiceCode: 'INV-01003',
+    conversationId: 504,
+    sellerId: 5,
+    sellerName: 'Vũ Quốc Tuấn',
+    sellerEmail: 'tuan.vq@ulis.edu.vn',
+    sellerReputation: 2,
+    buyerId: 304,
+    buyerName: 'Hoàng Minh Đức',
+    buyerEmail: 'duc.hm2304@ulis.edu.vn',
+    buyerReputation: 2,
+    totalAmount: 60000,
+    meetLocation: 'Cổng chính Phạm Văn Đồng',
+    meetTime: '09:30 - 17/11/2026',
+    note: 'Không liên lạc được tại điểm hẹn',
+    status: 'FAILED',
+    reminderCount: 3,
+    maxReminders: 3,
+    lastReminderAt: '17/11/2026 18:00',
+    createdAt: '17/11/2026 08:30',
+    completedAt: '17/11/2026 20:00',
+    items: [
+      {
+        bookPostId: 105,
+        bookCode: 'NB-100005',
+        bookTitle: 'Giáo trình Chuẩn HSK 4 - Tập 1 + Sách Bài Tập (Ấn bản ĐHQG)',
+        courseCode: 'CHN3005',
+        coverUrl:
+          'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=400&q=80',
+        quantity: 1,
+        unitPrice: 60000,
+      },
+    ],
+  },
+];
+
+export const INITIAL_CART: CartRecordItem[] = [
+  {
+    id: 1,
+    quantity: 1,
+    book: INITIAL_BOOKS[0],
+  },
+  {
+    id: 2,
+    quantity: 1,
+    book: INITIAL_BOOKS[6],
+  },
+  {
+    id: 3,
+    quantity: 1,
+    book: INITIAL_BOOKS[2],
+  },
+];
+
+export const INITIAL_FEEDBACKS: FeedbackRecordItem[] = [
+  {
+    id: 1,
+    senderName: 'Nguyễn Phương Linh',
+    senderEmail: 'linh.np2204@ulis.edu.vn',
+    category: 'Đề xuất tính năng',
+    content: 'Mong NextBook bổ sung thêm mục tài liệu luyện thi VSTEP B2-C1 của trường ULIS ạ!',
+    createdAt: '24/11/2026 15:20',
   },
 ];

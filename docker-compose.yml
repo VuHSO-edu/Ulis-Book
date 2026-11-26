@@ -47,7 +47,8 @@ services:
       MAIL_PORT: ${MAIL_PORT:-587}
       MAIL_USERNAME: ${MAIL_USERNAME:-}
       MAIL_PASSWORD: ${MAIL_PASSWORD:-}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost,http://localhost:9100,http://100.122.164.39:9100}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://nextbooks.online,https://www.nextbooks.online,http://nextbooks.online,http://localhost,http://localhost:9100,http://100.122.164.39:9100,*}
+      NEXTBOOK_DOMAIN: ${NEXTBOOK_DOMAIN:-nextbooks.online}
       APP_ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@ulis.edu.vn}
       APP_ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123456}
       MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}

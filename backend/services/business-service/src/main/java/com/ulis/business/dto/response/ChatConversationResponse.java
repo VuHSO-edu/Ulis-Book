@@ -48,6 +48,8 @@ public class ChatConversationResponse {
 
     private String peerAvatarBg;
 
+    private Integer peerReputationScore;
+
     private Boolean isOnline;
 
     private Long unreadCount;
@@ -89,6 +91,7 @@ public class ChatConversationResponse {
                 .peerFaculty(peer.getFaculty() == null ? "" : peer.getFaculty())
                 .peerInitials(initials(peer.getFullName()))
                 .peerAvatarBg(AVATAR_BG.get(Math.floorMod(safeHash(peer.getFullName()), AVATAR_BG.size())))
+                .peerReputationScore(peer.getReputationScore() == null ? 3 : peer.getReputationScore())
                 .isOnline(false)
                 .unreadCount(unreadCount)
                 .lastMessage(conversation.getLastMessage() == null ? "" : conversation.getLastMessage())

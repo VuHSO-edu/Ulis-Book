@@ -57,9 +57,7 @@ export default function MyPostsPage() {
   const [editingItem, setEditingItem] = useState<BookPostItem | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [photoUrls, setPhotoUrls] = useState<string[]>([
-    'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
-  ]);
+  const [photoUrls, setPhotoUrls] = useState<string[]>(['', '', '']);
   const [form] = Form.useForm<UpsertBookPostPayload>();
   const isGiveawayWatch = Form.useWatch('isGiveaway', form);
 
@@ -73,13 +71,15 @@ export default function MyPostsPage() {
       : CAMPUS_LOCATIONS;
 
   const openCreateModal = () => {
+    // TASK-13: Chặn khi đạt giới hạn 15 bài đăng / tháng / user
+    if (posts.length >= 15) {
+      message.warning(translate('v2:quota.exceededAlert'));
+      return;
+    }
     setEditingItem(null);
     setIsDirty(false);
-    setPhotoUrls([
-      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
-    ]);
+    setPhotoUrls(['', '', '']);
     form.setFieldsValue({
-      code: `POST_${Math.floor(1000 + Math.random() * 9000)}`,
       title: '',
       courseCode: '',
       bookTypeCode: bookTypes[0]?.code ?? 'TYPE_GIAOTRINH',
@@ -197,7 +197,9 @@ export default function MyPostsPage() {
           setIsDirty(false);
         },
         onError: (err) => {
-          if (err instanceof Error && err.message.startsWith('DUPLICATE_CODE:')) {
+          if (err instanceof Error && err.message.startsWith('MONTHLY_QUOTA_EXCEEDED')) {
+            message.error(translate('v2:quota.exceededAlert'));
+          } else if (err instanceof Error && err.message.startsWith('DUPLICATE_CODE:')) {
             const dup = err.message.split(':')[1] ?? cleanCode;
             message.error(translate('common:validation.duplicateCode', { code: dup }));
           } else {
@@ -421,16 +423,29 @@ export default function MyPostsPage() {
         }}
       >
         <div>
-          <h1 style={{ margin: 0, fontSize: 21, fontWeight: 800, color: '#131b2e' }}>
+          <h1 style={{ margin: 0, fontSize: 21, fontWeight: 700, color: '#131b2e' }}>
             {translate('myPosts:title')}
           </h1>
           <div style={{ fontSize: 13, color: '#596377' }}>{translate('myPosts:subtitle')}</div>
         </div>
 
-        <Button type="primary" className="ulis-primary-btn" onClick={openCreateModal}>
-          <MaterialIcon name="add_circle" size={16} style={{ marginRight: 6 }} />
-          {translate('button:createPost')}
-        </Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Tag
+            color={posts.length >= 15 ? 'red' : 'blue'}
+            style={{ fontSize: 13, padding: '5px 12px', fontWeight: 700, margin: 0 }}
+          >
+            {translate('v2:quota.badge', { used: Math.min(15, posts.length), limit: 15 })}
+          </Tag>
+          <Button
+            type="primary"
+            className="ulis-primary-btn"
+            disabled={posts.length >= 15}
+            onClick={openCreateModal}
+          >
+            <MaterialIcon name="add_circle" size={16} style={{ marginRight: 6 }} />
+            {translate('button:createPost')}
+          </Button>
+        </div>
       </div>
 
       <div
@@ -482,56 +497,53 @@ export default function MyPostsPage() {
           onValuesChange={() => setIsDirty(true)}
           onFinish={handleFinish}
         >
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <Form.Item
-              name="code"
-              label={translate('myPosts:fieldCode')}
-              rules={[
-                {
-                  required: true,
-                  message: translate('common:validation.required', {
-                    field: translate('myPosts:fieldCode'),
-                  }),
-                },
-                {
-                  pattern: COMMON_VALIDATION_PATTERN.CODE,
-                  message: translate('common:validation.codePattern', {
-                    field: translate('myPosts:fieldCode'),
-                  }),
-                },
-              ]}
-            >
-              <Input
-                disabled={!!editingItem}
-                autoFocus={!editingItem}
-                placeholder={translate('myPosts:fieldCodePlaceholder')}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="courseCode"
-              label={translate('myPosts:fieldCourseCode')}
-              rules={[
-                {
-                  required: true,
-                  message: translate('common:validation.required', {
-                    field: translate('myPosts:fieldCourseCode'),
-                  }),
-                },
-                {
-                  pattern: COMMON_VALIDATION_PATTERN.CODE,
-                  message: translate('common:validation.codePattern', {
-                    field: translate('myPosts:fieldCourseCode'),
-                  }),
-                },
-              ]}
-            >
-              <Input
-                autoFocus={!!editingItem}
-                placeholder={translate('myPosts:fieldCourseCodePlaceholder')}
-              />
-            </Form.Item>
+          {/* TASK-07: Ẩn hoàn toàn ô nhập Mã Code khi đăng bài; mã được tự sinh bằng Sequence NB-100001... */}
+          <div
+            style={{
+              marginBottom: 12,
+              padding: '8px 12px',
+              borderRadius: 4,
+              background: 'var(--ulis-wheat)',
+              fontSize: 12.5,
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <span>
+              {editingItem
+                ? `Mã bài đăng: ${editingItem.code}`
+                : translate('v2:quota.autoSeqHint')}
+            </span>
+            <Tag color="blue" style={{ margin: 0, fontWeight: 700 }}>
+              {editingItem ? editingItem.code : translate('v2:quota.autoSeqBadge')}
+            </Tag>
           </div>
+
+          <Form.Item
+            name="courseCode"
+            label={translate('myPosts:fieldCourseCode')}
+            rules={[
+              {
+                required: true,
+                message: translate('common:validation.required', {
+                  field: translate('myPosts:fieldCourseCode'),
+                }),
+              },
+              {
+                pattern: COMMON_VALIDATION_PATTERN.CODE,
+                message: translate('common:validation.codePattern', {
+                  field: translate('myPosts:fieldCourseCode'),
+                }),
+              },
+            ]}
+          >
+            <Input
+              autoFocus
+              placeholder={translate('myPosts:fieldCourseCodePlaceholder')}
+            />
+          </Form.Item>
 
           <Form.Item
             name="title"
@@ -590,13 +602,19 @@ export default function MyPostsPage() {
             </Form.Item>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <Form.Item
               name="isGiveaway"
               label={translate('myPosts:optionGiveaway')}
               valuePropName="checked"
             >
-              <Switch />
+              <Switch
+                onChange={(checked) => {
+                  if (checked) {
+                    form.setFieldValue('price', 0);
+                  }
+                }}
+              />
             </Form.Item>
 
             <Form.Item

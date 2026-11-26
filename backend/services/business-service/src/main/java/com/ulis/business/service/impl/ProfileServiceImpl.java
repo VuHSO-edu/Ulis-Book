@@ -3,6 +3,7 @@ package com.ulis.business.service.impl;
 import com.ulis.business.dto.request.UpdateProfileRequest;
 import com.ulis.business.dto.response.ProfileResponse;
 import com.ulis.business.entity.User;
+import com.ulis.business.repository.BookPostRepository;
 import com.ulis.business.repository.UserRepository;
 import com.ulis.business.service.ProfileService;
 import com.ulis.core.exception.NotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 /**
  * ProfileServiceImpl — mọi field tuỳ chọn lưu null cho chuỗi rỗng; audit
@@ -24,13 +26,17 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
 
+    private static final int MONTHLY_POST_LIMIT = 15;
+
     private final UserRepository userRepository;
+    private final BookPostRepository bookPostRepository;
     private final MessageHelper messageHelper;
 
     @Override
     @Transactional(readOnly = true)
     public ProfileResponse getProfile(Long userId) {
-        return ProfileResponse.from(findUser(userId));
+        User user = findUser(userId);
+        return ProfileResponse.from(user, countPostsInCurrentMonth(userId), MONTHLY_POST_LIMIT);
     }
 
     @Override
@@ -48,7 +54,14 @@ public class ProfileServiceImpl implements ProfileService {
         userRepository.save(user);
 
         log.info("Updated profile for user id={}", userId);
-        return ProfileResponse.from(user);
+        return ProfileResponse.from(user, countPostsInCurrentMonth(userId), MONTHLY_POST_LIMIT);
+    }
+
+    private int countPostsInCurrentMonth(Long userId) {
+        YearMonth ym = YearMonth.now();
+        LocalDateTime start = ym.atDay(1).atStartOfDay();
+        LocalDateTime end = ym.atEndOfMonth().atTime(23, 59, 59);
+        return (int) bookPostRepository.countByOwnerIdAndCreatedAtBetween(userId, start, end);
     }
 
     private User findUser(Long userId) {

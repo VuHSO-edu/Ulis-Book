@@ -13,6 +13,7 @@ import {
 import { translate } from '@ulis/locale';
 import { formatCurrencyVnd } from '@ulis/utils';
 import { useBookDetail, useMarkBookSold } from '../../services/books';
+import { useAddToCart } from '../../services/v2';
 import {
   useCommentsByPost,
   useCreateComment,
@@ -37,6 +38,7 @@ export default function BookDetailPage() {
   const updateComment = useUpdateComment();
   const deleteComment = useDeleteComment();
   const markBookSold = useMarkBookSold();
+  const addToCart = useAddToCart();
 
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
   const [commentText, setCommentText] = useState('');
@@ -455,30 +457,69 @@ export default function BookDetailPage() {
                 {book.seller.avatarInitials}
               </span>
               <div>
-                <div
-                  style={{
-                    fontFamily: 'var(--font-secondary)',
-                    fontSize: 13.5,
-                    fontWeight: 700,
-                    color: 'var(--ulis-midnight-violet)',
-                    textDecoration: 'underline',
-                  }}
-                >
-                  {book.seller.fullName}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  <span
+                    style={{
+                      fontSize: 13.5,
+                      fontWeight: 700,
+                      color: 'var(--ulis-midnight-violet)',
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    {book.seller.fullName}
+                  </span>
+                  {(() => {
+                    const rep = book.seller.reputationScore ?? 4;
+                    const isLowRep = rep < 3;
+                    return (
+                      <span
+                        style={{
+                          padding: '1px 8px',
+                          borderRadius: 4,
+                          background: isLowRep ? '#f9dadd' : '#dceee9',
+                          color: isLowRep ? '#9e2a2b' : '#2e6f5e',
+                          fontSize: 11.5,
+                          fontWeight: 700,
+                        }}
+                      >
+                        {isLowRep
+                          ? translate('v2:reputation.lowWarningBadge', { score: rep })
+                          : translate('v2:reputation.scoreDisplay', { score: rep })}
+                      </span>
+                    );
+                  })()}
                 </div>
                 <div
                   style={{
-                    fontFamily: 'var(--font-secondary)',
                     fontSize: 11.5,
                     color: 'var(--ulis-midnight-muted)',
                   }}
                 >
-                  ✓ {translate('bookDetail:sellerVerified')}
+                  ✓ {translate('bookDetail:sellerVerified')} · Mã bài: <strong>{book.code}</strong>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {book.status === 'SELLING' && book.quantity > 0 && (
+                <Button
+                  className="ulis-secondary-btn-wheat"
+                  onClick={() =>
+                    addToCart.mutate(
+                      { book, quantity: 1 },
+                      {
+                        onSuccess: () => {
+                          message.success(translate('v2:cart.addedSuccess'));
+                        },
+                      },
+                    )
+                  }
+                >
+                  <MaterialIcon name="add_shopping_cart" size={16} style={{ marginRight: 6 }} />
+                  {translate('v2:cart.addToCartBtn')}
+                </Button>
+              )}
+
               <Button
                 type="primary"
                 className="ulis-primary-btn"

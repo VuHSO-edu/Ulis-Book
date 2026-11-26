@@ -5,14 +5,18 @@ import { translate } from '@ulis/locale';
 import { SESSION_EXPIRED_EVENT } from '@ulis/utils';
 import { routes } from './routes';
 import { useAuth } from './store/useAuth';
+import { applyThemeCssVariables } from './services/v2';
+import { localDb } from './services/local-db';
 
 /**
- * Root app — màn hình loading khởi tạo trước khi vào ứng dụng + lắng nghe sự kiện phiên hết hạn.
+ * Root app — màn hình loading khởi tạo trước khi vào ứng dụng + lắng nghe sự kiện phiên hết hạn
+ * + đồng bộ bảng màu hệ thống do Admin cấu hình (TASK-04).
  */
 export default function App() {
   const [booting, setBooting] = useState(true);
 
   useEffect(() => {
+    applyThemeCssVariables(localDb.getAppearance());
     const onSessionExpired = () => useAuth.getState().logout();
     window.addEventListener(SESSION_EXPIRED_EVENT, onSessionExpired);
     const timer = setTimeout(() => setBooting(false), 650);

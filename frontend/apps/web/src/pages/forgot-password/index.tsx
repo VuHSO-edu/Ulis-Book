@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { App, Button, Form, Input, MaterialIcon } from '@ulis/components';
 import { COMMON_VALIDATION_PATTERN, translate } from '@ulis/locale';
 import { extractErrorMessage, forgotPassword } from '../../services/auth';
+import NextBookLogo from '../../components/NextBookLogo';
 
 interface ForgotPasswordFormValues {
   email: string;
@@ -75,12 +76,15 @@ export default function ForgotPasswordPage() {
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: 22 }}>
+            <div style={{ marginBottom: 14, display: 'flex', justifyContent: 'center' }}>
+              <NextBookLogo showDomainBadge size={36} />
+            </div>
             <h1
               style={{
-                fontFamily: "'Merriweather', Georgia, serif",
+                fontFamily: 'var(--font-primary)',
                 fontSize: 22,
                 fontWeight: 700,
-                color: '#0f172a',
+                color: 'var(--ulis-midnight-violet)',
                 margin: '0 0 8px',
               }}
             >

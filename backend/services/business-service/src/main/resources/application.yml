@@ -43,8 +43,9 @@ spring:
             enable: true
 
 app:
+  domain: ${NEXTBOOK_DOMAIN:nextbooks.online}
   cors:
-    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:*,http://127.0.0.1:*}
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://nextbooks.online,https://*.nextbooks.online,http://nextbooks.online,http://localhost:*,http://127.0.0.1:*,*}
   auth:
     otp-length: 6
     otp-expiry-minutes: 5

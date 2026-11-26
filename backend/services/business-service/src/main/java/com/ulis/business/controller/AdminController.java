@@ -4,6 +4,7 @@ import com.ulis.business.dto.response.BookPostResponse;
 import com.ulis.business.entity.BookCategory;
 import com.ulis.business.entity.BookPost;
 import com.ulis.business.entity.Report;
+import com.ulis.business.entity.SystemSetting;
 import com.ulis.business.entity.User;
 import com.ulis.business.enums.BookCategoryAxis;
 import com.ulis.business.enums.BookCategoryStatus;
@@ -15,7 +16,10 @@ import com.ulis.business.enums.UserStatus;
 import com.ulis.business.repository.BookCategoryRepository;
 import com.ulis.business.repository.BookPostRepository;
 import com.ulis.business.repository.CommentRepository;
+import com.ulis.business.repository.FeedbackRepository;
+import com.ulis.business.repository.InvoiceRepository;
 import com.ulis.business.repository.ReportRepository;
+import com.ulis.business.repository.SystemSettingRepository;
 import com.ulis.business.repository.UserRepository;
 import com.ulis.business.security.SecurityUtils;
 import com.ulis.business.service.ReportService;
@@ -60,6 +64,10 @@ public class AdminController {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final BookCategoryRepository bookCategoryRepository;
+    private final InvoiceRepository invoiceRepository;
+    private final InvoiceController invoiceController;
+    private final SystemSettingRepository systemSettingRepository;
+    private final FeedbackRepository feedbackRepository;
     private final MessageHelper messageHelper;
 
     private void requireAdmin() {
@@ -267,5 +275,50 @@ public class AdminController {
         requireAdmin();
         bookCategoryRepository.deleteById(id);
         return ResponseBuilder.ok(Map.of("id", id));
+    }
+
+    // ---------------- Transactions History (TASK-03) ----------------
+
+    @PostMapping("/transactions/search")
+    @Transactional(readOnly = true)
+    @Operation(summary = "Lịch sử giao dịch mua bán sách của tất cả user cho Admin (TASK-03)")
+    public ResponseEntity<Object> searchTransactions(@RequestBody(required = false) SearchPageRequest req) {
+        requireAdmin();
+        var list = invoiceRepository.findAllByOrderByCreatedAtDesc().stream()
+                .map(invoiceController::toDto)
+                .toList();
+        return ResponseBuilder.ok(list);
+    }
+
+    // ---------------- System Appearance & Hero Banner Loop (TASK-04, TASK-05) ----------------
+
+    @PostMapping("/system-settings/save")
+    @Transactional
+    @Operation(summary = "Lưu cấu hình màu nền hệ thống (TASK-04) & Loop Ảnh Hero Banner (TASK-05)")
+    public ResponseEntity<Object> saveSystemSettings(@RequestBody Map<String, String> settings) {
+        requireAdmin();
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        if (settings != null) {
+            settings.forEach((key, value) -> {
+                if (key != null && !key.isBlank()) {
+                    SystemSetting entity = systemSettingRepository.findById(key)
+                            .orElse(SystemSetting.builder().settingKey(key).build());
+                    entity.setSettingValue(value == null ? "" : value);
+                    entity.setUpdatedAt(now);
+                    systemSettingRepository.save(entity);
+                }
+            });
+        }
+        return ResponseBuilder.ok(settings, messageHelper.getMessage("settings.updated"));
+    }
+
+    // ---------------- Feedbacks (TASK-09) ----------------
+
+    @GetMapping("/feedbacks")
+    @Transactional(readOnly = true)
+    @Operation(summary = "Danh sách yêu cầu / góp ý từ Footer")
+    public ResponseEntity<Object> listFeedbacks() {
+        requireAdmin();
+        return ResponseBuilder.ok(feedbackRepository.findAllByOrderByCreatedAtDesc());
     }
 }

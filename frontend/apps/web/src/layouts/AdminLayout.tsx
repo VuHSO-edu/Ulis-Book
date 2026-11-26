@@ -3,7 +3,9 @@ import { Avatar, Breadcrumb, MaterialIcon } from '@ulis/components';
 import { translate } from '@ulis/locale';
 import { useAuth } from '../store/useAuth';
 import { useAdminReports } from '../services/admin';
+import { useSystemAppearance } from '../services/v2';
 import ReportModal from '../components/ReportModal';
+import NextBookLogo from '../components/NextBookLogo';
 
 export default function AdminLayout() {
   const location = useLocation();
@@ -11,6 +13,7 @@ export default function AdminLayout() {
   const user = useAuth((s) => s.user);
   const logout = useAuth((s) => s.logout);
   const { data: reports = [] } = useAdminReports();
+  useSystemAppearance();
 
   const pendingReportsCount = reports.filter((r) => r.status === 'PENDING').length;
 
@@ -19,6 +22,10 @@ export default function AdminLayout() {
     if (location.pathname.includes('/admin/users')) return translate('admin:navUsers');
     if (location.pathname.includes('/admin/book-categories'))
       return translate('admin:navCategories');
+    if (location.pathname.includes('/admin/transactions'))
+      return translate('admin:transactions.navTitle');
+    if (location.pathname.includes('/admin/appearance'))
+      return translate('admin:appearance.navTitle');
     return translate('admin:navReports');
   };
 
@@ -35,44 +42,7 @@ export default function AdminLayout() {
             gap: 12,
           }}
         >
-          <span
-            style={{
-              width: 34,
-              height: 34,
-              borderRadius: 8,
-              background: '#2563eb',
-              color: '#ffffff',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <MaterialIcon name="admin_panel_settings" size={19} />
-          </span>
-          <div>
-            <div
-              style={{
-                fontFamily: "'Merriweather', Georgia, serif",
-                fontSize: 15,
-                fontWeight: 700,
-                color: '#0f172a',
-                lineHeight: 1.2,
-              }}
-            >
-              {translate('common:appName')}
-            </div>
-            <div
-              style={{
-                fontSize: 10.5,
-                fontWeight: 600,
-                color: '#64748b',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-              }}
-            >
-              {translate('admin:consoleSubtitle')}
-            </div>
-          </div>
+          <NextBookLogo showDomainBadge size={34} />
         </div>
 
         <div style={{ flex: 1, padding: '18px 14px', overflowY: 'auto' }}>
@@ -142,6 +112,26 @@ export default function AdminLayout() {
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
               <MaterialIcon name="account_tree" size={18} />
               <span>{translate('admin:navCategories')}</span>
+            </span>
+          </Link>
+
+          <Link
+            to="/admin/transactions"
+            className={`ulis-admin-nav-item ${location.pathname.includes('/admin/transactions') ? 'active' : ''}`}
+          >
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+              <MaterialIcon name="receipt_long" size={18} />
+              <span>{translate('admin:transactions.navTitle')}</span>
+            </span>
+          </Link>
+
+          <Link
+            to="/admin/appearance"
+            className={`ulis-admin-nav-item ${location.pathname.includes('/admin/appearance') ? 'active' : ''}`}
+          >
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+              <MaterialIcon name="palette" size={18} />
+              <span>{translate('admin:appearance.navTitle')}</span>
             </span>
           </Link>
 

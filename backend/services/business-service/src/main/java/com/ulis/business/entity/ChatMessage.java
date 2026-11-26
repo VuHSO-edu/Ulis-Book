@@ -53,6 +53,15 @@ public class ChatMessage implements Serializable {
     @Column(name = "IS_READ", nullable = false)
     private Boolean isRead;
 
+    @Column(name = "MESSAGE_TYPE", length = 30)
+    private String messageType;
+
+    @Column(name = "INVOICE_ID")
+    private Long invoiceId;
+
+    @Column(name = "INVOICE_PAYLOAD", length = 4000)
+    private String invoicePayload;
+
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 

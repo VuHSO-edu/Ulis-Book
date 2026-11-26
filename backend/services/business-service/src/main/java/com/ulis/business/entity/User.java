@@ -75,6 +75,11 @@ public class User implements Serializable {
     @Column(name = "AVATAR_URL", length = 500)
     private String avatarUrl;
 
+    /** Điểm uy tín V2.0 (TASK-02): mặc định 3, tối thiểu 1, tối đa 5. */
+    @Builder.Default
+    @Column(name = "REPUTATION_SCORE")
+    private Integer reputationScore = 3;
+
     /** Hash của OTP hiện tại (BCrypt) — không lưu mã thô. */
     @Column(name = "OTP_HASH", length = 100)
     private String otpHash;

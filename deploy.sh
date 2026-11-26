@@ -50,7 +50,8 @@ MAIL_PORT=587
 MAIL_USERNAME=nexteraofbooks@gmail.com
 MAIL_PASSWORD=plcg ozzc nerr hwez
 
-CORS_ALLOWED_ORIGINS=http://localhost:*,http://127.0.0.1:*,http://${SERVER_IP},http://${SERVER_IP}:*,https://${SERVER_IP}
+CORS_ALLOWED_ORIGINS=https://nextbooks.online,https://www.nextbooks.online,http://nextbooks.online,http://localhost:*,http://127.0.0.1:*,http://${SERVER_IP},http://${SERVER_IP}:*,https://${SERVER_IP},*
+NEXTBOOK_DOMAIN=nextbooks.online
 ADMIN_EMAIL=admin@ulis.edu.vn
 ADMIN_PASSWORD=Admin@123456
 EOF

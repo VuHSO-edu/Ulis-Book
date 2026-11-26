@@ -39,6 +39,12 @@ public class ChatMessageResponse {
 
     private Boolean isAppointment;
 
+    private String messageType;
+
+    private Long invoiceId;
+
+    private String invoicePayload;
+
     public static ChatMessageResponse from(ChatMessage message) {
         return ChatMessageResponse.builder()
                 .id(message.getId())
@@ -49,6 +55,9 @@ public class ChatMessageResponse {
                 .createdAt(message.getCreatedAt() == null ? "" : message.getCreatedAt().format(FORMAT))
                 .isRead(Boolean.TRUE.equals(message.getIsRead()))
                 .isAppointment(false)
+                .messageType(message.getMessageType() == null ? "TEXT" : message.getMessageType())
+                .invoiceId(message.getInvoiceId())
+                .invoicePayload(message.getInvoicePayload())
                 .build();
     }
 }

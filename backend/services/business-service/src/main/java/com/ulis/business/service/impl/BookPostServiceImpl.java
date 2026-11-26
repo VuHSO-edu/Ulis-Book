@@ -35,9 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * BookPostServiceImpl (ticket 04 + 05):
@@ -56,6 +57,8 @@ import java.util.Random;
 public class BookPostServiceImpl implements BookPostService {
 
     private static final int MAX_IMAGES = 3;
+    private static final int MAX_MONTHLY_POSTS = 15;
+    private static final AtomicLong CODE_SEQ = new AtomicLong(100000L);
 
     private final BookPostRepository postRepository;
     private final UserRepository userRepository;
@@ -65,6 +68,7 @@ public class BookPostServiceImpl implements BookPostService {
     @Override
     public BookPostResponse create(Long userId, BookCreateRequest request) {
         User owner = findOwner(userId);
+        enforceMonthlyQuota(userId);
         BookPost post = new BookPost();
         post.setOwner(owner);
         applyRequest(post, request, null);
@@ -231,15 +235,44 @@ public class BookPostServiceImpl implements BookPostService {
         return generateUniqueCode();
     }
 
+    /** Kiểm tra giới hạn tối đa 15 bài đăng / tháng / user (TASK-13). */
+    private void enforceMonthlyQuota(Long userId) {
+        YearMonth ym = YearMonth.now();
+        LocalDateTime start = ym.atDay(1).atStartOfDay();
+        LocalDateTime end = ym.atEndOfMonth().atTime(23, 59, 59);
+        long count = postRepository.countByOwnerIdAndCreatedAtBetween(userId, start, end);
+        if (count >= MAX_MONTHLY_POSTS) {
+            throw new BadRequestException(
+                    messageHelper.getMessage("bookPost.monthlyQuota.exceeded", MAX_MONTHLY_POSTS));
+        }
+    }
+
+    /** Tự sinh mã tuần tự theo Sequence NB-100001, NB-100002... (TASK-07). */
     private String generateUniqueCode() {
-        Random random = new Random();
-        for (int i = 0; i < 20; i++) {
-            String candidate = String.format("POST_%04d", random.nextInt(9000) + 1000);
+        List<String> latest = postRepository.findLatestNextBookCodes();
+        long maxNum = 100000L;
+        for (String existing : latest) {
+            if (existing != null && existing.toUpperCase().startsWith("NB-")) {
+                try {
+                    long parsed = Long.parseLong(existing.substring(3).trim());
+                    if (parsed > maxNum) {
+                        maxNum = parsed;
+                    }
+                } catch (NumberFormatException ignored) {
+                    // ignore non-numeric suffix
+                }
+            }
+        }
+        long currentSeq = Math.max(maxNum, CODE_SEQ.get());
+        for (int i = 0; i < 50; i++) {
+            long nextVal = ++currentSeq;
+            CODE_SEQ.set(nextVal);
+            String candidate = String.format("NB-%06d", nextVal);
             if (!postRepository.existsByCodeIgnoreCase(candidate)) {
                 return candidate;
             }
         }
-        return String.format("POST_%04d", System.currentTimeMillis() % 10000);
+        return String.format("NB-%06d", CODE_SEQ.incrementAndGet());
     }
 
     private List<String> resolveImages(List<String> images, String coverUrl) {

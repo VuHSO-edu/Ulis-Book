@@ -14,11 +14,14 @@ const BookDetailPage = lazy(() => import('../pages/book-detail'));
 const MyPostsPage = lazy(() => import('../pages/my-posts'));
 const ChatPage = lazy(() => import('../pages/chat'));
 const ProfilePage = lazy(() => import('../pages/profile'));
+const CartPage = lazy(() => import('../pages/cart'));
 
 const AdminReportsPage = lazy(() => import('../pages/admin/reports'));
 const AdminBookPostsPage = lazy(() => import('../pages/admin/book-posts'));
 const AdminUsersPage = lazy(() => import('../pages/admin/users'));
 const AdminBookCategoriesPage = lazy(() => import('../pages/admin/book-categories'));
+const AdminTransactionsPage = lazy(() => import('../pages/admin/transactions'));
+const AdminAppearancePage = lazy(() => import('../pages/admin/appearance'));
 
 const withSuspense = (node: React.ReactNode) => (
   <Suspense fallback={<Spin size="large" className="page-loading" />}>{node}</Suspense>
@@ -39,6 +42,7 @@ export const routes = [
   <Route key="student-app" path="/" element={<AppLayout />}>
     <Route index element={withSuspense(<HomePage />)} />
     <Route path="books/:id" element={withSuspense(<BookDetailPage />)} />
+    <Route path="cart" element={withSuspense(<CartPage />)} />
     <Route
       path="my-posts"
       element={
@@ -79,6 +83,8 @@ export const routes = [
     <Route path="book-posts" element={withSuspense(<AdminBookPostsPage />)} />
     <Route path="users" element={withSuspense(<AdminUsersPage />)} />
     <Route path="book-categories" element={withSuspense(<AdminBookCategoriesPage />)} />
+    <Route path="transactions" element={withSuspense(<AdminTransactionsPage />)} />
+    <Route path="appearance" element={withSuspense(<AdminAppearancePage />)} />
   </Route>,
 
   <Route key="fallback" path="*" element={<Navigate to="/" replace />} />

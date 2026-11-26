@@ -33,7 +33,7 @@ createRoot(document.getElementById('root')!).render(
             colorBgBase: '#FFF4EB',
             borderRadius: 4,
             fontFamily:
-              "'Adobe Caslon Pro', 'Adobe Caslon', 'Libre Caslon Text', 'EB Garamond', Georgia, serif",
+              "'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif",
           },
         }}
       >

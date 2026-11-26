@@ -31,7 +31,7 @@ export interface BookSearchFilter {
 
 export interface UpsertBookPostPayload {
   id?: number;
-  code: string;
+  code?: string;
   title: string;
   courseCode: string;
   bookTypeCode: string;
@@ -190,11 +190,16 @@ export const useSaveBookPost = () => {
 
       const books = localDb.getBooks();
       const categories = localDb.getCategories();
-      const cleanCode = payload.code.trim().toUpperCase();
 
-      if (!payload.id && books.some((b) => b.code.toUpperCase() === cleanCode)) {
-        throw new Error(`DUPLICATE_CODE:${cleanCode}`);
+      // TASK-13: Giới hạn tối đa 15 bài đăng / tháng / user
+      if (!payload.id && books.length >= 15) {
+        throw new Error('MONTHLY_QUOTA_EXCEEDED:15');
       }
+
+      // TASK-07: Tự sinh mã theo Sequence NB-100001, NB-100002...
+      const cleanCode = payload.id
+        ? (payload.code?.trim().toUpperCase() || localDb.nextBookSequenceCode())
+        : localDb.nextBookSequenceCode();
 
       const facultyCat = categories.find((c) => c.code === payload.facultyCode);
       const typeCat = categories.find((c) => c.code === payload.bookTypeCode);
@@ -269,6 +274,7 @@ export const useSaveBookPost = () => {
           phone: '0987654321',
           avatarInitials: 'NA',
           avatarBg: '#dbe1ff',
+          reputationScore: 5,
         },
       };
       localDb.saveBooks([newPost, ...books]);

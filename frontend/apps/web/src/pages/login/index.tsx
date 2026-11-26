@@ -4,6 +4,7 @@ import { App, Button, Form, Input, MaterialIcon } from '@ulis/components';
 import { COMMON_VALIDATION_PATTERN, translate } from '@ulis/locale';
 import { useAuth } from '../../store/useAuth';
 import { extractErrorMessage, login, register } from '../../services/auth';
+import NextBookLogo from '../../components/NextBookLogo';
 
 interface LoginFormValues {
   username: string;
@@ -111,12 +112,7 @@ export function AuthSplitPage({ defaultTab = 'login' }: { defaultTab?: 'login' |
             gap: 18,
           }}
         >
-          <Link to="/" className="ulis-brand" style={{ textDecoration: 'none' }}>
-            <span className="brand-icon">
-              <MaterialIcon name="auto_stories" size={20} />
-            </span>
-            <span className="brand-title">{translate('common:appName')}</span>
-          </Link>
+          <NextBookLogo showDomainBadge size={40} />
 
           <h2
             style={{

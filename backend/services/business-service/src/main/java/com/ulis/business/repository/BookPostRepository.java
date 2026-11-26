@@ -31,6 +31,13 @@ public interface BookPostRepository
 
     long countByBookTypeCodeAndStatusIn(String bookTypeCode, Collection<BookPostStatus> statuses);
 
+    /** Đếm số bài đăng của user trong khoảng thời gian (TASK-13: tối đa 15 bài/tháng). */
+    long countByOwnerIdAndCreatedAtBetween(Long ownerId, LocalDateTime start, LocalDateTime end);
+
+    /** Tìm mã NB-xxxxxx lớn nhất để sinh sequence tuần tự (TASK-07). */
+    @Query("select p.code from BookPost p where upper(p.code) like 'NB-%' order by p.id desc")
+    List<String> findLatestNextBookCodes();
+
     /**
      * Job hết hạn (ticket 05): lật mọi bài {@code from} có EXPIRED_AT quá hạn
      * sang {@code to} trong một câu UPDATE — không cần load từng entity.
