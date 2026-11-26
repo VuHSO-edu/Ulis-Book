@@ -196,153 +196,120 @@ export default function HomePage() {
 
   return (
     <div className="ulis-home-container">
-      {/* 1. BẢNG QUẢNG CÁO VỀ WEB (HERO PROMOTIONAL BANNER — BOOKNET STYLE) */}
-      <section className="ulis-promo-banner">
-        <div className="promo-content">
-          <h1 className="promo-headline">{translate('home:promoHeadline')}</h1>
-
-          <div className="promo-cloud-badge">
-            <div className="cloud-sub">{translate('home:promoBadgeTop')}</div>
-            <div className="cloud-highlight">{translate('home:promoBadgeMain')}</div>
-            <button
-              type="button"
-              className="cloud-explore-btn"
-              onClick={() => bookGridRef.current?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <span>{translate('button:exploreArrow')}</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="promo-visual">
-          {activeHeroBanners.length > 0 ? (
-            <div
-              style={{
-                width: 340,
-                background: '#ffffff',
-                borderRadius: 6,
-                padding: 12,
-                position: 'relative',
-              }}
-            >
-              {(() => {
-                const currentSlide =
-                  activeHeroBanners[activeSlideIndex % activeHeroBanners.length] ??
-                  activeHeroBanners[0];
-                return (
-                  <>
-                    <div
-                      style={{
-                        position: 'relative',
-                        width: '100%',
-                        height: 205,
-                        borderRadius: 4,
-                        overflow: 'hidden',
-                        background: 'var(--ulis-wheat)',
-                      }}
-                    >
-                      <img
-                        src={currentSlide.imageUrl}
-                        alt={currentSlide.title}
+      {/* 1. BẢNG QUẢNG CÁO VỀ WEB (FULL-WIDTH LOOP IMAGE BANNER) */}
+      <section
+        className="ulis-promo-banner"
+        style={{
+          display: 'block',
+          padding: 0,
+          borderRadius: 6,
+          overflow: 'hidden',
+          position: 'relative',
+          height: 300,
+          background: 'var(--ulis-wheat)',
+        }}
+      >
+        {activeHeroBanners.length > 0 ? (
+          (() => {
+            const currentSlide =
+              activeHeroBanners[activeSlideIndex % activeHeroBanners.length] ??
+              activeHeroBanners[0];
+            return (
+              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                <img
+                  src={currentSlide.imageUrl}
+                  alt={currentSlide.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background:
+                      'linear-gradient(to top, rgba(61, 21, 52, 0.55) 0%, rgba(61, 21, 52, 0.08) 55%, transparent 100%)',
+                    pointerEvents: 'none',
+                  }}
+                />
+                {currentSlide.badgeText && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: 16,
+                      left: 18,
+                      padding: '5px 12px',
+                      borderRadius: 4,
+                      background: 'var(--ulis-french-blue)',
+                      color: '#ffffff',
+                      fontSize: 12,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {currentSlide.badgeText}
+                  </span>
+                )}
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: 20,
+                    right: 20,
+                    bottom: 16,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 12,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 700,
+                      color: '#ffffff',
+                      textShadow: '0 1px 4px rgba(0, 0, 0, 0.35)',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {currentSlide.title}
+                  </div>
+                  <div style={{ display: 'inline-flex', gap: 6, flexShrink: 0 }}>
+                    {activeHeroBanners.map((b, idx) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        aria-label={`Slide ${idx + 1}`}
+                        onClick={() => setActiveSlideIndex(idx)}
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          display: 'block',
+                          width: idx === activeSlideIndex % activeHeroBanners.length ? 22 : 8,
+                          height: 8,
+                          borderRadius: 999,
+                          border: 'none',
+                          padding: 0,
+                          cursor: 'pointer',
+                          background:
+                            idx === activeSlideIndex % activeHeroBanners.length
+                              ? '#ffffff'
+                              : 'rgba(255, 255, 255, 0.5)',
                         }}
                       />
-                      {currentSlide.badgeText && (
-                        <span
-                          style={{
-                            position: 'absolute',
-                            top: 8,
-                            left: 8,
-                            padding: '3px 9px',
-                            borderRadius: 4,
-                            background: 'var(--ulis-french-blue)',
-                            color: '#ffffff',
-                            fontSize: 11,
-                            fontWeight: 700,
-                          }}
-                        >
-                          {currentSlide.badgeText}
-                        </span>
-                      )}
-                    </div>
-
-                    <div
-                      style={{
-                        marginTop: 8,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 8,
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: 12.5,
-                          fontWeight: 700,
-                          color: 'var(--ulis-midnight-violet)',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {currentSlide.title}
-                      </div>
-                      <div style={{ display: 'inline-flex', gap: 5, flexShrink: 0 }}>
-                        {activeHeroBanners.map((b, idx) => (
-                          <button
-                            key={b.id}
-                            type="button"
-                            aria-label={`Slide ${idx + 1}`}
-                            onClick={() => setActiveSlideIndex(idx)}
-                            style={{
-                              width: idx === activeSlideIndex % activeHeroBanners.length ? 16 : 7,
-                              height: 7,
-                              borderRadius: 999,
-                              border: 'none',
-                              padding: 0,
-                              cursor: 'pointer',
-                              background:
-                                idx === activeSlideIndex % activeHeroBanners.length
-                                  ? 'var(--ulis-french-blue)'
-                                  : 'var(--ulis-powder-blue)',
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </>
-                );
-              })()}
-            </div>
-          ) : (
-            <div className="promo-books-cluster">
-              <img
-                className="cluster-book b1"
-                src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80"
-                alt="NextBook 1"
-              />
-              <img
-                className="cluster-book b2"
-                src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=400&q=80"
-                alt="NextBook 2"
-              />
-              <img
-                className="cluster-book b3"
-                src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80"
-                alt="NextBook 3"
-              />
-              <img
-                className="cluster-book b4"
-                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80"
-                alt="NextBook 4"
-              />
-            </div>
-          )}
-        </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()
+        ) : (
+          <img
+            src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1400&q=80"
+            alt="NextBook Banner"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        )}
       </section>
 
       {/* 2. THANH TÌM KIẾM (TEXT PHỤ FUTURA) + 2 DROPDOWN: KHOA, NGÀNH & THỂ LOẠI SÁCH */}
