@@ -25,13 +25,13 @@ import { useAuth } from '../../store/useAuth';
 import type { BookPostItem } from '../../services/mock-data';
 
 const CAMPUS_LOCATIONS = [
-  'Toà A1 ULIS',
+  'Sảnh A1 ULIS',
   'Sân C1',
   'Thư viện ULIS',
   'Toà B2',
-  'Cổng chính Phạm Văn Đồng',
   'Toà Sunwah',
   'Toà Pháp A3',
+  'Cổng chính Phạm Văn Đồng',
 ];
 
 export default function HomePage() {

@@ -31,6 +31,8 @@ public interface BookPostRepository
 
     long countByBookTypeCodeAndStatusIn(String bookTypeCode, Collection<BookPostStatus> statuses);
 
+    long countByCampusLocationIgnoreCaseAndStatusIn(String campusLocation, Collection<BookPostStatus> statuses);
+
     /** Đếm số bài đăng của user trong khoảng thời gian (TASK-13: tối đa 15 bài/tháng). */
     long countByOwnerIdAndCreatedAtBetween(Long ownerId, LocalDateTime start, LocalDateTime end);
 

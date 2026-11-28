@@ -55,11 +55,37 @@ export interface LoginResponseData {
   user?: UserSummary;
 }
 
-/** Trích message từ envelope lỗi của backend (BaseResponse.message). */
+/** Trích message lỗi rõ ràng từ phản hồi của backend hoặc lỗi kết nối mạng. */
 export const extractErrorMessage = (e: unknown): string | null => {
-  const err = e as { response?: { data?: { message?: unknown } } };
-  const message = err?.response?.data?.message;
-  return typeof message === 'string' && message.length > 0 ? message : null;
+  const err = e as {
+    response?: {
+      status?: number;
+      data?: { message?: unknown; errors?: Record<string, string> | string[] };
+    };
+    code?: string;
+    message?: string;
+  };
+  const data = err?.response?.data;
+  if (data?.errors && typeof data.errors === 'object') {
+    const details = Array.isArray(data.errors)
+      ? data.errors.filter((x): x is string => typeof x === 'string' && x.length > 0)
+      : Object.values(data.errors).filter((x): x is string => typeof x === 'string' && x.length > 0);
+    if (details.length > 0) {
+      return details.join(' ');
+    }
+  }
+  if (typeof data?.message === 'string' && data.message.trim().length > 0) {
+    return data.message.trim();
+  }
+  const status = err?.response?.status;
+  if (status === 401) return 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+  if (status === 403) return 'Bạn không có quyền thực hiện thao tác này.';
+  if (status === 404) return 'Không tìm thấy dữ liệu được yêu cầu.';
+  if (status && status >= 500) return 'Hệ thống đang gặp sự cố tạm thời. Vui lòng thử lại sau ít phút.';
+  if (!err?.response && (err?.code === 'ERR_NETWORK' || err?.code === 'ECONNABORTED')) {
+    return 'Không thể kết nối tới máy chủ. Vui lòng kiểm tra kết nối mạng và thử lại.';
+  }
+  return null;
 };
 
 export const register = (data: RegisterPayload) =>

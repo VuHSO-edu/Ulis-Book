@@ -38,9 +38,11 @@ public class BookCategoryServiceImpl implements BookCategoryService {
     @Transactional(readOnly = true)
     public List<CategoryItem> listActive() {
         List<BookCategory> active = categoryRepository.findByStatusOrderBySortOrderAsc(BookCategoryStatus.ACTIVE);
-        // Nhóm ổn định: FACULTY trước BOOK_TYPE (khớp thứ tự seed FE), trong trục theo sortOrder.
+        // Nhóm ổn định: FACULTY -> BOOK_TYPE -> CAMPUS_LOCATION, trong trục theo sortOrder.
         active.sort(Comparator
-                .comparingInt((BookCategory c) -> c.getParentAxis() == BookCategoryAxis.FACULTY ? 0 : 1)
+                .comparingInt((BookCategory c) -> c.getParentAxis() == BookCategoryAxis.FACULTY
+                        ? 0
+                        : c.getParentAxis() == BookCategoryAxis.BOOK_TYPE ? 1 : 2)
                 .thenComparing(BookCategory::getSortOrder));
         return active.stream()
                 .map(c -> CategoryItem.from(c, countVisibleFor(c)))
@@ -57,8 +59,12 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 
     private long countVisibleFor(BookCategory category) {
         List<BookPostStatus> statuses = Arrays.asList(BookPostConstants.PUBLIC_STATUSES);
-        return category.getParentAxis() == BookCategoryAxis.FACULTY
-                ? postRepository.countByFacultyCodeAndStatusIn(category.getCode(), statuses)
-                : postRepository.countByBookTypeCodeAndStatusIn(category.getCode(), statuses);
+        if (category.getParentAxis() == BookCategoryAxis.FACULTY) {
+            return postRepository.countByFacultyCodeAndStatusIn(category.getCode(), statuses);
+        }
+        if (category.getParentAxis() == BookCategoryAxis.BOOK_TYPE) {
+            return postRepository.countByBookTypeCodeAndStatusIn(category.getCode(), statuses);
+        }
+        return postRepository.countByCampusLocationIgnoreCaseAndStatusIn(category.getName(), statuses);
     }
 }
