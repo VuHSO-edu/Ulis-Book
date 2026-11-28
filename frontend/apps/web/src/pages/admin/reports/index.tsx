@@ -67,7 +67,10 @@ export default function AdminReportsPage() {
 
   const handleResolveAction = (record: ReportItem, status: ReportStatusType) => {
     showBhttConfirm({
-      content: translate('common:deleteConfirmMessage'),
+      content:
+        status === 'RESOLVED'
+          ? 'Bạn có chắc chắn muốn xử lý & khoá/gỡ đối tượng vi phạm này không?'
+          : 'Bạn có chắc chắn muốn bỏ qua (từ chối) báo cáo vi phạm này không?',
       onConfirm: () => {
         resolveReport.mutate(
           { id: record.id, status },
@@ -79,6 +82,9 @@ export default function AdminReportsPage() {
                   ? translate('admin:reports.resolvedSuccess')
                   : translate('admin:reports.dismissedSuccess'),
               );
+            },
+            onError: () => {
+              message.error(translate('common:unknownError'));
             },
           },
         );
@@ -210,6 +216,10 @@ export default function AdminReportsPage() {
                 e.stopPropagation();
                 if (record.sourceType === 'POST') {
                   navigate(`/books/${record.targetId}`);
+                } else if (record.sourceType === 'USER') {
+                  navigate('/admin/users');
+                } else {
+                  message.info(`Đối tượng #${record.targetId} (${record.sourceType})`);
                 }
               }}
             >

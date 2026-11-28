@@ -377,18 +377,6 @@ export default function AppLayout() {
             >
               {translate('v2:feedback.sectionSubtitle')}
             </p>
-            <div className="ulis-feedback-meta">
-              <span className="ulis-feedback-meta-item">
-                <MaterialIcon name="language" size={15} />
-                <span>
-                  Domain: <strong>{translate('v2:brandDomain')}</strong>
-                </span>
-              </span>
-              <span className="ulis-feedback-meta-item">
-                <MaterialIcon name="mail_outline" size={15} />
-                <span>nexteraofbooks@gmail.com</span>
-              </span>
-            </div>
           </div>
 
           <form onSubmit={handleFeedbackSubmit} className="ulis-feedback-form">

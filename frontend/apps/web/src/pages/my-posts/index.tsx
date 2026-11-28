@@ -497,30 +497,6 @@ export default function MyPostsPage() {
           onValuesChange={() => setIsDirty(true)}
           onFinish={handleFinish}
         >
-          {/* TASK-07: Ẩn hoàn toàn ô nhập Mã Code khi đăng bài; mã được tự sinh bằng Sequence NB-100001... */}
-          <div
-            style={{
-              marginBottom: 12,
-              padding: '8px 12px',
-              borderRadius: 4,
-              background: 'var(--ulis-wheat)',
-              fontSize: 12.5,
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <span>
-              {editingItem
-                ? `Mã bài đăng: ${editingItem.code}`
-                : translate('v2:quota.autoSeqHint')}
-            </span>
-            <Tag color="blue" style={{ margin: 0, fontWeight: 700 }}>
-              {editingItem ? editingItem.code : translate('v2:quota.autoSeqBadge')}
-            </Tag>
-          </div>
-
           <Form.Item
             name="courseCode"
             label={translate('myPosts:fieldCourseCode')}
