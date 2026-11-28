@@ -482,16 +482,6 @@ export default function HomePage() {
             >
               {translate('home:booksForYouTitle')}
             </h2>
-            <div
-              style={{
-                fontFamily: 'var(--font-secondary)',
-                fontSize: 13,
-                color: 'var(--ulis-midnight-muted)',
-              }}
-            >
-              {translate('home:sectionSubtitle')} ·{' '}
-              <strong>{translate('common:totalRecords', { total: totalCount })}</strong>
-            </div>
           </div>
 
           <div

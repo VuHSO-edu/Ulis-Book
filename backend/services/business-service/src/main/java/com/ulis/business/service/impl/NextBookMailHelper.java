@@ -33,6 +33,9 @@ public class NextBookMailHelper {
     @Value("${spring.mail.username:nexteraofbooks@gmail.com}")
     private String fromEmail;
 
+    @Value("${app.feedback.admin-email:${spring.mail.username:nexteraofbooks@gmail.com}}")
+    private String adminFeedbackEmail;
+
     @Value("${app.domain:nextbook.ulis.edu.vn}")
     private String appDomain;
 
@@ -74,7 +77,10 @@ public class NextBookMailHelper {
                 feedback.getSenderEmail(),
                 feedback.getCategory() == null ? "Góp ý chung" : feedback.getCategory(),
                 feedback.getContent());
-        sendHtmlSafe(NEXTBOOK_ADMIN_EMAIL, subject, html);
+        String targetEmail = (adminFeedbackEmail != null && !adminFeedbackEmail.isBlank())
+                ? adminFeedbackEmail
+                : NEXTBOOK_ADMIN_EMAIL;
+        sendHtmlSafe(targetEmail, subject, html);
     }
 
     private String buildInvoiceHtml(Invoice invoice, boolean isReminder) {
