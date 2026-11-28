@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type SortMode = 'newest' | 'cheapest' | 'mostViewed';
+export type SortMode = 'newest' | 'cheapest' | 'highest' | 'mostViewed';
 
 export interface BookFilterState {
   keyword: string;

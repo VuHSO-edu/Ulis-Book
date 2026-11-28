@@ -351,23 +351,24 @@ export default function ProfilePage() {
               marginBottom: 22,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 18 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 18, minWidth: 0, flex: 1 }}>
               <Avatar
                 size={96}
-                src={avatarUrl || undefined}
+                src={avatarUrl || profileData?.avatarUrl || undefined}
                 style={{
                   background: 'var(--ulis-french-blue)',
                   color: '#ffffff',
                   fontWeight: 700,
                   fontSize: 34,
                   border: '4px solid #ffffff',
+                  flexShrink: 0,
                 }}
               >
                 {(fullNameWatch || user?.fullName || 'N').charAt(0).toUpperCase()}
               </Avatar>
-              <div style={{ paddingBottom: 4 }}>
+              <div style={{ paddingTop: 48, paddingBottom: 4, minWidth: 0, flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                  <h1 style={{ margin: 0, fontSize: 23 }}>
+                  <h1 style={{ margin: 0, fontSize: 23, lineHeight: 1.3, wordBreak: 'break-word' }}>
                     {fullNameWatch || user?.fullName || 'Nguyễn Văn An'}
                   </h1>
                   <span
@@ -824,7 +825,31 @@ export default function ProfilePage() {
                 </div>
 
                 <Form.Item name="avatarUrl" label={translate('profile:avatarUrl')}>
-                  <Input placeholder={translate('profile:avatarUrlPlaceholder')} />
+                  <Input
+                    placeholder={translate('profile:avatarUrlPlaceholder')}
+                    addonAfter={
+                      <label style={{ cursor: 'pointer', fontSize: 12 }}>
+                        {translate('profile:uploadCover')}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: 'none' }}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              if (typeof reader.result === 'string') {
+                                form.setFieldValue('avatarUrl', reader.result);
+                                setIsDirty(true);
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                    }
+                  />
                 </Form.Item>
 
                 <Form.Item name="coverUrl" label={translate('profile:coverUrl')}>

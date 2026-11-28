@@ -120,6 +120,8 @@ export const useSearchBooks = (filters: BookSearchFilter) => {
       }
       if (filters.sortBy === 'cheapest') {
         list = [...list].sort((a, b) => a.price - b.price);
+      } else if (filters.sortBy === 'highest') {
+        list = [...list].sort((a, b) => b.price - a.price);
       } else if (filters.sortBy === 'mostViewed') {
         list = [...list].sort((a, b) => b.viewCount - a.viewCount);
       } else {

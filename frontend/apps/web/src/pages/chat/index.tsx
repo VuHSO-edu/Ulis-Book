@@ -447,6 +447,12 @@ export default function ChatPage() {
                 </button>
               ))}
             </div>
+            <Input
+              style={{ marginTop: 8 }}
+              value={dealLocation}
+              onChange={(e) => setDealLocation(e.target.value)}
+              placeholder="Hoặc tự nhập địa điểm khác (VD: Cổng trường, Quán cafe...)"
+            />
           </div>
 
           <div style={{ flex: 1, overflowY: 'auto' }}>
@@ -1350,48 +1356,11 @@ export default function ChatPage() {
             <div style={{ fontSize: 13, fontWeight: 700, color: '#000000', marginBottom: 6 }}>
               {translate('chat:dealLocationLabel')}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-              {(campusLocationItems.length > 0
-                ? campusLocationItems.map((c) => ({
-                    title: c.name,
-                    sub: c.subtitle || 'Địa điểm ULIS',
-                  }))
-                : [
-                    {
-                      title: translate('chat:dealLoc1Title'),
-                      sub: translate('chat:dealLoc1Sub'),
-                    },
-                    {
-                      title: translate('chat:dealLoc2Title'),
-                      sub: translate('chat:dealLoc2Sub'),
-                    },
-                    {
-                      title: translate('chat:dealLoc3Title'),
-                      sub: translate('chat:dealLoc3Sub'),
-                    },
-                  ]
-              ).map((loc) => {
-                const active = dealLocation === loc.title;
-                return (
-                  <div
-                    key={loc.title}
-                    onClick={() => setDealLocation(loc.title)}
-                    style={{
-                      padding: 10,
-                      borderRadius: 8,
-                      border: active ? '2px solid #1677ff' : '1px solid #c3c6d7',
-                      background: active ? '#eef2ff' : '#ffffff',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#131b2e' }}>
-                      {loc.title}
-                    </div>
-                    <div style={{ fontSize: 11, color: '#596377' }}>{loc.sub}</div>
-                  </div>
-                );
-              })}
-            </div>
+            <Input
+              value={dealLocation}
+              onChange={(e) => setDealLocation(e.target.value)}
+              placeholder="Nhập địa điểm hẹn gặp (VD: Sảnh A1, Sunwah, Cổng trường...)"
+            />
           </div>
 
           <div>

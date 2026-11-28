@@ -14,6 +14,7 @@ import { COMMON_VALIDATION_PATTERN, translate } from '@ulis/locale';
 import { useAuth } from '../store/useAuth';
 import { useBookFilterStore } from '../store/useBookFilterStore';
 import { useConversations } from '../services/chat';
+import { useGetProfile } from '../services/profile';
 import { useCartItems, useSubmitFeedback, useSystemAppearance } from '../services/v2';
 import ReportModal from '../components/ReportModal';
 import NextBookLogo from '../components/NextBookLogo';
@@ -27,6 +28,9 @@ export default function AppLayout() {
   const location = useLocation();
   const { data: conversations = [] } = useConversations();
   const { data: cartItems = [] } = useCartItems();
+  const { data: profileRes } = useGetProfile();
+  const profileAvatarUrl = (profileRes as { data?: { avatarUrl?: string | null } } | undefined)?.data
+    ?.avatarUrl;
   useSystemAppearance(); // Đồng bộ màu nền hệ thống (TASK-04)
 
   const submitFeedback = useSubmitFeedback();
@@ -200,6 +204,7 @@ export default function AppLayout() {
                 <div style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
                   <Avatar
                     size={32}
+                    src={profileAvatarUrl || undefined}
                     style={{
                       background: 'var(--ulis-french-blue)',
                       color: '#ffffff',

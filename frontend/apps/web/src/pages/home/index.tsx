@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Button,
   Drawer,
+  Dropdown,
   Empty,
   Input,
   InputNumber,
@@ -502,33 +503,91 @@ export default function HomePage() {
               gap: 4,
             }}
           >
-            {(
-              [
-                { key: 'newest', label: translate('home:sortNewest') },
-                { key: 'cheapest', label: translate('home:sortCheapest') },
-                { key: 'mostViewed', label: translate('home:sortMostViewed') },
-              ] as Array<{ key: SortMode; label: string }>
-            ).map((s) => (
+            <button
+              type="button"
+              onClick={() => setFilter({ sortBy: 'newest', pageNumber: 1 })}
+              style={{
+                padding: '6px 14px',
+                borderRadius: 4,
+                border: 'none',
+                background: sortBy === 'newest' ? 'var(--ulis-french-blue)' : 'transparent',
+                color: sortBy === 'newest' ? '#ffffff' : 'var(--ulis-midnight-violet)',
+                fontFamily: 'var(--font-primary)',
+                fontSize: 13.5,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              {translate('home:sortNewest')}
+            </button>
+
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 'cheapest',
+                    label: 'Giá: Thấp đến Cao',
+                    onClick: () => setFilter({ sortBy: 'cheapest', pageNumber: 1 }),
+                  },
+                  {
+                    key: 'highest',
+                    label: 'Giá: Cao đến Thấp',
+                    onClick: () => setFilter({ sortBy: 'highest', pageNumber: 1 }),
+                  },
+                ],
+                selectedKeys: sortBy === 'cheapest' || sortBy === 'highest' ? [sortBy] : [],
+              }}
+              trigger={['click']}
+            >
               <button
-                key={s.key}
                 type="button"
-                onClick={() => setFilter({ sortBy: s.key, pageNumber: 1 })}
                 style={{
                   padding: '6px 14px',
                   borderRadius: 4,
                   border: 'none',
                   background:
-                    sortBy === s.key ? 'var(--ulis-french-blue)' : 'transparent',
-                  color: sortBy === s.key ? '#ffffff' : 'var(--ulis-midnight-violet)',
+                    sortBy === 'cheapest' || sortBy === 'highest'
+                      ? 'var(--ulis-french-blue)'
+                      : 'transparent',
+                  color:
+                    sortBy === 'cheapest' || sortBy === 'highest'
+                      ? '#ffffff'
+                      : 'var(--ulis-midnight-violet)',
                   fontFamily: 'var(--font-primary)',
                   fontSize: 13.5,
                   fontWeight: 600,
                   cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
                 }}
               >
-                {s.label}
+                {sortBy === 'cheapest'
+                  ? 'Giá: Thấp đến Cao'
+                  : sortBy === 'highest'
+                    ? 'Giá: Cao đến Thấp'
+                    : 'Giá'}
+                <MaterialIcon name="expand_more" size={16} />
               </button>
-            ))}
+            </Dropdown>
+
+            <button
+              type="button"
+              onClick={() => setFilter({ sortBy: 'mostViewed', pageNumber: 1 })}
+              style={{
+                padding: '6px 14px',
+                borderRadius: 4,
+                border: 'none',
+                background: sortBy === 'mostViewed' ? 'var(--ulis-french-blue)' : 'transparent',
+                color: sortBy === 'mostViewed' ? '#ffffff' : 'var(--ulis-midnight-violet)',
+                fontFamily: 'var(--font-primary)',
+                fontSize: 13.5,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              {translate('home:sortMostViewed')}
+            </button>
           </div>
         </div>
 
