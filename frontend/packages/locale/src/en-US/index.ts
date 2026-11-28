@@ -3,7 +3,7 @@
  */
 export default {
   common: {
-    appName: 'NextBook',
+    appName: 'NextBooks',
     vnuBadge: 'VNU',
     vnuVerified: '100% VNU Mail Verified',
     loading: 'Loading...',

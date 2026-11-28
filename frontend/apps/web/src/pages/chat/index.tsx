@@ -688,6 +688,7 @@ export default function ChatPage() {
                   className="ulis-primary-btn"
                   onClick={openInvoiceBuilder}
                 >
+                  <MaterialIcon name="receipt_long" size={16} style={{ marginRight: 5 }} />
                   {translate('v2:invoice.openBuilderBtn')}
                 </Button>
 
@@ -897,7 +898,9 @@ export default function ChatPage() {
                                 cursor: 'pointer',
                               }}
                             >
-                              {translate('v2:invoice.buyerConfirmBtn')}
+                              {inv.sellerId === user?.id
+                                ? 'Xác nhận đã giao sách'
+                                : translate('v2:invoice.buyerConfirmBtn')}
                             </button>
 
                             <button

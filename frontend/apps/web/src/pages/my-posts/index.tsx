@@ -685,13 +685,30 @@ export default function MyPostsPage() {
                 },
               ]}
             >
-              <Select
-                options={campusLocationOptions.map((loc) => ({
-                  value: loc,
-                  label: loc,
-                }))}
-              />
+              <Input placeholder="Nhập hoặc chọn địa điểm hẹn bên dưới..." />
             </Form.Item>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: -8, marginBottom: 14 }}>
+            {campusLocationOptions.map((loc) => (
+              <button
+                key={loc}
+                type="button"
+                onClick={() => {
+                  form.setFieldValue('campusLocation', loc);
+                  setIsDirty(true);
+                }}
+                style={{
+                  padding: '3px 10px',
+                  borderRadius: 4,
+                  border: '1px solid #d9d9d9',
+                  background: '#fafafa',
+                  fontSize: 12,
+                  cursor: 'pointer',
+                }}
+              >
+                {loc}
+              </button>
+            ))}
           </div>
 
           <Form.Item

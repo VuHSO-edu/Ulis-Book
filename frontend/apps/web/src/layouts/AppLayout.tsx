@@ -244,7 +244,7 @@ export default function AppLayout() {
       </header>
 
       <Drawer
-        title="NextBook"
+        title="NextBooks"
         placement="right"
         width={280}
         open={mobileMenuOpen}

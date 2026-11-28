@@ -4,7 +4,7 @@
  */
 export default {
   common: {
-    appName: 'NextBook',
+    appName: 'NextBooks',
     vnuBadge: 'VNU',
     vnuVerified: '100% Xác thực VNU Mail',
     loading: 'Đang tải...',
@@ -428,7 +428,7 @@ export default {
     dealLoc3Sub: 'Ghế đá hành lang',
     dealTimeLabel: 'Thời gian hẹn gặp',
     dealSafetyNote:
-      'Cam kết an toàn & Nguyên tắc ULIS: Kiểm tra tình trạng sách trực tiếp trước khi nhận. Hệ thống không thu hộ hoặc yêu cầu đặt cọc trước.',
+      'Lưu ý: Kiểm tra tình trạng sách trực tiếp trước khi nhận. Hệ thống không thu hộ hoặc yêu cầu đặt cọc trước.',
     dealConfirmBtn: 'Gửi lịch hẹn vào khung chat',
     dealSentMessage: '📅 [Lịch hẹn nhận sách] Địa điểm: {{location}} · Thời gian: {{time}}.',
   },
@@ -649,7 +649,7 @@ export default {
       itemCount: '{{count}} cuốn trong giỏ',
     },
     invoice: {
-      openBuilderBtn: '🧾 Tạo hóa đơn',
+      openBuilderBtn: 'Tạo hóa đơn',
       modalTitle: 'Luồng Tạo Hóa Đơn Giao Dịch Sách (4 Bước)',
       step1Title: 'B1: Chọn sách',
       step2Title: 'B2: Xác nhận đơn',
