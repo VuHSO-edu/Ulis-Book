@@ -339,17 +339,6 @@ export default function HomePage() {
               <MaterialIcon name="close" size={16} />
             </button>
           )}
-          <button
-            type="button"
-            className="search-submit-btn"
-            onClick={() => {
-              clearFocusedRow();
-              setFilter({ keyword: inputKeyword.trim(), pageNumber: 1 });
-            }}
-            aria-label={translate('button:search')}
-          >
-            <MaterialIcon name="search" size={20} />
-          </button>
         </div>
 
         <div className="ulis-booknet-dropdowns" ref={dropdownWrapRef}>
@@ -456,6 +445,31 @@ export default function HomePage() {
             )}
           </div>
         </div>
+
+        <button
+          type="button"
+          className="search-submit-btn"
+          onClick={() => {
+            clearFocusedRow();
+            setFilter({ keyword: inputKeyword.trim(), pageNumber: 1 });
+          }}
+          aria-label={translate('button:search')}
+          style={{
+            width: 48,
+            height: 44,
+            borderRadius: 4,
+            border: 'none',
+            background: 'var(--ulis-french-blue)',
+            color: '#ffffff',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            flexShrink: 0,
+          }}
+        >
+          <MaterialIcon name="search" size={20} />
+        </button>
       </section>
 
       {/* 3. TIÊU ĐỀ PHẦN SÁCH & BỘ SẮP XẾP */}
