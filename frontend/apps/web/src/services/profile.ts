@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http } from '@ulis/apis';
 import type { BaseResponse } from '@ulis/apis';
+import { useAuth } from '../store/useAuth';
 
 /**
  * API hồ sơ người dùng (ticket 03) — GET/PUT /profile/me, JWT bảo vệ.
@@ -40,8 +41,14 @@ const getProfile = () => http.get<BaseResponse<Profile>>('/profile/me');
 const updateProfile = (data: UpdateProfilePayload) =>
   http.put<BaseResponse<Profile>>('/profile/me', data);
 
-export const useGetProfile = () =>
-  useQuery({ queryKey: profileQueryKey.all, queryFn: getProfile });
+export const useGetProfile = () => {
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  return useQuery({
+    queryKey: profileQueryKey.all,
+    queryFn: getProfile,
+    enabled: isAuthenticated,
+  });
+};
 
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();

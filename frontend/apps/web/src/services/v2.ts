@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http, httpBlocking } from '@ulis/apis';
 import { localDb } from './local-db';
+import { useAuth } from '../store/useAuth';
 import { bookQueryKey } from './books';
 import { chatQueryKey } from './chat';
 import type {
@@ -25,9 +26,11 @@ export const v2QueryKey = {
 // 1. GIỎ HÀNG GOM NHÓM THEO NGƯỜI BÁN (TASK-08)
 // =============================================================================
 
-export const useCartItems = () =>
-  useQuery({
+export const useCartItems = () => {
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  return useQuery({
     queryKey: v2QueryKey.cart(),
+    enabled: isAuthenticated,
     queryFn: async (): Promise<CartRecordItem[]> => {
       try {
         const res = await http.get<{ data?: CartRecordItem[] }>('/cart');
@@ -40,6 +43,7 @@ export const useCartItems = () =>
       return localDb.getCart();
     },
   });
+};
 
 export const useAddToCart = () => {
   const queryClient = useQueryClient();

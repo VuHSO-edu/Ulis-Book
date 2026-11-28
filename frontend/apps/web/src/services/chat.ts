@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { http, httpBlocking } from '@ulis/apis';
 import { localDb } from './local-db';
+import { useAuth } from '../store/useAuth';
 import type { ChatConversationItem, ChatMessageItem } from './mock-data';
 
 export const chatQueryKey = {
@@ -16,10 +17,12 @@ export interface SendMessagePayload {
   isAppointment?: boolean;
 }
 
-export const useConversations = () =>
-  useQuery({
+export const useConversations = () => {
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  return useQuery({
     queryKey: chatQueryKey.conversations(),
-    refetchInterval: 4000,
+    enabled: isAuthenticated,
+    refetchInterval: isAuthenticated ? 4000 : false,
     queryFn: async (): Promise<ChatConversationItem[]> => {
       try {
         const res = await http.post<{ data?: { content?: ChatConversationItem[] } }>(
@@ -35,6 +38,7 @@ export const useConversations = () =>
       return localDb.getConversations();
     },
   });
+};
 
 export const useConversationMessages = (conversationId: number) =>
   useQuery({

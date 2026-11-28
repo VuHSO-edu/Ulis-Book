@@ -66,6 +66,7 @@
   flex-direction: column;
   background: var(--ulis-seashell);
   color: var(--ulis-midnight-violet);
+  overflow-x: hidden;
 }
 
 .ulis-top-header {
@@ -79,6 +80,10 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: none;
+
+  @media (max-width: 900px) {
+    padding: 0 14px;
+  }
 }
 
 .ulis-header-inner {
@@ -125,6 +130,10 @@
     font-family: var(--font-primary);
     font-size: 10.5px;
     font-weight: 700;
+
+    @media (max-width: 560px) {
+      display: none;
+    }
   }
 }
 
@@ -132,10 +141,15 @@
 .ulis-nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
 
   a,
   .nav-link-btn {
+    white-space: nowrap;
     font-family: var(--font-primary);
     font-size: 15px;
     font-weight: 600;
@@ -168,7 +182,34 @@
 .ulis-header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-shrink: 0;
+
+  @media (max-width: 560px) {
+    gap: 6px;
+
+    .ulis-sell-cta-btn,
+    .ulis-secondary-btn-wheat {
+      display: none;
+    }
+  }
+}
+
+.ulis-mobile-menu-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid rgba(61, 21, 52, 0.14);
+  background: #ffffff;
+  color: var(--ulis-midnight-violet);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  @media (max-width: 900px) {
+    display: inline-flex;
+  }
 }
 
 // Nút "Đăng bài": French Blue (#3E4B8E), vuông góc (4px), Text chính (Adobe Caslon)
@@ -182,6 +223,7 @@
   font-family: var(--font-primary);
   font-size: 14px;
   font-weight: 600;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -191,6 +233,12 @@
 
   &:hover {
     background: var(--ulis-french-blue-hover);
+  }
+
+  @media (max-width: 560px) {
+    padding: 0 10px;
+    font-size: 13px;
+    height: 38px;
   }
 }
 
@@ -1276,6 +1324,80 @@
     &.active {
       background: var(--ulis-french-blue);
       color: #ffffff;
+    }
+  }
+}
+
+.ulis-feedback-card {
+  max-width: 1240px;
+  margin: 0 auto 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 26px 28px;
+  display: grid;
+  grid-template-columns: 1fr 1.45fr;
+  gap: 28px;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    padding: 20px 16px;
+    gap: 18px;
+  }
+}
+
+.ulis-feedback-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--ulis-wheat);
+  color: var(--ulis-midnight-violet);
+  font-size: 11.5px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.ulis-feedback-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ulis-french-blue);
+}
+
+.ulis-feedback-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.ulis-feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ulis-feedback-row-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ulis-feedback-submit-row {
+  display: flex;
+  justify-content: flex-end;
+
+  @media (max-width: 560px) {
+    button {
+      width: 100%;
     }
   }
 }

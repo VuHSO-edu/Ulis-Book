@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Button,
+  Drawer,
   Dropdown,
   Input,
   MaterialIcon,
@@ -38,6 +39,7 @@ export default function AppLayout() {
   const [fbEmail, setFbEmail] = useState(user?.email ?? '');
   const [fbCategory, setFbCategory] = useState('Đề xuất tính năng mới');
   const [fbContent, setFbContent] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const totalUnread = conversations.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
   const totalCartCount = cartItems.length;
@@ -228,97 +230,212 @@ export default function AppLayout() {
                 </button>
               </div>
             )}
+
+            <button
+              type="button"
+              className="ulis-mobile-menu-btn"
+              aria-label="Mở menu điều hướng"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <MaterialIcon name="menu" size={22} />
+            </button>
           </div>
         </div>
       </header>
+
+      <Drawer
+        title="NextBook"
+        placement="right"
+        width={280}
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <Button
+            block
+            type={isHomeActive ? 'primary' : 'default'}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              handleHomeClick();
+            }}
+          >
+            {translate('nav:home')}
+          </Button>
+          {isAuthenticated && (
+            <Button
+              block
+              type={location.pathname.startsWith('/my-posts') ? 'primary' : 'default'}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate('/my-posts');
+              }}
+            >
+              {translate('nav:myPosts')}
+            </Button>
+          )}
+          <Button
+            block
+            type={location.pathname.startsWith('/cart') ? 'primary' : 'default'}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate('/cart');
+            }}
+          >
+            {translate('v2:cart.navTitle')}
+            {totalCartCount > 0 ? ` (${totalCartCount})` : ''}
+          </Button>
+          <Button
+            block
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate(isAuthenticated ? '/chat' : '/login');
+            }}
+          >
+            {translate('nav:chat')}
+            {totalUnread > 0 ? ` (${totalUnread})` : ''}
+          </Button>
+          {isAdmin && (
+            <Button
+              block
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate('/admin/reports');
+              }}
+            >
+              {translate('nav:adminConsole')}
+            </Button>
+          )}
+          <Button
+            block
+            type="primary"
+            className="ulis-primary-btn"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate(isAuthenticated ? '/my-posts?create=1' : '/login');
+            }}
+          >
+            {translate('button:createPost')}
+          </Button>
+          {isAuthenticated ? (
+            <>
+              <Button
+                block
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate('/profile');
+                }}
+              >
+                {translate('nav:profile')}
+              </Button>
+              <Button
+                block
+                danger
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onLogout();
+                }}
+              >
+                {translate('button:logout')}
+              </Button>
+            </>
+          ) : (
+            <Button
+              block
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate('/login');
+              }}
+            >
+              {translate('button:login')}
+            </Button>
+          )}
+        </div>
+      </Drawer>
 
       <main style={{ flex: 1 }}>
         <Outlet />
       </main>
 
-      {/* TASK-09: Form Góp ý ở cuối trang (Lưu DB & Gửi về Mail NextBook nexteraofbooks@gmail.com) */}
+      {/* Form Góp ý ở cuối trang */}
       <footer className="ulis-footer">
-        <div
-          style={{
-            maxWidth: 1240,
-            margin: '0 auto 20px',
-            background: '#ffffff',
-            borderRadius: 6,
-            padding: '22px 26px',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1.35fr',
-            gap: 24,
-            alignItems: 'center',
-          }}
-        >
+        <div className="ulis-feedback-card">
           <div>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '3px 10px',
-                borderRadius: 4,
-                background: 'var(--ulis-wheat)',
-                color: 'var(--ulis-midnight-violet)',
-                fontSize: 11.5,
-                fontWeight: 700,
-                marginBottom: 8,
-              }}
-            >
+            <span className="ulis-feedback-badge">
               <MaterialIcon name="forward_to_inbox" size={15} />
               <span>{translate('v2:feedback.sectionBadge')}</span>
             </span>
-            <h3 style={{ margin: '0 0 6px', fontSize: 18 }}>
+            <h3 style={{ margin: '0 0 8px', fontSize: 19, lineHeight: 1.35 }}>
               {translate('v2:feedback.sectionTitle')}
             </h3>
             <p
               style={{
-                margin: '0 0 12px',
-                fontSize: 12.5,
+                margin: '0 0 14px',
+                fontSize: 13,
                 color: 'var(--ulis-midnight-muted)',
-                lineHeight: 1.55,
+                lineHeight: 1.6,
               }}
             >
               {translate('v2:feedback.sectionSubtitle')}
             </p>
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ulis-french-blue)' }}>
-              🌐 Domain: <strong>{translate('v2:brandDomain')}</strong> · ✉️ nexteraofbooks@gmail.com
+            <div className="ulis-feedback-meta">
+              <span className="ulis-feedback-meta-item">
+                <MaterialIcon name="language" size={15} />
+                <span>
+                  Domain: <strong>{translate('v2:brandDomain')}</strong>
+                </span>
+              </span>
+              <span className="ulis-feedback-meta-item">
+                <MaterialIcon name="mail_outline" size={15} />
+                <span>nexteraofbooks@gmail.com</span>
+              </span>
             </div>
           </div>
 
-          <form onSubmit={handleFeedbackSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+          <form onSubmit={handleFeedbackSubmit} className="ulis-feedback-form">
+            <div className="ulis-feedback-row-top">
               <Input
+                size="large"
                 value={fbName}
                 onChange={(e) => setFbName(e.target.value)}
                 placeholder={translate('v2:feedback.namePlaceholder')}
               />
               <Input
+                size="large"
                 value={fbEmail}
                 onChange={(e) => setFbEmail(e.target.value)}
                 placeholder={translate('v2:feedback.emailPlaceholder')}
               />
-              <Select
-                value={fbCategory}
-                onChange={(val) => setFbCategory(val)}
-                options={[
-                  { value: 'Đề xuất tính năng mới', label: translate('v2:feedback.catFeature') },
-                  { value: 'Góp ý giao diện / Trải nghiệm', label: translate('v2:feedback.catUiUx') },
-                  { value: 'Bổ sung học liệu / Khoa ngành', label: translate('v2:feedback.catBookSource') },
-                  { value: 'Yêu cầu hỗ trợ khác', label: translate('v2:feedback.catOther') },
-                ]}
-              />
             </div>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <Input
-                value={fbContent}
-                onChange={(e) => setFbContent(e.target.value)}
-                placeholder={translate('v2:feedback.contentPlaceholder')}
-                maxLength={500}
-              />
+
+            <Select
+              size="large"
+              style={{ width: '100%' }}
+              value={fbCategory}
+              onChange={(val) => setFbCategory(val)}
+              options={[
+                { value: 'Đề xuất tính năng mới', label: translate('v2:feedback.catFeature') },
+                { value: 'Góp ý giao diện / Trải nghiệm', label: translate('v2:feedback.catUiUx') },
+                {
+                  value: 'Bổ sung học liệu / Khoa ngành',
+                  label: translate('v2:feedback.catBookSource'),
+                },
+                { value: 'Yêu cầu hỗ trợ khác', label: translate('v2:feedback.catOther') },
+              ]}
+            />
+
+            <Input.TextArea
+              rows={3}
+              value={fbContent}
+              onChange={(e) => setFbContent(e.target.value)}
+              placeholder={translate('v2:feedback.contentPlaceholder')}
+              maxLength={500}
+              showCount
+            />
+
+            <div className="ulis-feedback-submit-row">
               <Button
                 type="primary"
+                size="large"
                 htmlType="submit"
                 loading={submitFeedback.isPending}
                 className="ulis-primary-btn"
